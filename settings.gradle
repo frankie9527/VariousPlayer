@@ -1,2 +1,3 @@
+include ':VariousPlayer'
 include ':app'
 rootProject.name = "VariousDemo"
