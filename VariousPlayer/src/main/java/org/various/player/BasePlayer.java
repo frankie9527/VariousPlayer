@@ -53,7 +53,7 @@ public class BasePlayer  implements IPlayer{
     }
 
     @Override
-    public boolean setVolume(float f) {
+    public boolean setVolume(float volume) {
         return false;
     }
 

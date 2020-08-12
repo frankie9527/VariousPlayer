@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 public class SimpleVideoView extends RelativeLayout {
-    VideoControlView control;
+    IVideoControl control;
     VariousSurfacePlayer play_view;
 
     public SimpleVideoView(Context context) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -15,6 +16,8 @@ import org.various.player.R;
  * func:
  */
 public class VideoTopView extends LinearLayout {
+    TextView tv_title;
+
     public VideoTopView(Context context) {
         super(context);
         initView(context);
@@ -29,7 +32,21 @@ public class VideoTopView extends LinearLayout {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
+
     private void initView(Context context) {
         View.inflate(context, R.layout.various_simple_view_top, this);
+        tv_title = findViewById(R.id.tv_title);
+    }
+
+    public void setOnTopClickListener(View.OnClickListener listener) {
+        tv_title=findViewById(R.id.tv_title);
+    }
+
+    public void setTitle(String title) {
+        tv_title.setText(title);
+    }
+
+    public void setVisibleStatus() {
+
     }
 }

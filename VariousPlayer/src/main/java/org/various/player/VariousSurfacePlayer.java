@@ -82,7 +82,7 @@ public class VariousSurfacePlayer extends SurfaceView implements SurfaceHolder.C
     }
 
     @Override
-    public boolean setVolume(float f) {
+    public boolean setVolume(float volume) {
         return false;
     }
 

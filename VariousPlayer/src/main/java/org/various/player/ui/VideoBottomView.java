@@ -3,6 +3,7 @@ package org.various.player.ui;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import org.various.player.R;
  * func:
  */
 public class VideoBottomView extends LinearLayout {
+    ImageView img_switch_screen;
     public VideoBottomView(Context context) {
         super(context);
         initView(context);
@@ -31,5 +33,12 @@ public class VideoBottomView extends LinearLayout {
     }
     private void initView(Context context) {
         View.inflate(context, R.layout.various_simple_view_bottom, this);
+        img_switch_screen=findViewById(R.id.img_switch_screen);
+    }
+    public void setOnBottomClickListener(View.OnClickListener listener) {
+        img_switch_screen.setOnClickListener(listener);
+    }
+    public void setVisibleStatus() {
+
     }
 }
