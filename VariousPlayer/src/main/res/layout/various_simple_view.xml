@@ -3,9 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<org.various.player.VariousSurfacePlayer
-    android:id="@+id/play_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    <org.various.player.VariousSurfacePlayer
+        android:id="@+id/surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <org.various.player.VideoControlView
+        android:id="@+id/video_control"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
 </RelativeLayout>

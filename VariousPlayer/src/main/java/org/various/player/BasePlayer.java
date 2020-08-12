@@ -2,9 +2,8 @@ package org.various.player;
 
 import android.net.Uri;
 import android.view.Surface;
-
 import androidx.annotation.Nullable;
-
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -45,7 +44,7 @@ public class BasePlayer  implements IPlayer{
 
     @Override
     public void seekTo(long milliseconds) {
-          player.seekTo(milliseconds);
+        player.seekTo(milliseconds);
     }
 
     @Override
@@ -60,6 +59,8 @@ public class BasePlayer  implements IPlayer{
 
     @Override
     public void startSyncPlay() {
+        player.prepare(mediaSource);
+        player.setPlayWhenReady(true);
 
     }
 
@@ -76,13 +77,13 @@ public class BasePlayer  implements IPlayer{
         int type = Util.inferContentType(Uri.parse(url), overrideExtension);
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(VariousSDK.getContext(), Util.getUserAgent(VariousSDK.getContext(), "yourApplicationName"));
         Uri uri = Uri.parse(url);
-        if (type == 0) {
+        if (type == C.TYPE_DASH) {
             return new DashMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
         }
-        if (type == 1) {
+        if (type == C.TYPE_SS) {
             return new SsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
         }
-        if (type == 2) {
+        if (type == C.TYPE_HLS) {
             return new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
         }
         return new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri);

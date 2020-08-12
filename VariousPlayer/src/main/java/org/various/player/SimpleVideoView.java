@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 public class SimpleVideoView extends RelativeLayout {
-    VideoControl control;
+    VideoControlView control;
     VariousSurfacePlayer play_view;
 
     public SimpleVideoView(Context context) {
@@ -26,8 +26,9 @@ public class SimpleVideoView extends RelativeLayout {
 
     public void initView(Context context) {
         View.inflate(context, R.layout.various_simple_view, this);
-        play_view = findViewById(R.id.play_view);
-        control = new VideoControl();
+        play_view = findViewById(R.id.surface_view);
+        control = findViewById(R.id.video_control);
+
     }
 
     public void setPlayData(String url, String title) {
@@ -36,6 +37,6 @@ public class SimpleVideoView extends RelativeLayout {
     }
 
     public void startSyncPlay() {
-         play_view.startSyncPlay();
+        play_view.startSyncPlay();
     }
 }

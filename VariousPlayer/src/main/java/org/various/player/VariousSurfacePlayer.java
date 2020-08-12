@@ -88,6 +88,6 @@ public class VariousSurfacePlayer extends SurfaceView implements SurfaceHolder.C
 
     @Override
     public void startSyncPlay() {
-
+        player.startSyncPlay();
     }
 }

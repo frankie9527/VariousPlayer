@@ -9,7 +9,7 @@ import org.various.player.SimpleVideoView;
 
 public class SimpleDemoActivity extends AppCompatActivity {
     String hsl = "http://cctvalih5ca.v.myalicdn.com/live/cctv1_2/index.m3u8";
-    SimpleVideoView play_view;
+    SimpleVideoView simple_view;
     String title = "hello!frankie";
     String url = "https://mov.bn.netease.com/open-movie/nos/mp4/2017/05/31/SCKR8V6E9_hd.mp4";
     @Override
@@ -19,8 +19,8 @@ public class SimpleDemoActivity extends AppCompatActivity {
         init();
     }
     private void init() {
-        play_view =findViewById(R.id.play_view);
-        play_view.setPlayData(this.url, this.title);
-        play_view.startSyncPlay();
+        simple_view =findViewById(R.id.simple_view);
+        simple_view.setPlayData(hsl, title);
+        simple_view.startSyncPlay();
     }
 }
