@@ -5,15 +5,19 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import androidx.annotation.NonNull;
 
 import org.various.player.ui.VideoBottomView;
+import org.various.player.ui.VideoLoadingView;
 import org.various.player.ui.VideoTopView;
+import org.various.player.utils.Repeater;
 
 public class VideoControlView extends RelativeLayout implements IVideoControl, View.OnClickListener {
     VideoTopView topView;
     VideoBottomView bottomView;
-
+    VideoLoadingView loadingView;
+    @NonNull
+    protected Repeater progressPollRepeater = new Repeater();
 
     public VideoControlView(Context context) {
         super(context);
@@ -46,34 +50,51 @@ public class VideoControlView extends RelativeLayout implements IVideoControl, V
 
     @Override
     public void showLoading() {
-
+        loadingView.setVisibleStatus(PlayerConstants.SHOW);
     }
 
     @Override
     public void hideloading() {
-
+        loadingView.setVisibleStatus(PlayerConstants.HIDE);
     }
 
     @Override
     public void showTopAndBottom() {
-        topView.setVisibleStatus();
-        bottomView.setVisibleStatus();
+        topView.setVisibleStatus(PlayerConstants.SHOW);
+        bottomView.setVisibleStatus(PlayerConstants.SHOW);
     }
 
     @Override
     public void hideTopAndBootom() {
-        topView.setVisibleStatus();
-        bottomView.setVisibleStatus();
+        topView.setVisibleStatus(PlayerConstants.HIDE);
+        bottomView.setVisibleStatus(PlayerConstants.HIDE);
     }
 
     @Override
     public void onClick(View view) {
         int viewId = view.getId();
         if (viewId == R.id.img_back) {
-            Toast.makeText(getContext(), "返回", Toast.LENGTH_LONG).show();
+
         }
         if (viewId == R.id.img_switch_screen) {
-            Toast.makeText(getContext(), "切换屏幕", Toast.LENGTH_LONG).show();
+
         }
+    }
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        //A poll used to periodically update the progress bar
+        progressPollRepeater.setRepeatListener(new Repeater.RepeatListener() {
+            @Override
+            public void onRepeat() {
+
+            }
+        });
+    }
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        progressPollRepeater.stop();
+        progressPollRepeater.setRepeatListener(null);
     }
 }

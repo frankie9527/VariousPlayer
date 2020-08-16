@@ -73,7 +73,7 @@ public class VariousSurfacePlayer extends SurfaceView implements SurfaceHolder.C
 
     @Override
     public void seekTo(long milliseconds) {
-
+        player.seekTo(milliseconds);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class VariousSurfacePlayer extends SurfaceView implements SurfaceHolder.C
 
     @Override
     public boolean setVolume(float volume) {
-        return false;
+           return player.setVolume(volume);
     }
 
     @Override

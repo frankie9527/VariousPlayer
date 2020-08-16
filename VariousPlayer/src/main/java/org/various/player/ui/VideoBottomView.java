@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
+import org.various.player.PlayerConstants;
 import org.various.player.R;
 
 /**
@@ -38,7 +39,17 @@ public class VideoBottomView extends LinearLayout {
     public void setOnBottomClickListener(View.OnClickListener listener) {
         img_switch_screen.setOnClickListener(listener);
     }
-    public void setVisibleStatus() {
+    public void setVisibleStatus(@PlayerConstants.VisibleStatus int status) {
+        if (status==PlayerConstants.SHOW){
+            show();
+            return;
+        }
+        hide();
+    }
+    public void show(){
+
+    }
+    public void hide(){
 
     }
 }
