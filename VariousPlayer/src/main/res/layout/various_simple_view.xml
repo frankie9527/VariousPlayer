@@ -9,7 +9,7 @@
         android:layout_height="match_parent" />
 
 
-    <org.various.player.VideoControlView
+    <org.various.player.ui.VideoControlView
         android:id="@+id/video_control"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

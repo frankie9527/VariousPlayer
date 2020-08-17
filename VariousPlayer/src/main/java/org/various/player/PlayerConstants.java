@@ -18,9 +18,26 @@ public interface PlayerConstants {
     int HIDE = 1;
 
 
-    @interface PlayerStatus{
+    @interface PlayerStatus {
 
     }
-    int startPlay=0;
-    int loading=1;
+
+    int STARTPLAY = 0;
+    int LOADING = 1;
+
+    @IntDef({ACTION_BACK, SWITCH_SCREEN})
+    @interface UserAction {
+
+    }
+
+    int ACTION_BACK = 0;
+    int SWITCH_SCREEN = 1;
+
+    @IntDef({EXO_CORE, IJY_CORE})
+    @interface PlayerCore {
+
+    }
+
+    int EXO_CORE = 0;
+    int IJY_CORE = 1;
 }

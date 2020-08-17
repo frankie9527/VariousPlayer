@@ -1,8 +1,10 @@
-package org.various.player;
+package org.various.player.core;
 
 import android.net.Uri;
 import android.view.Surface;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -14,17 +16,21 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-public class BasePlayer  implements IPlayer{
+import org.various.player.PlayerConfig;
+
+public class VariousExoPlayer implements IPlayer {
     MediaSource mediaSource;
-    SimpleExoPlayer player = new SimpleExoPlayer.Builder(VariousSDK.getContext()).build();
+    SimpleExoPlayer player = new SimpleExoPlayer.Builder(PlayerConfig.getContext()).build();
+    long totalTime = 0;
+
     @Override
     public float getVolume() {
-        return 0;
+        return player.getVolume();
     }
 
     @Override
     public boolean isPlaying() {
-        return false;
+        return player.isPlaying();
     }
 
     @Override
@@ -34,7 +40,7 @@ public class BasePlayer  implements IPlayer{
 
     @Override
     public void release() {
-
+        player.release();
     }
 
     @Override
@@ -58,6 +64,21 @@ public class BasePlayer  implements IPlayer{
     }
 
     @Override
+    public long getDuration() {
+        return player.getDuration();
+    }
+
+    @Override
+    public long getCurrentPosition() {
+        return player.getCurrentPosition();
+    }
+
+    @Override
+    public int getBufferedPercent() {
+        return player.getBufferedPercentage();
+    }
+
+    @Override
     public void startSyncPlay() {
         player.prepare(mediaSource);
         player.setPlayWhenReady(true);
@@ -73,9 +94,10 @@ public class BasePlayer  implements IPlayer{
     public void clearVideoSurface() {
         player.clearVideoSurface();
     }
+
     public MediaSource createMediaSource(@Nullable String url, @Nullable String overrideExtension) {
         int type = Util.inferContentType(Uri.parse(url), overrideExtension);
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(VariousSDK.getContext(), Util.getUserAgent(VariousSDK.getContext(), "yourApplicationName"));
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(PlayerConfig.getContext(), Util.getUserAgent(PlayerConfig.getContext(), "yourApplicationName"));
         Uri uri = Uri.parse(url);
         if (type == C.TYPE_DASH) {
             return new DashMediaSource.Factory(dataSourceFactory).createMediaSource(uri);

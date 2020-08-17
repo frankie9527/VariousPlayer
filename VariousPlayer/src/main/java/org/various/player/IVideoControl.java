@@ -1,5 +1,7 @@
 package org.various.player;
 
+import org.various.player.listener.UserActionListener;
+
 /**
  * Created by 江雨寒 on 2020/8/13
  * Email：847145851@qq.com
@@ -10,10 +12,11 @@ public interface IVideoControl {
 
     void showLoading();
 
-    void hideloading();
+    void hideLoading();
 
     void showTopAndBottom();
 
     void hideTopAndBootom();
 
+    void setUserActionListener(UserActionListener listener);
 }

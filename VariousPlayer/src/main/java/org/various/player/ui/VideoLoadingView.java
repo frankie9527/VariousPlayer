@@ -49,9 +49,9 @@ public class VideoLoadingView extends LinearLayout {
         hide();
     }
     public void show(){
-
+        setVisibility(View.VISIBLE);
     }
     public void hide(){
-
+        setVisibility(View.GONE);
     }
 }

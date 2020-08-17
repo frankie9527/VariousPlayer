@@ -40,7 +40,7 @@ public class VideoTopView extends LinearLayout {
     }
 
     public void setOnTopClickListener(View.OnClickListener listener) {
-        tv_title=findViewById(R.id.tv_title);
+        findViewById(R.id.img_back).setOnClickListener(listener);
     }
 
     public void setTitle(String title) {

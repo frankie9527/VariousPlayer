@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 
 import org.various.demo.utils.CrashHandler;
-import org.various.player.VariousSDK;
+import org.various.player.PlayerConfig;
 
 public class App extends Application {
     @SuppressLint({"StaticFieldLeak"})
@@ -13,7 +13,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         mContext=this;
-        VariousSDK.init(this);
+        PlayerConfig.init(this);
         CrashHandler.getInstance().init();
     }
     public static Application getContext() {

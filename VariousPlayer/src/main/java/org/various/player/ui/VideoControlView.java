@@ -1,23 +1,18 @@
-package org.various.player;
-
-
+package org.various.player.ui;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
-import androidx.annotation.NonNull;
-
-import org.various.player.ui.VideoBottomView;
-import org.various.player.ui.VideoLoadingView;
-import org.various.player.ui.VideoTopView;
-import org.various.player.utils.Repeater;
-
-public class VideoControlView extends RelativeLayout implements IVideoControl, View.OnClickListener {
+import org.various.player.IVideoControl;
+import org.various.player.PlayerConstants;
+import org.various.player.R;
+import org.various.player.listener.UserActionListener;
+import org.various.player.listener.UserDragSeekBarListener;
+public class VideoControlView extends RelativeLayout implements IVideoControl, View.OnClickListener , UserDragSeekBarListener {
     VideoTopView topView;
     VideoBottomView bottomView;
     VideoLoadingView loadingView;
-    @NonNull
-    protected Repeater progressPollRepeater = new Repeater();
+    UserActionListener listener;
 
     public VideoControlView(Context context) {
         super(context);
@@ -40,6 +35,8 @@ public class VideoControlView extends RelativeLayout implements IVideoControl, V
         topView.setOnTopClickListener(this);
         bottomView = findViewById(R.id.video_bottom_view);
         bottomView.setOnBottomClickListener(this);
+        bottomView.setDragSeekListener(this);
+        loadingView = findViewById(R.id.video_loading_view);
     }
 
 
@@ -50,11 +47,11 @@ public class VideoControlView extends RelativeLayout implements IVideoControl, V
 
     @Override
     public void showLoading() {
-        loadingView.setVisibleStatus(PlayerConstants.SHOW);
+        loadingView.setVisibleStatus(PlayerConstants.HIDE);
     }
 
     @Override
-    public void hideloading() {
+    public void hideLoading() {
         loadingView.setVisibleStatus(PlayerConstants.HIDE);
     }
 
@@ -71,30 +68,23 @@ public class VideoControlView extends RelativeLayout implements IVideoControl, V
     }
 
     @Override
+    public void setUserActionListener(UserActionListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
     public void onClick(View view) {
         int viewId = view.getId();
         if (viewId == R.id.img_back) {
-
+            listener.onUserAction(PlayerConstants.ACTION_BACK);
         }
         if (viewId == R.id.img_switch_screen) {
-
+            listener.onUserAction(PlayerConstants.SWITCH_SCREEN);
         }
     }
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        //A poll used to periodically update the progress bar
-        progressPollRepeater.setRepeatListener(new Repeater.RepeatListener() {
-            @Override
-            public void onRepeat() {
 
-            }
-        });
-    }
     @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        progressPollRepeater.stop();
-        progressPollRepeater.setRepeatListener(null);
+    public void onUserDrag(long time) {
+        showLoading();
     }
 }

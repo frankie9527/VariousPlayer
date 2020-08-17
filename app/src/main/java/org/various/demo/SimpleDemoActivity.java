@@ -5,7 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.various.player.PlayerConstants;
 import org.various.player.SimpleVideoView;
+import org.various.player.PlayerConfig;
 
 public class SimpleDemoActivity extends AppCompatActivity {
     String hsl = "http://cctvalih5ca.v.myalicdn.com/live/cctv1_2/index.m3u8";
@@ -19,8 +21,9 @@ public class SimpleDemoActivity extends AppCompatActivity {
         init();
     }
     private void init() {
+        PlayerConfig.setPlayerCore(PlayerConstants.IJY_CORE);
         simple_view =findViewById(R.id.simple_view);
-        simple_view.setPlayData(hsl, title);
+        simple_view.setPlayData(url, title);
         simple_view.startSyncPlay();
     }
 }

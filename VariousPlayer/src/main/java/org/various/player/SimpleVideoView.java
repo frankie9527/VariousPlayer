@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import org.various.player.listener.UserActionListener;
+
 public class SimpleVideoView extends RelativeLayout {
     IVideoControl control;
     VariousSurfacePlayer video_container;
@@ -38,6 +40,10 @@ public class SimpleVideoView extends RelativeLayout {
 
     public void startSyncPlay() {
         setKeepScreenOn(true);
+        control.showLoading();
         video_container.startSyncPlay();
+    }
+    public void setUserActionListener(UserActionListener listener){
+        control.setUserActionListener(listener);
     }
 }

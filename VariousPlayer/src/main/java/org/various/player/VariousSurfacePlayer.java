@@ -8,6 +8,10 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.various.player.core.PlayerManager;
+import org.various.player.core.VariousExoPlayer;
+import org.various.player.core.IPlayer;
+
 public class VariousSurfacePlayer extends SurfaceView implements SurfaceHolder.Callback, IPlayer {
     IPlayer player;
 
@@ -27,7 +31,7 @@ public class VariousSurfacePlayer extends SurfaceView implements SurfaceHolder.C
     }
 
     private void init() {
-        player = new BasePlayer();
+        player = PlayerManager.getPlayer();
         getHolder().addCallback(this);
     }
 
@@ -83,7 +87,22 @@ public class VariousSurfacePlayer extends SurfaceView implements SurfaceHolder.C
 
     @Override
     public boolean setVolume(float volume) {
-           return player.setVolume(volume);
+        return player.setVolume(volume);
+    }
+
+    @Override
+    public long getDuration() {
+        return 0;
+    }
+
+    @Override
+    public long getCurrentPosition() {
+        return 0;
+    }
+
+    @Override
+    public int getBufferedPercent() {
+        return 0;
     }
 
     @Override

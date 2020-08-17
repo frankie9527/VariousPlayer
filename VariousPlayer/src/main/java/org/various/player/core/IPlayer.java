@@ -1,4 +1,4 @@
-package org.various.player;
+package org.various.player.core;
 
 
 
@@ -27,7 +27,16 @@ public interface IPlayer {
 
     boolean setVolume(@FloatRange(from = 0.0d, to = 1.0d) float volume);
 
-    void startSyncPlay();
+
+    @IntRange(from = 0)
+    long getDuration();
+
+    @IntRange(from = 0)
+    long getCurrentPosition();
+    @IntRange(from = 0, to = 100)
+    int getBufferedPercent();
+
+    default void startSyncPlay(){};
 
 
     default void setVideoSurface(@Nullable Surface surface){
@@ -35,4 +44,5 @@ public interface IPlayer {
     }
 
     default void clearVideoSurface(){}
+
 }
