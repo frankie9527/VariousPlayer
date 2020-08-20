@@ -1,12 +1,13 @@
 package org.various.demo;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.various.player.PlayerConstants;
-import org.various.player.SimpleVideoView;
+import org.various.player.ui.simple.SimpleVideoView;
 import org.various.player.PlayerConfig;
 
 public class SimpleDemoActivity extends AppCompatActivity {
@@ -25,5 +26,12 @@ public class SimpleDemoActivity extends AppCompatActivity {
         simple_view =findViewById(R.id.simple_view);
         simple_view.setPlayData(url, title);
         simple_view.startSyncPlay();
+    }
+    public void stop(View view) {
+        simple_view.pause();
+    }
+
+    public void continuePlay(View view) {
+        simple_view.resume();
     }
 }

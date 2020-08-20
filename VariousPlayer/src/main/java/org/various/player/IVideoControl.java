@@ -18,5 +18,9 @@ public interface IVideoControl {
 
     void hideTopAndBootom();
 
+    void showComplete();
+
+    void showError();
+
     void setUserActionListener(UserActionListener listener);
 }

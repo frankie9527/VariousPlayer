@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:text="00:00"
+        android:text="--:--"
         android:textColor="#ffffff" />
 
     <SeekBar
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
-        android:text="00:00"
+        android:text="--:--"
         android:textColor="#ffffff" />
 
     <ImageView

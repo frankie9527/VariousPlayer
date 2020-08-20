@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.various.player.ui.VideoTopView
+    <org.various.player.ui.simple.VideoTopView
         android:id="@+id/video_top_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <org.various.player.ui.VideoBottomView
+    <org.various.player.ui.simple.VideoBottomView
         android:id="@+id/video_bottom_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />
-    <org.various.player.ui.VideoLoadingView
+    <org.various.player.ui.simple.VideoLoadingView
         android:id="@+id/video_loading_view"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"

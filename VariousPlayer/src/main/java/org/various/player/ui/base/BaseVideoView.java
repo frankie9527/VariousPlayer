@@ -1,78 +1,68 @@
-package org.various.player;
+package org.various.player.ui.base;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.various.player.core.PlayerManager;
-import org.various.player.core.VariousExoPlayer;
 import org.various.player.core.IPlayer;
+import org.various.player.core.PlayerManager;
 
-public class VariousSurfacePlayer extends SurfaceView implements SurfaceHolder.Callback, IPlayer {
-    IPlayer player;
+/**
+ * Created by 江雨寒 on 2020/8/19
+ * Email：847145851@qq.com
+ * func:
+ */
+public abstract class BaseVideoView extends FrameLayout implements IPlayer {
+    protected IPlayer player;
 
-    public VariousSurfacePlayer(Context context) {
+    public BaseVideoView(@NonNull Context context) {
         super(context);
         init();
     }
 
-    public VariousSurfacePlayer(Context context, AttributeSet attrs) {
+    public BaseVideoView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public VariousSurfacePlayer(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BaseVideoView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     private void init() {
         player = PlayerManager.getPlayer();
-        getHolder().addCallback(this);
-    }
-
-    @Override
-    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        player.setVideoSurface(surfaceHolder.getSurface());
-    }
-
-    @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-        player.clearVideoSurface();
     }
 
     @Override
     public float getVolume() {
-        return 0;
+        return player.getVolume();
     }
 
     @Override
     public boolean isPlaying() {
-        return false;
+        return player.isPlaying();
     }
 
     @Override
     public void pause() {
-
+        player.pause();
     }
 
     @Override
     public void release() {
-
+        if (player != null) {
+            player.release();
+        }
     }
+
 
     @Override
     public void resume() {
-
+        player.resume();
     }
 
     @Override
@@ -86,27 +76,29 @@ public class VariousSurfacePlayer extends SurfaceView implements SurfaceHolder.C
     }
 
     @Override
-    public boolean setVolume(float volume) {
-        return player.setVolume(volume);
+    public void setVolume(float volume) {
+        player.setVolume(volume);
     }
 
     @Override
     public long getDuration() {
-        return 0;
+        return player.getDuration();
     }
 
     @Override
     public long getCurrentPosition() {
-        return 0;
+        return player.getCurrentPosition();
     }
 
     @Override
     public int getBufferedPercent() {
-        return 0;
+        return player.getBufferedPercent();
     }
 
     @Override
     public void startSyncPlay() {
+        setKeepScreenOn(true);
         player.startSyncPlay();
     }
+
 }

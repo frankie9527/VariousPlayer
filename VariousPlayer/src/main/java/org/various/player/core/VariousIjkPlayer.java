@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
  * Email：847145851@qq.com
  * func:
  */
-public class VariousIjkPlayer implements IPlayer {
+public class VariousIjkPlayer extends AbstractBasePlayer {
     @Override
     public float getVolume() {
         return 0;
@@ -46,8 +46,8 @@ public class VariousIjkPlayer implements IPlayer {
     }
 
     @Override
-    public boolean setVolume(float volume) {
-        return false;
+    public void setVolume(float volume) {
+
     }
 
     @Override

@@ -11,8 +11,8 @@ import org.various.player.PlayerConfig;
  * func:
  */
 public class PlayerManager {
-   private static IPlayer iPlayer;
-    public static IPlayer getPlayer(){
+    private static AbstractBasePlayer iPlayer;
+    public static AbstractBasePlayer getPlayer(){
         if (iPlayer==null){
             if (PlayerConfig.getPlayerCore()== PlayerConstants.EXO_CORE){
                 iPlayer= new VariousExoPlayer();

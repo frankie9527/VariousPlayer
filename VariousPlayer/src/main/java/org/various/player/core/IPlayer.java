@@ -1,12 +1,12 @@
 package org.various.player.core;
 
 
-
 import android.view.Surface;
 
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.Nullable;
+
 
 
 public interface IPlayer {
@@ -25,7 +25,7 @@ public interface IPlayer {
 
     void setVideoUri(@Nullable String url);
 
-    boolean setVolume(@FloatRange(from = 0.0d, to = 1.0d) float volume);
+    void setVolume(@FloatRange(from = 0.0d, to = 1.0d) float volume);
 
 
     @IntRange(from = 0)
@@ -33,16 +33,19 @@ public interface IPlayer {
 
     @IntRange(from = 0)
     long getCurrentPosition();
+
     @IntRange(from = 0, to = 100)
     int getBufferedPercent();
 
-    default void startSyncPlay(){};
+    default void startSyncPlay() {
+    }
 
 
-    default void setVideoSurface(@Nullable Surface surface){
+    default void setVideoSurface(@Nullable Surface surface) {
 
     }
 
-    default void clearVideoSurface(){}
+    default void clearVideoSurface() {
+    }
 
 }

@@ -18,12 +18,16 @@ public interface PlayerConstants {
     int HIDE = 1;
 
 
+    @IntDef({READY, BUFFERING,END,ERROR})
     @interface PlayerStatus {
 
     }
 
-    int STARTPLAY = 0;
-    int LOADING = 1;
+    int READY = 0;
+    int BUFFERING = 1;
+    int END=2;
+    int ERROR=3;
+
 
     @IntDef({ACTION_BACK, SWITCH_SCREEN})
     @interface UserAction {
