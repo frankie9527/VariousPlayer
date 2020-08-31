@@ -2,7 +2,6 @@ package org.various.player.ui.base;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -21,7 +20,7 @@ import org.various.player.PlayerConstants;
 public abstract class BaseTopView extends FrameLayout {
     protected View backView;
     protected TextView titleView;
-    protected SparseArray<View> viewContainer = new SparseArray<>();
+
 
     public BaseTopView(@NonNull Context context) {
         super(context);
@@ -45,20 +44,16 @@ public abstract class BaseTopView extends FrameLayout {
 
     }
 
-    public void saveView2Sparse(int id) {
-        View view = viewContainer.get(id);
-        if (view == null) {
-            view = findViewById(id);
-            viewContainer.put(id, view);
-        }
-    }
+
 
     public void setVisibleStatus(@PlayerConstants.VisibleStatus int status) {
         if (status == PlayerConstants.SHOW) {
             show();
             return;
         }
-        hide();
+        if (status == PlayerConstants.HIDE) {
+            hide();
+        }
     }
 
     public void setTitle(String title) {
@@ -75,7 +70,7 @@ public abstract class BaseTopView extends FrameLayout {
             backView.setOnClickListener(listener);
     }
 
-    public View getViewFromSparse(int id) {
-        return viewContainer.get(id);
+    public View getBackView(){
+        return backView;
     }
 }

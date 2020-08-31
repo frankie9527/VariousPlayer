@@ -1,6 +1,7 @@
 package org.various.player;
 
 import org.various.player.listener.UserActionListener;
+import org.various.player.listener.UserChangeOrientationListener;
 
 /**
  * Created by 江雨寒 on 2020/8/13
@@ -10,17 +11,20 @@ import org.various.player.listener.UserActionListener;
 public interface IVideoControl {
     void setTitle(String title);
 
-    void showLoading();
 
-    void hideLoading();
+    void stateBuffering();
+
+    void stateReady();
 
     void showTopAndBottom();
 
-    void hideTopAndBootom();
+    void hideTopAndBottom();
 
     void showComplete();
 
     void showError();
 
     void setUserActionListener(UserActionListener listener);
+
+    void setOrientationListener(UserChangeOrientationListener orientationListener);
 }

@@ -45,5 +45,5 @@
         android:layout_height="fill_parent"
         android:paddingRight="16dp"
         android:scaleType="center"
-        android:src="@drawable/video_enlarge" />
+        android:src="@drawable/video_switch_normal" />
 </LinearLayout>

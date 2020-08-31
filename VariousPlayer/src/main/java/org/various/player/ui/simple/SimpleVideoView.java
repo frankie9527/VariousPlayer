@@ -7,7 +7,6 @@ import android.view.View;
 import org.various.player.IVideoControl;
 import org.various.player.PlayerConstants;
 import org.various.player.R;
-import org.various.player.core.PlayerManager;
 import org.various.player.listener.UserActionListener;
 import org.various.player.listener.PlayerStatustListener;
 import org.various.player.ui.base.BaseVideoView;
@@ -34,7 +33,8 @@ public class SimpleVideoView extends BaseVideoView implements PlayerStatustListe
     public void initView(Context context) {
         View.inflate(context, R.layout.various_simple_view, this);
         control = findViewById(R.id.video_control);
-        PlayerManager.getPlayer().setVideoEventListener(this);
+        player.setVideoEventListener(this);
+        control.setOrientationListener(this);
 
     }
 
@@ -46,7 +46,7 @@ public class SimpleVideoView extends BaseVideoView implements PlayerStatustListe
     @Override
     public void startSyncPlay() {
         super.startSyncPlay();
-        control.showLoading();
+        control.stateBuffering();
     }
 
     public void setUserActionListener(UserActionListener listener) {
@@ -55,18 +55,16 @@ public class SimpleVideoView extends BaseVideoView implements PlayerStatustListe
 
     @Override
     public void statusChange(int status) {
-        if (status== PlayerConstants.READY){
-            control.hideLoading();
-        }else if (status== PlayerConstants.BUFFERING){
-            control.showLoading();
-        }else if (status== PlayerConstants.END){
+        if (status == PlayerConstants.READY) {
+            control.stateReady();
+        } else if (status == PlayerConstants.BUFFERING) {
+            control.stateBuffering();
+        } else if (status == PlayerConstants.END) {
             control.showComplete();
-        }else if (status==PlayerConstants.ERROR){
+        } else if (status == PlayerConstants.ERROR) {
             control.showError();
         }
     }
-
-
 
 
 }

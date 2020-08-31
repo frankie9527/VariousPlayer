@@ -8,5 +8,7 @@ package org.various.player.listener;
  * func: 用户拖动进度条
  */
 public interface UserDragSeekBarListener {
-    void onUserDrag(long time);
+    int DRAG_START = 0;
+    int DRAG_END = 1;
+    void onUserDrag(int type,long time);
 }

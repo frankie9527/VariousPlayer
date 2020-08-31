@@ -1,6 +1,7 @@
 package org.various.player.ui.simple;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import org.various.player.PlayerConstants;
 import org.various.player.R;
@@ -50,6 +52,7 @@ public class VideoBottomView extends BaseBottomView {
         video_seek.setOnSeekBarChangeListener(this);
         tv_current = findViewById(R.id.tv_current);
         tv_total = findViewById(R.id.tv_total);
+        img_switch_screen=findViewById(R.id.img_switch_screen);
     }
 
     @Override
@@ -64,6 +67,17 @@ public class VideoBottomView extends BaseBottomView {
 
     @Override
     public void setOnBottomClickListener(OnClickListener listener) {
+        if (img_switch_screen!=null)
+            img_switch_screen.setOnClickListener(listener);
+    }
 
+    @Override
+    public void onScreenOrientationChanged(int currentOrientation) {
+        super.onScreenOrientationChanged(currentOrientation);
+        if (currentOrientation== ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+            img_switch_screen.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_switch_full));
+            return;
+        }
+        img_switch_screen.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_switch_normal));
     }
 }

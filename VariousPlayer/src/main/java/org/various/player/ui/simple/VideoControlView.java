@@ -11,7 +11,7 @@ import org.various.player.R;
 
 import org.various.player.ui.base.BaseControlView;
 
-public class VideoControlView extends BaseControlView<VideoTopView,VideoBottomView,VideoLoadingView> {
+public class VideoControlView extends BaseControlView<VideoTopView,VideoBottomView, VideoCenterView> {
 
     public VideoControlView(@NonNull Context context) {
         super(context);
@@ -42,6 +42,6 @@ public class VideoControlView extends BaseControlView<VideoTopView,VideoBottomVi
 
     @Override
     protected int setLoaindViewId() {
-        return R.id.video_loading_view;
+        return R.id.video_center_view;
     }
 }

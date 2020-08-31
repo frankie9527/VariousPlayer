@@ -2,16 +2,14 @@ package org.various.player.ui.base;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.SparseArray;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import org.various.player.PlayerConstants;
 import org.various.player.core.PlayerManager;
 import org.various.player.listener.UserDragSeekBarListener;
@@ -28,7 +26,7 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
     protected SeekBar video_seek;
     protected TextView tv_current, tv_total;
     protected UserDragSeekBarListener dragSeekBarListener;
-    protected SparseArray<View> viewContainer = new SparseArray<>();
+
     @NonNull
     protected Repeater progressPollRepeater = new Repeater();
 
@@ -59,7 +57,9 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
             show();
             return;
         }
-        hide();
+        if (status == PlayerConstants.HIDE) {
+            hide();
+        }
     }
 
     @Override
@@ -134,15 +134,10 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         progressPollRepeater.stop();
+        dragSeekBarListener.onUserDrag(UserDragSeekBarListener.DRAG_START,0);
     }
 
-    public void saveView2Sparse(int id) {
-        View view = viewContainer.get(id);
-        if (view == null) {
-            view = findViewById(id);
-            viewContainer.put(id, view);
-        }
-    }
+
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
@@ -151,13 +146,19 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
         PlayerManager.getPlayer().seekTo(time);
         progressPollRepeater.start();
         if (dragSeekBarListener != null) {
-            dragSeekBarListener.onUserDrag(time);
+            dragSeekBarListener.onUserDrag(UserDragSeekBarListener.DRAG_END,time);
         }
 
     }
 
+    public void  onScreenOrientationChanged(int currentOrientation){
+        Log.e("BaseBottomView","user ScreenOrientationChanged="+currentOrientation);
+    }
 
     public void setDragSeekListener(UserDragSeekBarListener listener) {
         this.dragSeekBarListener = listener;
+    }
+    public ImageView getImgSwitchScreen(){
+        return img_switch_screen;
     }
 }

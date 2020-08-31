@@ -1,23 +1,30 @@
 package org.various.player.ui.base;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.various.player.core.AbstractBasePlayer;
 import org.various.player.core.IPlayer;
 import org.various.player.core.PlayerManager;
+import org.various.player.listener.UserChangeOrientationListener;
+import org.various.player.utils.OrientationUtils;
 
 /**
  * Created by 江雨寒 on 2020/8/19
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseVideoView extends FrameLayout implements IPlayer {
-    protected IPlayer player;
-
+public abstract class BaseVideoView extends FrameLayout implements IPlayer , UserChangeOrientationListener {
+    protected AbstractBasePlayer player;
+    OrientationUtils orientationUtils;
+    private  int initHeight;
     public BaseVideoView(@NonNull Context context) {
         super(context);
         init();
@@ -35,6 +42,7 @@ public abstract class BaseVideoView extends FrameLayout implements IPlayer {
 
     private void init() {
         player = PlayerManager.getPlayer();
+        orientationUtils=new OrientationUtils(getContext());
     }
 
     @Override
@@ -101,4 +109,27 @@ public abstract class BaseVideoView extends FrameLayout implements IPlayer {
         player.startSyncPlay();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        orientationUtils.release();
+    }
+
+    @Override
+    public void changeOrientation() {
+        ViewGroup.LayoutParams lp = getLayoutParams();
+        lp.width=ViewGroup.LayoutParams.MATCH_PARENT;
+        if (initHeight==0){
+            initHeight=lp.height;
+        }
+        int  currentOrientation=orientationUtils.getOrientation();
+        if (currentOrientation== ActivityInfo.SCREEN_ORIENTATION_PORTRAIT||currentOrientation==-1){
+            lp.height=ViewGroup.LayoutParams.MATCH_PARENT;
+            orientationUtils.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }else {
+            orientationUtils.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            lp.height=initHeight;
+        }
+        setLayoutParams(lp);
+    }
 }

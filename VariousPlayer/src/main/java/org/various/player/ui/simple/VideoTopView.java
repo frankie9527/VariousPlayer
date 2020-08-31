@@ -43,10 +43,15 @@ public class VideoTopView extends BaseTopView {
         titleView=findViewById(R.id.tv_title);
     }
 
-    public void show(){
-
+    @Override
+    public void show() {
+        setVisibility(View.VISIBLE);
     }
-    public void hide(){
 
+    @Override
+    public void hide() {
+        setVisibility(View.GONE);
     }
+
+
 }

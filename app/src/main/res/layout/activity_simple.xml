@@ -9,7 +9,7 @@
     <org.various.player.ui.simple.SimpleVideoView
         android:id="@+id/simple_view"
         android:layout_width="match_parent"
-        android:layout_height="180dp"/>
+        android:layout_height="240dp"/>
     <Button
         android:layout_below="@id/simple_view"
         android:text="暂停"

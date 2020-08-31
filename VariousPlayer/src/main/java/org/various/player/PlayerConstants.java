@@ -9,15 +9,19 @@ import androidx.annotation.IntDef;
  * func:
  */
 public interface PlayerConstants {
-
-    @IntDef({SHOW, HIDE})
+    /** 播放器Ui层显示状态*/
+    @IntDef({SHOW, HIDE,SHOW_LOADING,HIDE_LOADING,PLAY_END,PLAY_ERROR})
     @interface VisibleStatus {
     }
-
     int SHOW = 0;
     int HIDE = 1;
+    int SHOW_LOADING = 2;
+    int HIDE_LOADING = 3;
+    int PLAY_END=4;
+    int PLAY_ERROR=5;
 
 
+    /** 播放器内核状态*/
     @IntDef({READY, BUFFERING,END,ERROR})
     @interface PlayerStatus {
 
@@ -36,7 +40,7 @@ public interface PlayerConstants {
 
     int ACTION_BACK = 0;
     int SWITCH_SCREEN = 1;
-
+    /**选择播放器内核*/
     @IntDef({EXO_CORE, IJY_CORE})
     @interface PlayerCore {
 

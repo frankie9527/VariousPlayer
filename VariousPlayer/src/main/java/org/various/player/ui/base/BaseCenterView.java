@@ -15,18 +15,18 @@ import org.various.player.PlayerConstants;
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseLoadingView extends FrameLayout {
-    public BaseLoadingView(@NonNull Context context) {
+public abstract class BaseCenterView extends FrameLayout {
+    public BaseCenterView(@NonNull Context context) {
         super(context);
         initView(context);
     }
 
-    public BaseLoadingView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseCenterView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-    public BaseLoadingView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BaseCenterView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
@@ -37,12 +37,24 @@ public abstract class BaseLoadingView extends FrameLayout {
 
     }
     public void setVisibleStatus(@PlayerConstants.VisibleStatus int status) {
-        if (status== PlayerConstants.SHOW){
-            show();
+        if (status== PlayerConstants.SHOW_LOADING){
+            showLoading();
             return;
         }
-        hide();
+        if (status== PlayerConstants.HIDE_LOADING){
+            hideLoading();
+            return;
+        }
+        if (status== PlayerConstants.PLAY_END){
+            showEnd();
+            return;
+        }
+        if (status== PlayerConstants.PLAY_ERROR){
+            showError();
+        }
     }
-    public abstract void show();
-    public abstract void hide();
+    public abstract void showLoading();
+    public abstract void hideLoading();
+    public abstract void showEnd();
+    public abstract void showError();
 }
