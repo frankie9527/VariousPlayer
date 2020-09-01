@@ -148,7 +148,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
 
     @Override
     public void onLoadingChanged(boolean isLoading) {
-        Log.e(TAG, "onLoadingChanged=" + isLoading);
+//        Log.e(TAG, "onLoadingChanged=" + isLoading);
     }
 
     @Override

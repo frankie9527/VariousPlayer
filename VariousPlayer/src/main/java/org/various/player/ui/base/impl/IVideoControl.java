@@ -1,4 +1,4 @@
-package org.various.player;
+package org.various.player.ui.base.impl;
 
 import org.various.player.listener.UserActionListener;
 import org.various.player.listener.UserChangeOrientationListener;

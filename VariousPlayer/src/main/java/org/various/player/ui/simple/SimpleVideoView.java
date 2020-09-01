@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
-import org.various.player.IVideoControl;
+import org.various.player.ui.base.impl.IVideoControl;
 import org.various.player.PlayerConstants;
 import org.various.player.R;
 import org.various.player.listener.UserActionListener;

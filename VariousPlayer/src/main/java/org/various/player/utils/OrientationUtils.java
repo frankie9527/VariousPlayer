@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.content.pm.ActivityInfo;
 import android.view.OrientationEventListener;
 import android.view.View;
+import android.view.WindowManager;
 
 /**
  * Created by 江雨寒 on 2020/8/21
@@ -48,7 +49,16 @@ public class OrientationUtils {
             Orientation=orientation;
             activity.setRequestedOrientation(
                     orientation);
-            activity.getWindow().getDecorView().setSystemUiVisibility(orientation==ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE?getFullscreenUiFlags():getStableUiFlags());
+            WindowManager.LayoutParams attrs = activity.getWindow().getAttributes();
+            if (orientation==ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+                attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                activity.getWindow().setAttributes(attrs);
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            }else {
+                attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                activity.getWindow().setAttributes(attrs);
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            }
         }
 
 
@@ -56,9 +66,9 @@ public class OrientationUtils {
     }
     public  int getOrientation(){
         if (activity!=null){
-          return   activity.getRequestedOrientation();
+            return   activity.getRequestedOrientation();
         }
-       
+
         return   -1;
     }
     public void release(){
@@ -68,11 +78,4 @@ public class OrientationUtils {
         }
     }
 
-    private int getFullscreenUiFlags() {
-        return  View.SYSTEM_UI_FLAG_FULLSCREEN ;
-    }
-
-    private int getStableUiFlags() {
-        return View.SYSTEM_UI_FLAG_VISIBLE;
-    }
 }

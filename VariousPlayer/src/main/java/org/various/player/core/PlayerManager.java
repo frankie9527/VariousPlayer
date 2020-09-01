@@ -2,6 +2,8 @@ package org.various.player.core;
 
 
 
+import android.util.Log;
+
 import org.various.player.PlayerConstants;
 import org.various.player.PlayerConfig;
 
@@ -11,6 +13,8 @@ import org.various.player.PlayerConfig;
  * func:
  */
 public class PlayerManager {
+    private static final String TAG = "PlayerManager";
+    private static int currentStatus;
     private static AbstractBasePlayer iPlayer;
     public static AbstractBasePlayer getPlayer(){
         if (iPlayer==null){
@@ -24,5 +28,11 @@ public class PlayerManager {
     }
 
 
-
+    public static void setPlayerStatus(int status) {
+        Log.e(TAG,"status="+status);
+        currentStatus=status;
+    }
+    public static int getCurrentStatus(){
+        return currentStatus;
+    }
 }

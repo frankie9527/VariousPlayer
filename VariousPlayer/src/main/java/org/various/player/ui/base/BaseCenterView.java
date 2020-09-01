@@ -57,4 +57,6 @@ public abstract class BaseCenterView extends FrameLayout {
     public abstract void hideLoading();
     public abstract void showEnd();
     public abstract void showError();
+    public abstract void hideAll();
+    public abstract void showStatus();
 }

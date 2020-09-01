@@ -12,12 +12,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.various.player.IVideoControl;
+import org.various.player.ui.base.impl.IVideoControl;
 import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
 import org.various.player.listener.UserChangeOrientationListener;
@@ -38,8 +37,8 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     UserActionListener userActionListener;
     TouchListener touchListener;
     public final int SHOW_TOP_AND_BOTTOM = 0;
-    public final int HIDE_TOP_AND_BOTTOM = 1;
-    Handler uiHandler = new Handler(Looper.getMainLooper()) {
+    public final int HIDE_ALL = 1;
+    Handler mUiHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -48,8 +47,9 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
                 case SHOW_TOP_AND_BOTTOM:
                     showTopAndBottom();
                     break;
-                case HIDE_TOP_AND_BOTTOM:
+                case HIDE_ALL:
                     hideTopAndBottom();
+                    centerView.hideAll();
                     break;
             }
         }
@@ -124,7 +124,9 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void stateReady() {
-        centerView.setVisibleStatus(PlayerConstants.HIDE_LOADING);
+        Log.e(TAG,"stateReady");
+        centerView.showStatus();
+        mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
         bottomView.startRepeater();
     }
 
@@ -144,8 +146,8 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void showComplete() {
-        Toast.makeText(getContext(), "播放完了", Toast.LENGTH_LONG).show();
-
+        showTopAndBottom();
+        centerView.showEnd();
     }
 
     @Override
@@ -180,7 +182,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     @Override
     public void onUserDrag(int type, long time) {
         if (type == UserDragSeekBarListener.DRAG_START) {
-            uiHandler.removeMessages(HIDE_TOP_AND_BOTTOM);
+            mUiHandler.removeMessages(HIDE_ALL);
             return;
         }
         stateBuffering();
@@ -207,12 +209,13 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
             Log.e(TAG, "onSingleTapConfirmed=" + (bottomView.getVisibility() != VISIBLE));
             if (bottomView.getVisibility() != VISIBLE) {
                 showTopAndBottom();
-                uiHandler.removeMessages(HIDE_TOP_AND_BOTTOM);
-                uiHandler.sendEmptyMessageDelayed(HIDE_TOP_AND_BOTTOM, 5000);
+                centerView.showStatus();
+                mUiHandler.removeMessages(HIDE_ALL);
+                mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
 
             } else {
-                uiHandler.removeMessages(HIDE_TOP_AND_BOTTOM);
-                uiHandler.sendEmptyMessage(HIDE_TOP_AND_BOTTOM);
+                mUiHandler.removeMessages(HIDE_ALL);
+                mUiHandler.sendEmptyMessage(HIDE_ALL);
             }
             return true;
         }

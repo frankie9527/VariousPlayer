@@ -11,28 +11,32 @@ import org.various.player.listener.PlayerStatustListener;
  * func:
  */
 public abstract class AbstractBasePlayer implements IPlayer {
-    PlayerStatustListener statustListener = null;
+    PlayerStatustListener mStatustListener = null;
 
 
     public void setVideoEventListener(PlayerStatustListener listener) {
-        statustListener = listener;
+        mStatustListener = listener;
     }
 
     public void notifyStatus(int status) {
-        if (statustListener == null)
+        if (mStatustListener == null)
             return;
         if (status == Player.STATE_READY) {
-            statustListener.statusChange(PlayerConstants.READY);
+            PlayerManager.setPlayerStatus(PlayerConstants.READY);
+            mStatustListener.statusChange(PlayerConstants.READY);
         } else if (status == Player.STATE_BUFFERING) {
-            statustListener.statusChange(PlayerConstants.BUFFERING);
+            PlayerManager.setPlayerStatus(PlayerConstants.BUFFERING);
+            mStatustListener.statusChange(PlayerConstants.BUFFERING);
         } else if (status == Player.STATE_ENDED) {
-            statustListener.statusChange(PlayerConstants.END);
+            PlayerManager.setPlayerStatus(PlayerConstants.END);
+            mStatustListener.statusChange(PlayerConstants.END);
         }
     }
 
     public void notifyPlayerError(){
-        if (statustListener!=null){
-            statustListener.statusChange(PlayerConstants.ERROR);
+        PlayerManager.setPlayerStatus(PlayerConstants.ERROR);
+        if (mStatustListener !=null){
+            mStatustListener.statusChange(PlayerConstants.ERROR);
         }
     }
 
