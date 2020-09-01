@@ -175,6 +175,8 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
             if (orientationListener != null) {
                 orientationListener.changeOrientation();
                 bottomView.onScreenOrientationChanged(OrientationUtils.Orientation);
+                mUiHandler.removeMessages(HIDE_ALL);
+                mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
             }
         }
     }
