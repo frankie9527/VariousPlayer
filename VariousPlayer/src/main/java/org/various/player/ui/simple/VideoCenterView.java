@@ -6,13 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.exoplayer2.Player;
-
+import org.various.player.NotificationCenter;
 import org.various.player.PlayerConstants;
 import org.various.player.R;
 import org.various.player.core.PlayerManager;
@@ -27,6 +27,8 @@ public class VideoCenterView extends BaseCenterView {
     private static final String TAG = "VideoCenterView";
     ProgressBar video_progress;
     ImageView img_status;
+    RelativeLayout rl_play_err;
+    TextView tv_replay;
     public VideoCenterView(Context context) {
         super(context);
 
@@ -55,7 +57,21 @@ public class VideoCenterView extends BaseCenterView {
         img_status.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(),"nihao",Toast.LENGTH_LONG).show();
+                int type=PlayerManager.getCurrentStatus();
+                if (type==PlayerConstants.READY){
+                    return;
+                }
+                if (type==PlayerConstants.READY){
+                    return;
+                }
+            }
+        });
+        rl_play_err=findViewById(R.id.rl_play_err);
+        tv_replay=findViewById(R.id.tv_replay);
+        tv_replay.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_video_err_retry);
             }
         });
     }
@@ -91,8 +107,9 @@ public class VideoCenterView extends BaseCenterView {
         if (video_progress!=null&&video_progress.getVisibility()==VISIBLE){
             video_progress.setVisibility(GONE);
         }
-        img_status.setVisibility(VISIBLE);
-        img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_replay));
+        if (rl_play_err!=null&&rl_play_err.getVisibility()!=VISIBLE){
+            rl_play_err.setVisibility(VISIBLE);
+        }
     }
 
     @Override
@@ -115,15 +132,13 @@ public class VideoCenterView extends BaseCenterView {
                 img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_pause));
                 break;
             case PlayerConstants.BUFFERING:
-                video_progress.setVisibility(VISIBLE);
+                showLoading();
                 break;
             case PlayerConstants.END:
-                img_status.setVisibility(VISIBLE);
-                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_replay));
+                showEnd();
                 break;
             case PlayerConstants.ERROR:
-                img_status.setVisibility(VISIBLE);
-                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_switch_full));
+                showError();
                 break;
         }
     }

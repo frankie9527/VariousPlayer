@@ -20,11 +20,13 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
+
+import org.various.player.NotificationCenter;
 import org.various.player.PlayerConfig;
 
 
 
-public class VariousExoPlayer extends AbstractBasePlayer implements Player.EventListener {
+public class VariousExoPlayer extends AbstractBasePlayer implements Player.EventListener , NotificationCenter.NotificationCenterDelegate{
     String TAG = "VariousExoPlayer";
     MediaSource mediaSource;
     SimpleExoPlayer player;
@@ -193,5 +195,21 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
     @Override
     public void onSeekProcessed() {
         Log.e(TAG, "onSeekProcessed");
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id==NotificationCenter.user_onclick_video_err_retry){
+            player.retry();
+            return;
+        }
+        if (id==NotificationCenter.user_onclick_video_pause){
+            pause();
+            return;
+        }
+        if (id==NotificationCenter.user_onclick_video_resume){
+            resume();
+        }
+
     }
 }

@@ -2,6 +2,7 @@ package org.various.player;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 /**
@@ -14,9 +15,10 @@ public class PlayerConfig {
     int currentCore = PlayerConstants.EXO_CORE;
     @SuppressLint({"StaticFieldLeak"})
     private static Application mContext;
-
+    public static volatile Handler applicationHandler;
     public static void init(@NonNull Application app) {
         mContext = app;
+        applicationHandler = new Handler(mContext.getMainLooper());
     }
 
     public static Application getContext() {

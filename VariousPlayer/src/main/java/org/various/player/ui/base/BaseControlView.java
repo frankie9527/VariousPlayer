@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.various.player.core.PlayerManager;
 import org.various.player.ui.base.impl.IVideoControl;
 import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
@@ -209,6 +210,11 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Log.e(TAG, "onSingleTapConfirmed=" + (bottomView.getVisibility() != VISIBLE));
+            if (PlayerManager.getCurrentStatus()==PlayerConstants.END||PlayerManager.getCurrentStatus()==PlayerConstants.ERROR){
+                showTopAndBottom();
+                centerView.showStatus();
+                return true;
+            }
             if (bottomView.getVisibility() != VISIBLE) {
                 showTopAndBottom();
                 centerView.showStatus();

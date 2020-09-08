@@ -1,7 +1,6 @@
 package org.various.demo;
 
 
-import android.view.View;
 import org.various.demo.base.BaseActivity;
 import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
@@ -35,11 +34,26 @@ public class SimpleDemoActivity extends BaseActivity {
             }
         });
     }
-    public void stop(View view) {
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (simple_view!=null)
         simple_view.pause();
     }
 
-    public void continuePlay(View view) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (simple_view!=null)
         simple_view.resume();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (simple_view!=null)
+            simple_view.release();
     }
 }

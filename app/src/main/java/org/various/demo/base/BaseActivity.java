@@ -38,9 +38,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void initImmersionBar() {
         //在BaseActivity裡初始化
-        ImmersionBar.with(this)
-                .statusBarDarkFont(false, 1f)
-                .keyboardEnable(false)
-                .init();
+//        ImmersionBar.with(this)
+//                .statusBarDarkFont(false, 1f)
+//                .keyboardEnable(false)
+//                .init();
     }
 }

@@ -1,21 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
     <ProgressBar
         android:id="@+id/video_progress"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:indeterminateDrawable="@drawable/anim_progressbar_rotate"
+        android:indeterminateDuration="1000"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/img_status"
-        android:visibility="gone"
-        android:src="@drawable/video_play"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:src="@drawable/video_play"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_play_err"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_replay"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="14dp"
+            android:text="播放失败"
+            android:textColor="#aaa"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_replay"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="点击重试"
+            android:background="@drawable/shape_play_err_tv_background"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+    </RelativeLayout>
 </RelativeLayout>
 
 
