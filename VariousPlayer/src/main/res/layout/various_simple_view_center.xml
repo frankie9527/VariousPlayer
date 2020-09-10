@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="点击重试"
-            android:background="@drawable/shape_play_err_tv_background"
+            android:background="@drawable/shape_play_err_tv_bg"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
     </RelativeLayout>

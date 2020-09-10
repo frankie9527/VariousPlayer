@@ -2,6 +2,8 @@ package org.various.player.core;
 
 import android.net.Uri;
 import android.view.Surface;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -35,6 +37,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
     public VariousExoPlayer() {
         player = new SimpleExoPlayer.Builder(PlayerConfig.getContext()).build();
         player.addListener(this);
+        NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_video_err_retry);
     }
 
 
@@ -60,6 +63,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
         if (player != null) {
             player.removeListener(this);
             player.release();
+            NotificationCenter.getGlobalInstance().removeObserver(this,NotificationCenter.user_onclick_video_err_retry);
         }
     }
 
@@ -201,15 +205,9 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id==NotificationCenter.user_onclick_video_err_retry){
             player.retry();
-            return;
+            Toast.makeText(PlayerConfig.getContext(),"player.retry",Toast.LENGTH_LONG).show();
         }
-        if (id==NotificationCenter.user_onclick_video_pause){
-            pause();
-            return;
-        }
-        if (id==NotificationCenter.user_onclick_video_resume){
-            resume();
-        }
+
 
     }
 }

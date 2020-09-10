@@ -126,7 +126,7 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
             setTotalTime(totalStr);
         }
         float duration = PlayerManager.getPlayer().getDuration();
-        int currentPosition = (int) ((PlayerManager.getPlayer().getCurrentPosition() / duration) * 100);
+        int currentPosition = (int) ((currentTime / duration) * 100);
         int bufferPercent = PlayerManager.getPlayer().getBufferedPercent();
         setSeekPosition(currentPosition, bufferPercent);
     }

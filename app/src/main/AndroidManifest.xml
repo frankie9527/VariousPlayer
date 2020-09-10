@@ -26,7 +26,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".SimpleDemoActivity">
+            android:name=".VideoApiActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

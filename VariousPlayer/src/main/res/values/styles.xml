@@ -1,0 +1,16 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">#090c15</item>
+        <item name="colorPrimaryDark">#090c15</item>
+        <item name="colorAccent">#090c15</item>
+        <item name="android:screenOrientation">portrait</item>
+    </style>
+
+    <style name="popup_brightness_volume_anim" parent="@android:style/Animation">
+        <!--item name="android:windowEnterAnimation">@android:anim/fade_in</item-->
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+</resources>

@@ -119,7 +119,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void stateBuffering() {
-        centerView.setVisibleStatus(PlayerConstants.SHOW_LOADING);
+        centerView.showLoading();
         showTopAndBottom();
     }
 
@@ -204,6 +204,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             gestureDetector.onTouchEvent(event);
+            centerView.handleTouch(view,event);
             return true;
         }
 

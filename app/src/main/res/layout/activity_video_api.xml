@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VideoApiActivity">
+
+    <org.various.player.ui.simple.SimpleVideoView
+        android:id="@+id/simple_view"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"/>
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+      <Button
+          android:id="@+id/pause"
+          android:onClick="pause"
+          android:text="暂停"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+
+      <Button
+          android:id="@+id/resume"
+          android:layout_toRightOf="@id/pause"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:onClick="resume"
+          android:text="继续播放" />
+  </RelativeLayout>
+
+</LinearLayout>

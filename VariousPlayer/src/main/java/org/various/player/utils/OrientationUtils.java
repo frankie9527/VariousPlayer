@@ -31,7 +31,7 @@ public class OrientationUtils {
         };
     }
 
-    private static Activity getActivity(Context context) {
+    public static Activity getActivity(Context context) {
         if (context == null) {
             return null;
         }
