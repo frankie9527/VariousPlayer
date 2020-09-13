@@ -205,19 +205,11 @@ public class VideoCenterView extends BaseCenterView {
 
     @Override
     public void showProgressChange(long lastVideoPlayTime, int arrowDirection, long videoDurationTime) {
-        String str = arrowDirection < 0 ? "左" : "右";
+        String str = arrowDirection <= 0 ? "左" : "右";
         String playStr = TimeFormatUtil.formatMs(lastVideoPlayTime);
         String allStr = TimeFormatUtil.formatMs(videoDurationTime);
 
-        PlayerManager.getPlayer().seekTo(lastVideoPlayTime);
-
-
-        Log.e(TAG, "arrowDirection=" + str);
-        Log.e(TAG, "lastVideoPlayTime=" + lastVideoPlayTime);
-        Log.e(TAG, "playStr=" + playStr);
-        Log.e(TAG, "videoDurationTime=" + videoDurationTime);
-        Log.e(TAG, "allStr=" + allStr);
-
+        Log.e(TAG, "arrowDirection=" + arrowDirection+" str="+str);
 
 
     }

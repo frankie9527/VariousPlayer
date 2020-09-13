@@ -41,7 +41,7 @@ public class VideoControlView extends BaseControlView<VideoTopView,VideoBottomVi
     }
 
     @Override
-    protected int setLoaindViewId() {
+    protected int setCenterViewId() {
         return R.id.video_center_view;
     }
 }

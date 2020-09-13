@@ -17,11 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.various.player.core.PlayerManager;
+import org.various.player.listener.UserProgressListener;
 import org.various.player.ui.base.impl.IVideoControl;
 import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
 import org.various.player.listener.UserChangeOrientationListener;
-import org.various.player.listener.UserDragSeekBarListener;
 import org.various.player.utils.OrientationUtils;
 
 
@@ -30,7 +30,7 @@ import org.various.player.utils.OrientationUtils;
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseControlView<T extends BaseTopView, B extends BaseBottomView, C extends BaseCenterView> extends FrameLayout implements IVideoControl, View.OnClickListener, UserDragSeekBarListener {
+public abstract class BaseControlView<T extends BaseTopView, B extends BaseBottomView, C extends BaseCenterView> extends FrameLayout implements IVideoControl, View.OnClickListener, UserProgressListener {
     private String TAG = "BaseControlView";
     T topView;
     B bottomView;
@@ -84,16 +84,17 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     protected abstract int setBottomViewId();
 
-    protected abstract int setLoaindViewId();
+    protected abstract int setCenterViewId();
 
 
     public void initView(Context context) {
         View.inflate(context, setLayoutId(), this);
         initTopView(setTopViewId());
         initBottomView(setBottomViewId());
-        initLoadingView(setLoaindViewId());
+        initCenterView(setCenterViewId());
         touchListener = new TouchListener(getContext());
         setOnTouchListener(touchListener);
+
     }
 
     protected void initTopView(int id) {
@@ -105,11 +106,12 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     protected void initBottomView(int id) {
         bottomView = findViewById(id);
         bottomView.setOnBottomClickListener(this);
+        bottomView.setDragSeekListener(this);
     }
 
-    protected void initLoadingView(int id) {
-        bottomView.setDragSeekListener(this);
+    protected void initCenterView(int id) {
         centerView = findViewById(id);
+        centerView.setUserProgressListener(this);
     }
 
     @Override
@@ -183,12 +185,18 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     }
 
     @Override
-    public void onUserDrag(int type, long time) {
-        if (type == UserDragSeekBarListener.DRAG_START) {
+    public void onUserProgress(int type, long time) {
+        if (type == PlayerConstants.USER_DRAG_START) {
             mUiHandler.removeMessages(HIDE_ALL);
             return;
         }
-        stateBuffering();
+        if (type == PlayerConstants.USER_DRAG_END) {
+            stateBuffering();
+            return;
+        }
+        if (bottomView!=null){
+            bottomView.changSeekBar(type,time);
+        }
     }
 
 

@@ -48,4 +48,15 @@ public interface PlayerConstants {
 
     int EXO_CORE = 0;
     int IJY_CORE = 1;
+
+
+    /**用户滑动屏幕或者拖动底部的seekBar,*/
+    @IntDef({USER_DRAG_START,USER_DRAG_END,USER_PROGRESS_START, USER_PROGRESS_END})
+    @interface UserProgress {
+
+    }
+    int USER_DRAG_START = 0;
+    int USER_DRAG_END = 1;
+    int USER_PROGRESS_START = 2;
+    int USER_PROGRESS_END = 3;
 }

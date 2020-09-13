@@ -2,27 +2,15 @@ package org.various.player.ui.simple;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import org.various.player.PlayerConstants;
 import org.various.player.R;
-import org.various.player.core.PlayerManager;
-import org.various.player.listener.UserDragSeekBarListener;
 import org.various.player.ui.base.BaseBottomView;
-import org.various.player.utils.Repeater;
-import org.various.player.utils.TimeFormatUtil;
 
 /**
  * Created by 江雨寒 on 2020/8/13

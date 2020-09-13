@@ -10,7 +10,9 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.various.player.PlayerConfig;
+import org.various.player.PlayerConstants;
 import org.various.player.core.PlayerManager;
+import org.various.player.listener.UserProgressListener;
 import org.various.player.utils.OrientationUtils;
 
 /**
@@ -52,8 +54,12 @@ public abstract class BaseCenterView extends FrameLayout {
     public float offsetDis;
     public long offsetTime;
     public int arrowDirection;
+    /**
+     * 上一次播放时间
+     */
     public long lastVideoPlayTime;
 
+    private   UserProgressListener userProgressListener;
     public BaseCenterView(@NonNull Context context) {
         super(context);
         initView(context);
@@ -68,7 +74,9 @@ public abstract class BaseCenterView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
-
+    public void setUserProgressListener(UserProgressListener userProgressListener) {
+        this.userProgressListener = userProgressListener;
+    }
     protected abstract int setLayoutId();
 
     public void initView(Context context) {
@@ -153,6 +161,9 @@ public abstract class BaseCenterView extends FrameLayout {
                 if (lastVideoPlayTime > videoDurationTime)
                     lastVideoPlayTime = videoDurationTime;
                 showProgressChange(lastVideoPlayTime, arrowDirection, videoDurationTime);
+                if (userProgressListener!=null){
+                    userProgressListener.onUserProgress(PlayerConstants.USER_PROGRESS_START,lastVideoPlayTime);
+                }
                 break;
             case MotionEvent.ACTION_UP:
                 lastChangPercent = -1;
@@ -164,7 +175,9 @@ public abstract class BaseCenterView extends FrameLayout {
                         dismissAllView();
                     }
                 },5000);
-                dismissAllView();
+                if (userProgressListener!=null&&moveType==1){
+                    userProgressListener.onUserProgress(PlayerConstants.USER_PROGRESS_END,lastVideoPlayTime);
+                }
                 break;
         }
     }
