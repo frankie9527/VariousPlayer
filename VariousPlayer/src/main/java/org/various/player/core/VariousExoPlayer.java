@@ -92,6 +92,18 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
     }
 
     @Override
+    public void setSpeed(float speed) {
+        PlaybackParameters params = new PlaybackParameters(speed, 1.0f);
+        player.setPlaybackParameters(params);
+    }
+
+    @Override
+    public float getSpeed() {
+        PlaybackParameters params = player.getPlaybackParameters();
+        return params.speed;
+    }
+
+    @Override
     public long getDuration() {
         return player.getDuration();
     }
@@ -207,7 +219,5 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
             player.retry();
             Toast.makeText(PlayerConfig.getContext(),"player.retry",Toast.LENGTH_LONG).show();
         }
-
-
     }
 }

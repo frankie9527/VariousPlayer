@@ -1,15 +1,12 @@
 package org.various.player.ui.base;
 import android.content.Context;
-import android.media.AudioManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import org.various.player.PlayerConfig;
 import org.various.player.PlayerConstants;
 import org.various.player.core.PlayerManager;
 import org.various.player.listener.UserProgressListener;
@@ -43,9 +40,7 @@ public abstract class BaseCenterView extends FrameLayout {
      * 上一次音量或者屏幕亮度值
      */
     private int lastChangPercent = -1;
-    public AudioManager audioManager;
-    public int maxVolume = -1;
-    public int currentVolume = -1;
+    public float currentVolume = -1;
     public float currentBrightness = -1;
     public float lastDownX = -1;
     public long actionDownVideoTime = -1;
@@ -82,9 +77,7 @@ public abstract class BaseCenterView extends FrameLayout {
     public void initView(Context context) {
         View.inflate(context, setLayoutId(), this);
         defaultMoveLength = ViewConfiguration.get(context).getScaledTouchSlop() + 24;
-        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        Log.e(TAG, "maxVolume=" + maxVolume);
+
     }
 
     public abstract void showLoading();
@@ -117,11 +110,7 @@ public abstract class BaseCenterView extends FrameLayout {
                         currentBrightness = 0.01f;
                     }
                 }
-                if (maxVolume == -1) {
-                    maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-
-                }
-                currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                currentVolume=    PlayerManager.getPlayer().getVolume();
                 actionDownVideoTime = PlayerManager.getPlayer().getCurrentPosition();
                 if (videoDurationTime == -1) {
                     videoDurationTime = PlayerManager.getPlayer().getDuration();
@@ -169,12 +158,7 @@ public abstract class BaseCenterView extends FrameLayout {
                 lastChangPercent = -1;
                 currentBrightness = -1;
                 currentVolume = -1;
-                PlayerConfig.applicationHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        dismissAllView();
-                    }
-                },5000);
+                dismissAllView();
                 if (userProgressListener!=null&&moveType==1){
                     userProgressListener.onUserProgress(PlayerConstants.USER_PROGRESS_END,lastVideoPlayTime);
                 }
@@ -193,12 +177,7 @@ public abstract class BaseCenterView extends FrameLayout {
      */
     public abstract void showProgressChange(long lastVideoPlayTime, int arrowDirection, long videoDurationTime);
 
-    public AudioManager getAudioManager() {
-        if (audioManager == null) {
-            audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        }
-        return audioManager;
-    }
+
 
     protected abstract void dismissAllView();
 }

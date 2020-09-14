@@ -10,6 +10,8 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.exoplayer2.PlaybackParameters;
+
 import org.various.player.core.AbstractBasePlayer;
 import org.various.player.core.IPlayer;
 import org.various.player.core.PlayerManager;
@@ -131,5 +133,14 @@ public abstract class BaseVideoView extends FrameLayout implements IPlayer , Use
             lp.height=initHeight;
         }
         setLayoutParams(lp);
+    }
+    @Override
+    public void setSpeed(float speed) {
+        player.setSpeed(speed);
+    }
+
+    @Override
+    public float getSpeed() {
+        return player.getSpeed();
     }
 }

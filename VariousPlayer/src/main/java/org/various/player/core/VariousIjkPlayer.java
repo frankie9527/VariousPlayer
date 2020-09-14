@@ -51,6 +51,16 @@ public class VariousIjkPlayer extends AbstractBasePlayer {
     }
 
     @Override
+    public void setSpeed(float speed) {
+
+    }
+
+    @Override
+    public float getSpeed() {
+        return 0;
+    }
+
+    @Override
     public long getDuration() {
         return 0;
     }

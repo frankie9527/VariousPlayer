@@ -68,7 +68,7 @@ public class UiUtils {
 
 	/**
 	 * 将dip转换为px
-	 * 
+	 *
 	 * @param dipValue
 	 * @return
 	 */
@@ -118,6 +118,16 @@ public class UiUtils {
 	}
 
 
+	public static void viewSetGone(View view) {
+		if (view.getVisibility() == View.VISIBLE) {
+			view.setVisibility(View.GONE);
+		}
+	}
 
+	public static void viewSetVisible(View view) {
+		if (view.getVisibility() != View.VISIBLE) {
+			view.setVisibility(View.VISIBLE);
+		}
+	}
 
 }

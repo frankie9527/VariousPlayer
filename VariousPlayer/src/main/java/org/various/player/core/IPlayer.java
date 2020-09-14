@@ -28,6 +28,10 @@ public interface IPlayer {
     void setVolume(@FloatRange(from = 0.0d, to = 1.0d) float volume);
 
 
+    void setSpeed(float speed);
+
+    float getSpeed();
+
     @IntRange(from = 0)
     long getDuration();
 

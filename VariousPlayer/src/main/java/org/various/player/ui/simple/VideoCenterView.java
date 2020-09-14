@@ -26,6 +26,9 @@ import org.various.player.ui.base.BaseCenterView;
 import org.various.player.utils.OrientationUtils;
 import org.various.player.utils.TimeFormatUtil;
 import org.various.player.utils.UiUtils;
+import org.various.player.widget.BrightnessPopupWindow;
+import org.various.player.widget.ProgressPopupWindow;
+import org.various.player.widget.VolumePopupWindow;
 
 /**
  * Created by 江雨寒 on 2020/8/14
@@ -38,22 +41,13 @@ public class VideoCenterView extends BaseCenterView {
     ImageView img_status;
     RelativeLayout rl_play_err;
     TextView tv_replay;
-
-    public VideoCenterView(Context context) {
-        super(context);
-
-    }
-
+    BrightnessPopupWindow mBrightnessPop;
+    VolumePopupWindow   mVolumePop;
+    ProgressPopupWindow mProgressPopup;
     public VideoCenterView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
     }
-
-    public VideoCenterView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-
-    }
-
     @Override
     protected int setLayoutId() {
         return R.layout.various_simple_view_center;
@@ -82,44 +76,46 @@ public class VideoCenterView extends BaseCenterView {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_video_err_retry);
             }
         });
-
+        mVolumePop=new VolumePopupWindow(context);
+        mBrightnessPop=new BrightnessPopupWindow(context);
+        mProgressPopup=new ProgressPopupWindow(context);
     }
 
     @Override
     public void showLoading() {
-        viewSetVisible(this);
-        viewSetGone(img_status);
-        viewSetGone(rl_play_err);
-        viewSetVisible(video_progress);
+        UiUtils.viewSetVisible(this);
+        UiUtils.viewSetGone(img_status);
+        UiUtils.viewSetGone(rl_play_err);
+        UiUtils.viewSetVisible(video_progress);
     }
 
     @Override
     public void hideLoading() {
-        viewSetGone(video_progress);
-        viewSetGone(this);
+        UiUtils.viewSetGone(video_progress);
+        UiUtils.viewSetGone(this);
     }
 
     @Override
     public void showEnd() {
-        viewSetVisible(this);
-        viewSetGone(video_progress);
+        UiUtils.viewSetVisible(this);
+        UiUtils.viewSetGone(video_progress);
         img_status.setVisibility(VISIBLE);
         img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_replay));
     }
 
     @Override
     public void showError() {
-        viewSetVisible(this);
-        viewSetGone(video_progress);
-        viewSetVisible(rl_play_err);
+        UiUtils.viewSetVisible(this);
+        UiUtils.viewSetGone(video_progress);
+        UiUtils.viewSetVisible(rl_play_err);
     }
 
     @Override
     public void hideAll() {
-        viewSetGone(video_progress);
-        viewSetGone(img_status);
-        viewSetGone(rl_play_err);
-        viewSetGone(this);
+        UiUtils.viewSetGone(video_progress);
+        UiUtils.viewSetGone(img_status);
+        UiUtils.viewSetGone(rl_play_err);
+        UiUtils.viewSetGone(this);
     }
 
     @Override
@@ -127,12 +123,12 @@ public class VideoCenterView extends BaseCenterView {
         setVisibility(View.VISIBLE);
         int type = PlayerManager.getCurrentStatus();
         Log.e(TAG, "type=" + type);
-        viewSetGone(video_progress);
-        viewSetGone(img_status);
-        viewSetGone(rl_play_err);
+        UiUtils.viewSetGone(video_progress);
+        UiUtils.viewSetGone(img_status);
+        UiUtils.viewSetGone(rl_play_err);
         switch (type) {
             case PlayerConstants.READY:
-                viewSetVisible(img_status);
+                UiUtils.viewSetVisible(img_status);
                 img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), PlayerManager.getPlayer().isPlaying() ? R.drawable.video_pause : R.drawable.video_play));
                 break;
             case PlayerConstants.BUFFERING:
@@ -147,101 +143,34 @@ public class VideoCenterView extends BaseCenterView {
         }
     }
 
-    protected PopupWindow mBrightnessPopup;
-    protected ProgressBar mBrightnessPopupProgressBar;
+
 
     @Override
     public void showBrightnessChange(int changePercent) {
-        Log.e(TAG, "showBrightnessChange=" + changePercent);
-        float lastBrightness = currentBrightness + changePercent * 0.01f;
-        WindowManager.LayoutParams layoutParams = OrientationUtils.getActivity(getContext()).getWindow().getAttributes();
-        layoutParams.screenBrightness = lastBrightness;
-        if (layoutParams.screenBrightness > 1.0f) {
-            layoutParams.screenBrightness = 1.0f;
-        } else if (layoutParams.screenBrightness < 0.01f) {
-            layoutParams.screenBrightness = 0f;
-        }
-        Log.e(TAG, "layoutParams.screenBrightness=" + layoutParams.screenBrightness);
-        OrientationUtils.getActivity(getContext()).getWindow().setAttributes(layoutParams);
-
-        if (mBrightnessPopup == null) {
-            View localView = LayoutInflater.from(getContext()).inflate(R.layout.various_popup_brightness, null);
-
-            mBrightnessPopupProgressBar = ((ProgressBar) localView.findViewById(R.id.brightness_progressbar));
-            mBrightnessPopupProgressBar.setMax(100);
-
-            mBrightnessPopup = getPopupWindow(localView);
-        }
-        if (!mBrightnessPopup.isShowing())
-            mBrightnessPopup.showAtLocation(this, Gravity.TOP, 0, UiUtils.dip2px(20));
-        mBrightnessPopupProgressBar.setProgress((int) (lastBrightness * 100));
+        mBrightnessPop.showBrightnessChange(changePercent, (View) getParent(),currentBrightness);
     }
-
-    protected PopupWindow mVolumePopup;
-    protected ProgressBar mVolumeProgressBar;
 
     @Override
     public void showVolumeChange(int changePercent) {
-        Log.e(TAG, "showVolumeChange=" + changePercent);
-        int offsetVolume = (int) (maxVolume * changePercent * 0.01f);
-        int nowVolume = currentVolume + offsetVolume;
-        if (nowVolume < 0)
-            nowVolume = 0;
-        if (nowVolume > maxVolume)
-            nowVolume = maxVolume;
-        Log.e(TAG, "nowVolume=" + nowVolume);
-        getAudioManager().setStreamVolume(AudioManager.STREAM_MUSIC, nowVolume, 0);
-
-        if (mVolumePopup == null) {
-            View localView = LayoutInflater.from(getContext()).inflate(R.layout.various_popup_volume, null);
-            mVolumeProgressBar = localView.findViewById(R.id.brightness_progressbar);
-            mVolumeProgressBar.setMax(maxVolume);
-            mVolumePopup = getPopupWindow(localView);
-        }
-        if (!mVolumePopup.isShowing())
-            mVolumePopup.showAtLocation(this, Gravity.TOP, 0, UiUtils.dip2px(20));
-        mVolumeProgressBar.setProgress(nowVolume);
+        mVolumePop.showVolumeChange(changePercent,(View) getParent(),currentVolume);
     }
 
     @Override
     public void showProgressChange(long lastVideoPlayTime, int arrowDirection, long videoDurationTime) {
-        String str = arrowDirection <= 0 ? "左" : "右";
-        String playStr = TimeFormatUtil.formatMs(lastVideoPlayTime);
-        String allStr = TimeFormatUtil.formatMs(videoDurationTime);
-
-        Log.e(TAG, "arrowDirection=" + arrowDirection+" str="+str);
-
-
+        mProgressPopup.showProgressChange((View) getParent(),lastVideoPlayTime,arrowDirection,videoDurationTime);
     }
 
     @Override
     protected void dismissAllView() {
-        if (mVolumePopup != null && mVolumePopup.isShowing()) {
-            mVolumePopup.dismiss();
+        if (mVolumePop != null) {
+            mVolumePop.dismissPop();
         }
-        if (mBrightnessPopup != null && mBrightnessPopup.isShowing()) {
-            mBrightnessPopup.dismiss();
+        if (mBrightnessPop != null) {
+            mBrightnessPop.dismissPop();
         }
-    }
-
-    public void viewSetGone(View view) {
-        if (view.getVisibility() == VISIBLE) {
-            view.setVisibility(GONE);
+        if (mProgressPopup != null) {
+            mProgressPopup.dismissPop();
         }
     }
 
-    public void viewSetVisible(View view) {
-        if (view.getVisibility() != VISIBLE) {
-            view.setVisibility(VISIBLE);
-        }
-    }
-
-    private PopupWindow getPopupWindow(View popupView) {
-        PopupWindow mPopupWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
-        mPopupWindow.setTouchable(true);
-        mPopupWindow.setOutsideTouchable(true);
-        mPopupWindow.setBackgroundDrawable(new ColorDrawable(0));
-        mPopupWindow.setAnimationStyle(R.style.popup_brightness_volume_anim);
-        return mPopupWindow;
-    }
 }
