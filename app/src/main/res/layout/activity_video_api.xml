@@ -35,6 +35,18 @@
             android:layout_height="wrap_content"
             android:onClick="speed"
             android:text="倍速播放" />
+        <Button
+            android:id="@+id/getBitMap"
+            android:layout_toRightOf="@id/speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="getBitMap"
+            android:text="获取播放图片" />
+        <ImageView
+            android:id="@+id/img_copy"
+            android:layout_below="@id/getBitMap"
+            android:layout_width="wrap_content"
+            android:layout_height="240dp"/>
     </RelativeLayout>
 
 </LinearLayout>

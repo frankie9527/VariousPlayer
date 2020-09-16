@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -83,8 +84,9 @@ public class UiUtils {
 	public static int getWindowWidth() {
 		WindowManager wm = (WindowManager) getContext().getSystemService(
 				Context.WINDOW_SERVICE);
-		int width = wm.getDefaultDisplay().getWidth();
-		return width;
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		wm.getDefaultDisplay().getMetrics(outMetrics);
+		return outMetrics.widthPixels;
 	}
 	/** 获取屏幕宽度
 	 * @return */
@@ -93,8 +95,9 @@ public class UiUtils {
 		WindowManager wm = (WindowManager) getContext().getSystemService(
 				Context.WINDOW_SERVICE);
 
-		int height = wm.getDefaultDisplay().getHeight();
-		return height;
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		wm.getDefaultDisplay().getMetrics(outMetrics);
+		return outMetrics.heightPixels;
 	}
 
 	/**

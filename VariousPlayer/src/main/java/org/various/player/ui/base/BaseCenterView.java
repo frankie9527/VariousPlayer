@@ -1,6 +1,7 @@
 package org.various.player.ui.base;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -11,6 +12,7 @@ import org.various.player.PlayerConstants;
 import org.various.player.core.PlayerManager;
 import org.various.player.listener.UserProgressListener;
 import org.various.player.utils.OrientationUtils;
+import org.various.player.utils.UiUtils;
 
 /**
  * Created by 江雨寒 on 2020/8/19
@@ -82,7 +84,7 @@ public abstract class BaseCenterView extends FrameLayout {
 
     public abstract void showLoading();
 
-    public abstract void hideLoading();
+    public abstract void hideLoadingAndPlayIcon();
 
     public abstract void showEnd();
 
@@ -150,9 +152,12 @@ public abstract class BaseCenterView extends FrameLayout {
                 if (lastVideoPlayTime > videoDurationTime)
                     lastVideoPlayTime = videoDurationTime;
                 showProgressChange(lastVideoPlayTime, arrowDirection, videoDurationTime);
+                // 告知底部seek 跟随手指滑动改变seek 当前进度
                 if (userProgressListener!=null){
                     userProgressListener.onUserProgress(PlayerConstants.USER_PROGRESS_START,lastVideoPlayTime);
                 }
+                //快进快退过程中，隐藏播放或者加载的按钮或者动画
+                hideLoadingAndPlayIcon();
                 break;
             case MotionEvent.ACTION_UP:
                 lastChangPercent = -1;
@@ -164,6 +169,27 @@ public abstract class BaseCenterView extends FrameLayout {
                 }
                 break;
         }
+    }
+    public void handleDoubleTap( MotionEvent event){
+        float x = event.getRawX();
+        int W = UiUtils.getWindowWidth();
+        if (x < W * 0.4) {
+            onLeftDoubleTop();
+        } else if (x > W * 0.7) {//右边
+            onRightDoubleTap();
+        }
+    }
+    /**
+     * 左边双击了
+     */
+    public void onLeftDoubleTop() {
+
+    }
+    /**
+     * 右边双击了
+     */
+    public void onRightDoubleTap() {
+
     }
 
 
@@ -180,4 +206,8 @@ public abstract class BaseCenterView extends FrameLayout {
 
 
     protected abstract void dismissAllView();
+
+    public void onScreenOrientationChanged(int currentOrientation) {
+        Log.e("BaseBottomView", "user ScreenOrientationChanged=" + currentOrientation);
+    }
 }

@@ -25,10 +25,12 @@ public class VolumePopupWindow {
     protected PopupWindow mVolumePopup;
     protected ProgressBar mVolumeProgressBar;
     View localView;
-    int offsetX,  offsetY;
+    int offsetX, offsetY;
+
     public VolumePopupWindow(Context context) {
         this.context = context;
     }
+
     private PopupWindow getPopupWindow(View popupView) {
         PopupWindow mPopupWindow = new PopupWindow(popupView, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, true);
         mPopupWindow.setTouchable(true);
@@ -37,8 +39,9 @@ public class VolumePopupWindow {
         mPopupWindow.setAnimationStyle(R.style.popup_brightness_volume_anim);
         return mPopupWindow;
     }
-    public void showVolumeChange(int changePercent,View view,float currentVolume){
-        float nowVolume=changePercent* 0.01f+currentVolume;
+
+    public void showVolumeChange(int changePercent, View view, float currentVolume) {
+        float nowVolume = changePercent * 0.01f + currentVolume;
         if (nowVolume < 0)
             nowVolume = 0;
         if (nowVolume > 1.0f)
@@ -46,23 +49,22 @@ public class VolumePopupWindow {
         Log.e("VolumePopupWindow", "nowVolume=" + nowVolume);
         PlayerManager.getPlayer().setVolume(nowVolume);
         if (mVolumePopup == null) {
-             localView = LayoutInflater.from(context).inflate(R.layout.various_popup_volume, null);
+            localView = LayoutInflater.from(context).inflate(R.layout.various_popup_volume, null);
             mVolumeProgressBar = localView.findViewById(R.id.brightness_progressbar);
             mVolumeProgressBar.setMax(100);
             mVolumePopup = getPopupWindow(localView);
-            localView.measure(0,0);
-            offsetX=(view.getWidth()-localView.getMeasuredWidth())/2;
-            offsetY=-(view.getHeight()-UiUtils.dip2px(24));
-
 
         }
+        localView.measure(0, 0);
+        offsetX = (view.getWidth() - localView.getMeasuredWidth()) / 2;
+        offsetY = -(view.getHeight() - UiUtils.dip2px(24));
         if (!mVolumePopup.isShowing())
             mVolumePopup.showAsDropDown(view, offsetX, offsetY);
-        mVolumeProgressBar.setProgress((int) (nowVolume*100));
+        mVolumeProgressBar.setProgress((int) (nowVolume * 100));
     }
 
-    public void dismissPop(){
-        if (mVolumePopup!=null&&mVolumePopup.isShowing()){
+    public void dismissPop() {
+        if (mVolumePopup != null && mVolumePopup.isShowing()) {
             mVolumePopup.dismiss();
         }
     }

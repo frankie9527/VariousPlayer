@@ -168,6 +168,8 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         if (view == topView.getBackView() && orientationListener != null) {
             if (OrientationUtils.Orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                 orientationListener.changeOrientation();
+                topView.onScreenOrientationChanged(OrientationUtils.Orientation);
+                centerView.onScreenOrientationChanged(OrientationUtils.Orientation);
                 bottomView.onScreenOrientationChanged(OrientationUtils.Orientation);
                 return;
             }
@@ -177,6 +179,8 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         if (view == bottomView.getImgSwitchScreen()) {
             if (orientationListener != null) {
                 orientationListener.changeOrientation();
+                topView.onScreenOrientationChanged(OrientationUtils.Orientation);
+                centerView.onScreenOrientationChanged(OrientationUtils.Orientation);
                 bottomView.onScreenOrientationChanged(OrientationUtils.Orientation);
                 mUiHandler.removeMessages(HIDE_ALL);
                 mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
@@ -239,6 +243,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
+            centerView.handleDoubleTap(e);
             return super.onDoubleTap(e);
         }
     }

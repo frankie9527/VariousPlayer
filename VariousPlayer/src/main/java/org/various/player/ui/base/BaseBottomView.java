@@ -17,6 +17,7 @@ import org.various.player.core.PlayerManager;
 import org.various.player.listener.UserProgressListener;
 import org.various.player.utils.Repeater;
 import org.various.player.utils.TimeFormatUtil;
+import org.various.player.view.CanDragSeekBar;
 
 /**
  * Created by 江雨寒 on 2020/8/19
@@ -25,10 +26,9 @@ import org.various.player.utils.TimeFormatUtil;
  */
 public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
     protected ImageView img_switch_screen;
-    protected SeekBar video_seek;
+    protected CanDragSeekBar  video_seek;
     protected TextView tv_current, tv_total;
     protected UserProgressListener userProgressListener;
-
     @NonNull
     protected Repeater progressPollRepeater = new Repeater();
 
@@ -78,6 +78,9 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
     public abstract void setOnBottomClickListener(OnClickListener listener);
 
     public void startRepeater() {
+        if (video_seek!=null) {
+            video_seek.setCanDrag(true);
+        }
         progressPollRepeater.start();
     }
 
@@ -193,7 +196,7 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
             }
             return;
         }
-        if (type == PlayerConstants.USER_PROGRESS_END){
+        if (type == PlayerConstants.USER_PROGRESS_END) {
             PlayerManager.getPlayer().seekTo(time);
             progressPollRepeater.start();
         }

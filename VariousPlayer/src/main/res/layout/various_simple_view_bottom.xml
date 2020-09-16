@@ -16,7 +16,7 @@
         android:text="--:--"
         android:textColor="#ffffff" />
 
-    <SeekBar
+    <org.various.player.view.CanDragSeekBar
         android:id="@+id/video_seek"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

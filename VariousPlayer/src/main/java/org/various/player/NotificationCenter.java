@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class NotificationCenter {
     private static int totalEvents = 1;
     public static final int user_onclick_video_err_retry = totalEvents++;
-    public static final int user_onclick_video_pause=totalEvents++;
-    public static final int user_onclick_video_resume=totalEvents++;
+    public static final int user_onclick_take_pic = totalEvents++;
+    public static final int user_onclick_take_pic_data = totalEvents++;
 
     private SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
     private SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();
@@ -128,9 +128,9 @@ public class NotificationCenter {
         }
     }
     public void addPostponeNotificationsCallback(PostponeNotificationCallback callback) {
-            if (Thread.currentThread() != PlayerConfig.applicationHandler.getLooper().getThread()) {
-                throw new RuntimeException("PostponeNotificationsCallback allowed only from MAIN thread");
-            }
+        if (Thread.currentThread() != PlayerConfig.applicationHandler.getLooper().getThread()) {
+            throw new RuntimeException("PostponeNotificationsCallback allowed only from MAIN thread");
+        }
         if (!postponeCallbackList.contains(callback)) {
             postponeCallbackList.add(callback);
         }

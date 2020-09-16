@@ -2,6 +2,7 @@ package org.various.player.ui.base;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -72,5 +73,8 @@ public abstract class BaseTopView extends FrameLayout {
 
     public View getBackView(){
         return backView;
+    }
+    public void onScreenOrientationChanged(int currentOrientation) {
+        Log.e("BaseBottomView", "user ScreenOrientationChanged=" + currentOrientation);
     }
 }

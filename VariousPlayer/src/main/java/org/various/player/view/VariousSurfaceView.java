@@ -1,4 +1,4 @@
-package org.various.player;
+package org.various.player.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

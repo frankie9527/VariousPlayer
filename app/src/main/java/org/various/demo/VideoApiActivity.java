@@ -1,13 +1,15 @@
 package org.various.demo;
 
 
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.Button;
-
+import android.widget.ImageView;
 import org.various.demo.base.BaseActivity;
 import org.various.player.PlayerConfig;
 import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
+import org.various.player.ui.normal.NormalVideoView;
 import org.various.player.ui.simple.SimpleVideoView;
 
 public class VideoApiActivity extends BaseActivity {
@@ -20,6 +22,7 @@ public class VideoApiActivity extends BaseActivity {
      * 当前播放的倍速
      * */
     float currentSpeed;
+    ImageView img_copy;
     @Override
     protected int setLayout() {
         return R.layout.activity_video_api;
@@ -40,6 +43,7 @@ public class VideoApiActivity extends BaseActivity {
 
             }
         });
+        img_copy=findViewById(R.id.img_copy);
 
     }
 
@@ -61,4 +65,9 @@ public class VideoApiActivity extends BaseActivity {
         simple_view.setSpeed(currentSpeed);
         speedButton.setText(currentSpeed+"x");
     }
+    public void  getBitMap(View view){
+        Bitmap bitmap= simple_view.video_container.getBitmap();
+        img_copy.setImageBitmap(bitmap);
+    }
+
 }

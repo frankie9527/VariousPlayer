@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_backward"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="invisible"
+        android:background="@drawable/bg_ripple_left"
+        android:clickable="true"
+        >
+
+        <ImageView
+            android:id="@+id/lottie_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+           />
+
+        <TextView
+            android:id="@+id/tv_backward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lottie_left"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="-10"
+            android:textColor="#fff"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_forward"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="invisible"
+        android:background="@drawable/bg_ripple_right"
+        android:clickable="true"
+        >
+
+        <ImageView
+            android:id="@+id/lottie_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lottie_right"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:text="+10"
+            android:textColor="#fff"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</LinearLayout>

@@ -10,7 +10,7 @@ import org.various.player.PlayerConfig;
 public class SimpleDemoActivity extends BaseActivity {
     String hsl = "http://cctvalih5ca.v.myalicdn.com/live/cctv1_2/index.m3u8";
     SimpleVideoView simple_view;
-    String title = "hello!frankie";
+    String title = "SimpleVideoView";
     String url = "https://mov.bn.netease.com/open-movie/nos/mp4/2017/05/31/SCKR8V6E9_hd.mp4";
 
 
@@ -39,14 +39,14 @@ public class SimpleDemoActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         if (simple_view!=null)
-        simple_view.pause();
+            simple_view.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (simple_view!=null)
-        simple_view.resume();
+            simple_view.resume();
     }
 
 

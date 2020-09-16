@@ -47,11 +47,10 @@ public class ProgressPopupWindow {
             video_progressbar =  localView.findViewById(R.id.video_progressbar);
             video_progressbar.setMax(100);
             mProgressPopup = getPopupWindow(localView);
-            localView.measure(0,0);
-            offsetX=(view.getWidth()-localView.getMeasuredWidth())/2;
-            offsetY=-(view.getHeight()+localView.getMeasuredHeight())/2;
-
         }
+        localView.measure(0,0);
+        offsetX=(view.getWidth()-localView.getMeasuredWidth())/2;
+        offsetY=-(view.getHeight()+localView.getMeasuredHeight())/2;
         if (!mProgressPopup.isShowing()){
             Log.e("jyh","simple_view="+view.getWidth());
             Log.e("jyh","localView="+localView.getMeasuredWidth());

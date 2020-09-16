@@ -8,9 +8,18 @@
     tools:context=".MainActivity">
 
     <Button
+        android:onClick="goApi"
+        android:text="ApiView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
         android:onClick="goSimple"
         android:text="SimpleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-
+    <Button
+        android:onClick="goNormal"
+        android:text="NormalView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -15,6 +15,7 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import org.various.player.core.AbstractBasePlayer;
 import org.various.player.core.IPlayer;
 import org.various.player.core.PlayerManager;
+import org.various.player.listener.PlayerStatusListener;
 import org.various.player.listener.UserChangeOrientationListener;
 import org.various.player.utils.OrientationUtils;
 
@@ -143,4 +144,5 @@ public abstract class BaseVideoView extends FrameLayout implements IPlayer , Use
     public float getSpeed() {
         return player.getSpeed();
     }
+
 }

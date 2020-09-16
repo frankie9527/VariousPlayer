@@ -7,7 +7,7 @@ import org.various.player.PlayerConstants;
  * Email：847145851@qq.com
  * func:
  */
-public interface PlayerStatustListener {
+public interface PlayerStatusListener {
 
     void statusChange(@PlayerConstants.PlayerStatus int status);
 

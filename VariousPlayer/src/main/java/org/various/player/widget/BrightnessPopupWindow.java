@@ -47,10 +47,10 @@ public class BrightnessPopupWindow {
             mBrightnessPopupProgressBar =   localView.findViewById(R.id.brightness_progressbar) ;
             mBrightnessPopupProgressBar.setMax(100);
             mBrightnessPopup = getPopupWindow(localView);
-            localView.measure(0,0);
-            offsetX=(view.getWidth()-localView.getMeasuredWidth())/2;
-            offsetY=-(view.getHeight()-UiUtils.dip2px(24));
         }
+        localView.measure(0,0);
+        offsetX=(view.getWidth()-localView.getMeasuredWidth())/2;
+        offsetY=-(view.getHeight()-UiUtils.dip2px(24));
         if (!mBrightnessPopup.isShowing())
             mBrightnessPopup.showAsDropDown(view, offsetX, offsetY);
         mBrightnessPopupProgressBar.setProgress((int) (lastBrightness * 100));

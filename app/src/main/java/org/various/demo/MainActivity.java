@@ -62,12 +62,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+    public void goApi(View view) {
+        intent=new Intent(this,VideoApiActivity.class);
+        startActivity(intent);
+    }
     public void goSimple(View view) {
         intent=new Intent(this,SimpleDemoActivity.class);
         startActivity(intent);
 
     }
 
-
+    public void goNormal(View view) {
+        intent=new Intent(this,NormalDemoActivity.class);
+        startActivity(intent);
+    }
 }

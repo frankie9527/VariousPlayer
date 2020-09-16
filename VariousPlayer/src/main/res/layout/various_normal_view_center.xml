@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/video_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:indeterminateDrawable="@drawable/anim_progressbar_rotate"
+        android:indeterminateDuration="1000"
+        />
+
+    <ImageView
+        android:id="@+id/img_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/video_play"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
+    <ImageView
+        android:id="@+id/img_lock_screen"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="32dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_unlock"
+        android:visibility="gone"
+        />
+    <ImageView
+        android:id="@+id/img_take_pic"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="32dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_take_pic"
+        android:visibility="gone"
+        />
+    <include layout="@layout/various_video_forward" />
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_play_err"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_replay"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="14dp"
+            android:text="播放失败"
+            android:textColor="#aaa"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_replay"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="点击重试"
+            android:background="@drawable/shape_play_err_tv_bg"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
+

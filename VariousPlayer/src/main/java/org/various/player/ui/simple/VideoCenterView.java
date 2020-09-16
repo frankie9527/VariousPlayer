@@ -90,9 +90,9 @@ public class VideoCenterView extends BaseCenterView {
     }
 
     @Override
-    public void hideLoading() {
+    public void hideLoadingAndPlayIcon() {
         UiUtils.viewSetGone(video_progress);
-        UiUtils.viewSetGone(this);
+        UiUtils.viewSetGone(img_status);
     }
 
     @Override
