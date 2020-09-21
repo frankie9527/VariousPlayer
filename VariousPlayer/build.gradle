@@ -38,6 +38,5 @@ dependencies {
     api "com.google.android.exoplayer:exoplayer-dash:2.11.7"
     api "com.google.android.exoplayer:exoplayer-hls:2.11.7"
     api "com.google.android.exoplayer:exoplayer-smoothstreaming:2.11.7"
-
-
+    api "com.google.android.exoplayer:extension-okhttp:2.11.7"
 }

@@ -3,7 +3,8 @@ package org.various.player.core;
 import com.google.android.exoplayer2.Player;
 
 import org.various.player.PlayerConstants;
-import org.various.player.listener.PlayerStatustListener;
+import org.various.player.listener.PlayerStatusListener;
+
 
 /**
  * Created by 江雨寒 on 2020/8/19
@@ -11,10 +12,10 @@ import org.various.player.listener.PlayerStatustListener;
  * func:
  */
 public abstract class AbstractBasePlayer implements IPlayer {
-    PlayerStatustListener mStatusListener = null;
+    PlayerStatusListener mStatusListener = null;
 
 
-    public void setVideoEventListener(PlayerStatustListener listener) {
+    public void setVideoEventListener(PlayerStatusListener listener) {
         mStatusListener = listener;
     }
 

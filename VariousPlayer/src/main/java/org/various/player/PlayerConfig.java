@@ -6,6 +6,23 @@ import android.os.Environment;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+
+import com.google.android.exoplayer2.database.DatabaseProvider;
+import com.google.android.exoplayer2.database.ExoDatabaseProvider;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.FileDataSource;
+import com.google.android.exoplayer2.upstream.cache.Cache;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+import com.google.android.exoplayer2.util.Util;
+
+import java.io.File;
+
 /**
  * Created by 江雨寒 on 2020/8/18
  * Email：847145851@qq.com
@@ -19,9 +36,14 @@ public class PlayerConfig {
     @SuppressLint({"StaticFieldLeak"})
     private static Application mContext;
     public static volatile Handler applicationHandler;
+    protected static String userAgent;
+    private static Cache downloadCache;
+
+
     public static void init(@NonNull Application app) {
         mContext = app;
         applicationHandler = new Handler(mContext.getMainLooper());
+        userAgent = Util.getUserAgent(mContext, "org.Various.player");
     }
 
     public static Application getContext() {
@@ -35,4 +57,30 @@ public class PlayerConfig {
     public static @PlayerConstants.PlayerCore int getPlayerCore() {
         return currentCore;
     }
+
+    public static DataSource.Factory buildDataSourceFactory() {
+        DefaultDataSourceFactory upstreamFactory =
+                new DefaultDataSourceFactory(mContext,  new DefaultHttpDataSourceFactory(userAgent));
+        return buildReadOnlyCacheDataSource(upstreamFactory, getDownloadCache());
+    }
+    protected static CacheDataSourceFactory buildReadOnlyCacheDataSource(
+            DataSource.Factory upstreamFactory, Cache cache) {
+        return new CacheDataSourceFactory(
+                cache,
+                upstreamFactory,
+                new FileDataSource.Factory(),
+                /* cacheWriteDataSinkFactory= */ null,
+                CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR,
+                /* eventListener= */ null);
+    }
+    protected static synchronized Cache getDownloadCache() {
+        if (downloadCache == null) {
+            File downloadContentDirectory = new File(mContext.getExternalFilesDir(null),"VariousCache");
+            downloadCache =
+                    new SimpleCache(downloadContentDirectory, new LeastRecentlyUsedCacheEvictor(50 * 1024 * 1024), new ExoDatabaseProvider(mContext));
+        }
+        return downloadCache;
+    }
+
+
 }

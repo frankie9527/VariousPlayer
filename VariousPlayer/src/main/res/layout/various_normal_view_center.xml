@@ -44,7 +44,10 @@
         android:src="@drawable/ic_take_pic"
         android:visibility="gone"
         />
-    <include layout="@layout/various_video_forward" />
+    <org.various.player.ui.normal.DoubleBackForWardView
+        android:id="@+id/double_forward_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <RelativeLayout
         android:visibility="gone"
         android:id="@+id/rl_play_err"

@@ -22,4 +22,11 @@
         android:text="NormalView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+    <Button
+        android:onClick="SeamlessConnection"
+        android:text="无缝衔接"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 </LinearLayout>

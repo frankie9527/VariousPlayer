@@ -52,9 +52,6 @@ public class ProgressPopupWindow {
         offsetX=(view.getWidth()-localView.getMeasuredWidth())/2;
         offsetY=-(view.getHeight()+localView.getMeasuredHeight())/2;
         if (!mProgressPopup.isShowing()){
-            Log.e("jyh","simple_view="+view.getWidth());
-            Log.e("jyh","localView="+localView.getMeasuredWidth());
-            Log.e("jyh","left="+(view.getWidth()-localView.getWidth())/2);
             mProgressPopup.showAsDropDown(view,offsetX ,offsetY);
         }
 

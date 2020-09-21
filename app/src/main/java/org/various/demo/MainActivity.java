@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import org.various.player.view.VariousSurfaceView;
+
 
 public class MainActivity extends AppCompatActivity {
     Intent intent;
@@ -74,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void goNormal(View view) {
         intent=new Intent(this,NormalDemoActivity.class);
+        startActivity(intent);
+    }
+    public void SeamlessConnection(View view){
+        intent=new Intent(this,SeamlessConnectionActivity.class);
         startActivity(intent);
     }
 }

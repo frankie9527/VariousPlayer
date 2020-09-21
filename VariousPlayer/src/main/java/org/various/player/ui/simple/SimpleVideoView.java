@@ -14,7 +14,7 @@ import org.various.player.view.VariousTextureView;
 
 public class SimpleVideoView extends BaseVideoView implements PlayerStatusListener {
     IVideoControl control;
-    public VariousTextureView video_container;
+
 
     public SimpleVideoView(Context context) {
         super(context);
@@ -36,7 +36,6 @@ public class SimpleVideoView extends BaseVideoView implements PlayerStatusListen
         control = findViewById(R.id.video_control);
         player.setVideoEventListener(this);
         control.setOrientationListener(this);
-        video_container=findViewById(R.id.video_container);
     }
 
     public void setPlayData(String url, String title) {

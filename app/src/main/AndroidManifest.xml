@@ -41,6 +41,9 @@
         <activity
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:name=".NormalDemoActivity"/>
+        <activity
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:name=".SeamlessConnectionActivity"/>
     </application>
 
 </manifest>

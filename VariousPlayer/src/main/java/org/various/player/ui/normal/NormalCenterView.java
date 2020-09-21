@@ -50,15 +50,7 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
     PicPopupWindow mPicPop;
     int currentOrientation;
 
-    ForwardHandler forwardHandler=new ForwardHandler();
-    public static final int USER_ONCLICK_BACKWARD = 0;
-    public static final int USER_ONCLICK_FORWARD = 1;
-    public static final int DISMISS_FORWARD_BACKWARD = 2;
-    private int fingerCount = 0;
-    RelativeLayout rl_backward, rl_forward;
-    TextView tv_backward,tv_forward;
-    AnimationDrawable animate_backward, animate_forward;
-    ImageView lottie_left, lottie_right;
+    DoubleBackForWardView double_forward_view;
     public NormalCenterView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
@@ -91,16 +83,7 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
         mPicPop = new PicPopupWindow(context);
 
 
-        rl_backward = findViewById(R.id.rl_backward);
-        rl_backward.setOnClickListener(this);
-        rl_forward = findViewById(R.id.rl_forward);
-        rl_forward.setOnClickListener(this);
-        tv_backward=findViewById(R.id.tv_backward);
-        tv_forward=findViewById(R.id.tv_forward);
-        lottie_left=findViewById(R.id.lottie_left);
-        lottie_left.setImageResource(R.drawable.anim_arrow_left);
-        lottie_right=findViewById(R.id.lottie_right);
-        lottie_right.setImageResource(R.drawable.anim_arrow_right);
+        double_forward_view=findViewById(R.id.double_forward_view);
     }
 
     @Override
@@ -217,15 +200,7 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
 
             return;
         }
-        if (v.getId() == R.id.rl_backward) {
-            forwardHandler.sendEmptyMessage(USER_ONCLICK_BACKWARD);
-            forwardHandler.removeMessages(DISMISS_FORWARD_BACKWARD);
-            return;
-        }
-        if (v.getId() == R.id.rl_forward) {
-            forwardHandler.sendEmptyMessage(USER_ONCLICK_FORWARD);
-            forwardHandler.removeMessages(DISMISS_FORWARD_BACKWARD);
-        }
+
     }
 
     @Override
@@ -235,17 +210,7 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
             mPicPop.showPic((View) getParent(), bitmap);
         }
     }
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (forwardHandler != null) {
-            forwardHandler.removeMessages(USER_ONCLICK_BACKWARD);
-            forwardHandler.removeMessages(USER_ONCLICK_FORWARD);
-            forwardHandler.removeMessages(DISMISS_FORWARD_BACKWARD);
-            forwardHandler = null;
-        }
 
-    }
     @Override
     public void onScreenOrientationChanged(int currentOrientation) {
         super.onScreenOrientationChanged(currentOrientation);
@@ -259,69 +224,13 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
         img_take_pic.setVisibility(INVISIBLE);
 
     }
-
-    @SuppressLint("HandlerLeak")
-    private class ForwardHandler extends Handler {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case USER_ONCLICK_BACKWARD:
-                    fingerCount--;
-                    tv_backward.setText(fingerCount * 10 + "秒");
-                    forwardHandler.sendEmptyMessageDelayed(DISMISS_FORWARD_BACKWARD, 2000);
-                    break;
-                case USER_ONCLICK_FORWARD:
-                    fingerCount++;
-                    tv_forward.setText(fingerCount * 10 + "秒");
-                    forwardHandler.sendEmptyMessageDelayed(DISMISS_FORWARD_BACKWARD, 2000);
-                    break;
-                case DISMISS_FORWARD_BACKWARD:
-                    UiUtils.viewSetGone(rl_backward);
-                    UiUtils.viewSetGone(rl_forward);
-                    long goTime = fingerCount * 10 * 1000 + PlayerManager.getPlayer().getCurrentPosition();
-
-                    if (goTime > 0 && goTime < PlayerManager.getPlayer().getDuration()) {
-                        PlayerManager.getPlayer().seekTo(goTime);
-                    } else {
-                        ToastUtils.show( "预期播放不符合影片时长");
-                    }
-                    break;
-            }
-        }
-    }
     @Override
     public void onLeftDoubleTop() {
-        UiUtils.viewSetVisible(rl_backward);
-        rl_forward.setVisibility(INVISIBLE);
-        if (animate_backward == null) {
-            animate_backward = (AnimationDrawable) lottie_left.getDrawable();
-        }
-        if (!animate_backward.isRunning()) {
-            //开启帧动画
-            animate_backward.start();
-        }
-        fingerCount = -1;
-        String str = fingerCount * 10 + "秒";
-        tv_backward.setText(str);
-        forwardHandler.sendEmptyMessageDelayed(DISMISS_FORWARD_BACKWARD, 2000);
+        double_forward_view.onLeftDoubleTop();
     }
     @Override
     public void onRightDoubleTap() {
-        UiUtils.viewSetVisible(rl_forward);
-        rl_backward.setVisibility(INVISIBLE);
-        if (animate_forward == null) {
-            animate_forward = (AnimationDrawable) lottie_right.getDrawable();
-        }
-        if (!animate_forward.isRunning()) {
-            //开启帧动画
-            animate_forward.start();
-        }
-
-        fingerCount = 1;
-        String str = fingerCount * 10 + "秒";
-        tv_forward.setText(str);
-        forwardHandler.sendEmptyMessageDelayed(DISMISS_FORWARD_BACKWARD, 2000);
+        double_forward_view.onRightDoubleTap();
     }
 
 

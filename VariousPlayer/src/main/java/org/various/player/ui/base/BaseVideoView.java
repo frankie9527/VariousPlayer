@@ -44,7 +44,7 @@ public abstract class BaseVideoView extends FrameLayout implements IPlayer , Use
     }
 
     private void init() {
-        player = PlayerManager.getPlayer();
+        player = PlayerManager.init();
         orientationUtils=new OrientationUtils(getContext());
     }
 

@@ -6,13 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import org.various.demo.base.BaseActivity;
-import org.various.player.PlayerConfig;
-import org.various.player.PlayerConstants;
+import org.various.player.NotificationCenter;
 import org.various.player.listener.UserActionListener;
-import org.various.player.ui.normal.NormalVideoView;
 import org.various.player.ui.simple.SimpleVideoView;
 
-public class VideoApiActivity extends BaseActivity {
+public class VideoApiActivity extends BaseActivity implements NotificationCenter.NotificationCenterDelegate {
     String hsl = "http://cctvalih5ca.v.myalicdn.com/live/cctv1_2/index.m3u8";
     SimpleVideoView simple_view;
     String title = "hello!frankie";
@@ -32,7 +30,7 @@ public class VideoApiActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        PlayerConfig.setPlayerCore(PlayerConstants.EXO_CORE);
+        NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_take_pic_data);
         speedButton=findViewById(R.id.speed);
         simple_view =findViewById(R.id.simple_view);
         simple_view.setPlayData(url, title);
@@ -66,8 +64,13 @@ public class VideoApiActivity extends BaseActivity {
         speedButton.setText(currentSpeed+"x");
     }
     public void  getBitMap(View view){
-        Bitmap bitmap= simple_view.video_container.getBitmap();
-        img_copy.setImageBitmap(bitmap);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_take_pic);
     }
 
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id==NotificationCenter.user_onclick_take_pic_data){
+            img_copy.setImageBitmap((Bitmap) args[0]);
+        }
+    }
 }

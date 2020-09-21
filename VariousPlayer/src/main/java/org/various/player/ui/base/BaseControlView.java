@@ -216,7 +216,9 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             gestureDetector.onTouchEvent(event);
-            centerView.handleTouch(view,event);
+            if (PlayerManager.getCurrentStatus()==PlayerConstants.READY){
+                centerView.handleTouch(view,event);
+            }
             return true;
         }
 
@@ -243,7 +245,9 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            centerView.handleDoubleTap(e);
+            if ( PlayerManager.getCurrentStatus()==PlayerConstants.READY){
+                centerView.handleDoubleTap(e);
+            }
             return super.onDoubleTap(e);
         }
     }

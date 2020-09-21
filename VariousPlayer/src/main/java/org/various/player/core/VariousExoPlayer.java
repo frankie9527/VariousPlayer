@@ -17,6 +17,9 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -29,13 +32,17 @@ import org.various.player.PlayerConfig;
 
 
 public class VariousExoPlayer extends AbstractBasePlayer implements Player.EventListener , NotificationCenter.NotificationCenterDelegate{
-    String TAG = "VariousExoPlayer";
-    MediaSource mediaSource;
-    SimpleExoPlayer player;
-
+    private  String TAG = "VariousExoPlayer";
+    private  MediaSource mediaSource;
+    private  SimpleExoPlayer player;
+    public static DefaultTrackSelector trackSelector;
+    private DefaultTrackSelector.Parameters trackSelectorParameters;
 
     public VariousExoPlayer() {
-        player = new SimpleExoPlayer.Builder(PlayerConfig.getContext()).build();
+        trackSelector = new DefaultTrackSelector(PlayerConfig.getContext(), new AdaptiveTrackSelection.Factory());
+        trackSelectorParameters= new DefaultTrackSelector.ParametersBuilder(PlayerConfig.getContext()).build();
+        trackSelector.setParameters(trackSelectorParameters);
+        player = new SimpleExoPlayer.Builder(PlayerConfig.getContext()).setTrackSelector(trackSelector).build();
         player.addListener(this);
         NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_video_err_retry);
     }
@@ -140,18 +147,17 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
 
     public MediaSource createMediaSource(@Nullable String url, @Nullable String overrideExtension) {
         int type = Util.inferContentType(Uri.parse(url), overrideExtension);
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(PlayerConfig.getContext(), Util.getUserAgent(PlayerConfig.getContext(), "org.Various.player"));
         Uri uri = Uri.parse(url);
         if (type == C.TYPE_DASH) {
-            return new DashMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+            return new DashMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(uri);
         }
         if (type == C.TYPE_SS) {
-            return new SsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+            return new SsMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(uri);
         }
         if (type == C.TYPE_HLS) {
-            return new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+            return new HlsMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(uri);
         }
-        return new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+        return new ProgressiveMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(uri);
     }
 
     @Override
