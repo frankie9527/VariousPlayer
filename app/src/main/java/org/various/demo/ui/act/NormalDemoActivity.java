@@ -1,33 +1,25 @@
-package org.various.demo;
+package org.various.demo.ui.act;
 
-import android.view.View;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import org.various.demo.R;
 import org.various.demo.base.BaseActivity;
+import org.various.demo.data.SimpleData;
 import org.various.player.listener.UserActionListener;
 import org.various.player.ui.normal.NormalVideoView;
 
-
-/**
- * Created by 江雨寒 on 2020/9/17
- * Email：847145851@qq.com
- * func: 视频无缝衔接播放的demo
- */
-public class SeamlessConnectionActivity extends BaseActivity {
-    String url="https://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest";
+public class NormalDemoActivity extends BaseActivity {
     NormalVideoView normal_view;
-    RecyclerView recycler;
-    SeamlessConnectionAdapter adapter;
+    String title = "NormalVideoView";
     @Override
     protected int setLayout() {
-        return R.layout.activity_seamless_con;
+        return R.layout.activity_normal;
     }
+
+
     @Override
     protected void initView() {
         normal_view = findViewById(R.id.normal_view);
-        normal_view.setPlayData(url, "SeamlessConnectionActivity");
+        normal_view.setPlayData(SimpleData.url2, title);
         normal_view.startSyncPlay();
         normal_view.setUserActionListener(new UserActionListener() {
             @Override
@@ -35,16 +27,8 @@ public class SeamlessConnectionActivity extends BaseActivity {
 
             }
         });
-        recycler=findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        adapter=new SeamlessConnectionAdapter(SeamlessConnectionActivity.this);
-        recycler.setAdapter(adapter);
-
     }
 
-    public void test(View view){
-        adapter.setVideoData();
-    }
     @Override
     protected void onPause() {
         super.onPause();

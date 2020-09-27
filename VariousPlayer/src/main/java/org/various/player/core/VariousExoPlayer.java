@@ -35,7 +35,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
     private  String TAG = "VariousExoPlayer";
     private  MediaSource mediaSource;
     private  SimpleExoPlayer player;
-    public static DefaultTrackSelector trackSelector;
+    private   DefaultTrackSelector trackSelector;
     private DefaultTrackSelector.Parameters trackSelectorParameters;
 
     public VariousExoPlayer() {
@@ -45,9 +45,16 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
         player = new SimpleExoPlayer.Builder(PlayerConfig.getContext()).setTrackSelector(trackSelector).build();
         player.addListener(this);
         NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_video_err_retry);
+
     }
 
+    public DefaultTrackSelector getTrackSelector() {
+        return trackSelector;
+    }
 
+    public DefaultTrackSelector.Parameters getTrackSelectorParameters() {
+        return trackSelectorParameters;
+    }
     @Override
     public float getVolume() {
         return player.getVolume();
@@ -102,6 +109,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
     public void setSpeed(float speed) {
         PlaybackParameters params = new PlaybackParameters(speed, 1.0f);
         player.setPlaybackParameters(params);
+
     }
 
     @Override
@@ -131,7 +139,6 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
             player.prepare(mediaSource);
             player.setPlayWhenReady(true);
         }
-
     }
 
 
@@ -200,7 +207,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
-        Log.e(TAG, "ExoPlaybackException=");
+        Log.e(TAG, "ExoPlaybackException="+error.toString());
         notifyPlayerError();
     }
 

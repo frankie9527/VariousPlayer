@@ -34,16 +34,20 @@
         </activity>
         <activity
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".VideoApiActivity"/>
+            android:name=".ui.act.VideoApiActivity"/>
         <activity
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".SimpleDemoActivity"/>
+            android:name=".ui.act.SimpleDemoActivity"/>
         <activity
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".NormalDemoActivity"/>
+            android:name=".ui.act.NormalDemoActivity"/>
         <activity
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".SeamlessConnectionActivity"/>
+            android:name=".ui.act.SmoothStreamingActivity"/>
+
+        <activity
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:name=".ui.act.SimpleRecyclerActivity"/>
     </application>
 
 </manifest>

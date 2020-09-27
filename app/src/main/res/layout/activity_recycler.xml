@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.act.SimpleDemoActivity">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <org.various.player.ui.normal.NormalVideoView
-        android:id="@+id/normal_view"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"/>
-
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recycler"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 </RelativeLayout>

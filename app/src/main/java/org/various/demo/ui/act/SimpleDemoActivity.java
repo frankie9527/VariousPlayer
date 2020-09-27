@@ -1,6 +1,7 @@
-package org.various.demo;
+package org.various.demo.ui.act;
 
 
+import org.various.demo.R;
 import org.various.demo.base.BaseActivity;
 import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
@@ -26,7 +27,7 @@ public class SimpleDemoActivity extends BaseActivity {
         PlayerConfig.setPlayerCore(PlayerConstants.EXO_CORE);
         simple_view =findViewById(R.id.simple_view);
         simple_view.setPlayData(url, title);
-        simple_view.startSyncPlay();
+//        simple_view.startSyncPlay();
         simple_view.setUserActionListener(new UserActionListener() {
             @Override
             public void onUserAction(int action) {

@@ -46,7 +46,6 @@ public class VideoCenterView extends BaseCenterView {
     ProgressPopupWindow mProgressPopup;
     public VideoCenterView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
     }
     @Override
     protected int setLayoutId() {
@@ -139,6 +138,10 @@ public class VideoCenterView extends BaseCenterView {
                 break;
             case PlayerConstants.ERROR:
                 showError();
+                break;
+            default:
+                UiUtils.viewSetVisible(img_status);
+                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(),   R.drawable.video_play));
                 break;
         }
     }

@@ -146,6 +146,10 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
             case PlayerConstants.ERROR:
                 showError();
                 break;
+            default:
+                UiUtils.viewSetVisible(img_status);
+                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(),   R.drawable.video_play));
+                break;
         }
     }
 

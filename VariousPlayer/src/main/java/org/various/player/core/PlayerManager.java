@@ -14,7 +14,7 @@ import org.various.player.utils.StackTraceUtils;
  */
 public class PlayerManager {
     private static final String TAG = "PlayerManager";
-    private static int currentStatus;
+    private static int currentStatus=-1;
     private static AbstractBasePlayer iPlayer;
 
     public static AbstractBasePlayer getPlayer() {

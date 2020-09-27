@@ -1,20 +1,21 @@
-package org.various.demo;
+package org.various.demo.ui.act;
 
 
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import org.various.demo.R;
 import org.various.demo.base.BaseActivity;
+import org.various.demo.data.SimpleData;
 import org.various.player.NotificationCenter;
 import org.various.player.listener.UserActionListener;
 import org.various.player.ui.simple.SimpleVideoView;
 
 public class VideoApiActivity extends BaseActivity implements NotificationCenter.NotificationCenterDelegate {
-    String hsl = "http://cctvalih5ca.v.myalicdn.com/live/cctv1_2/index.m3u8";
     SimpleVideoView simple_view;
     String title = "hello!frankie";
-    String url = "https://mov.bn.netease.com/open-movie/nos/mp4/2017/05/31/SCKR8V6E9_hd.mp4";
     Button speedButton;
     /**
      * 当前播放的倍速
@@ -33,8 +34,6 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
         NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_take_pic_data);
         speedButton=findViewById(R.id.speed);
         simple_view =findViewById(R.id.simple_view);
-        simple_view.setPlayData(url, title);
-        simple_view.startSyncPlay();
         simple_view.setUserActionListener(new UserActionListener() {
             @Override
             public void onUserAction(int action) {
@@ -67,6 +66,14 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_take_pic);
     }
 
+    public void play1(View view){
+        simple_view.setPlayData(SimpleData.url, title);
+        simple_view.startSyncPlay();
+    }
+    public void play2(View view){
+        simple_view.setPlayData(SimpleData.url2, title);
+        simple_view.startSyncPlay();
+    }
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id==NotificationCenter.user_onclick_take_pic_data){

@@ -16,7 +16,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import org.various.player.view.VariousSurfaceView;
+import org.various.demo.ui.act.NormalDemoActivity;
+import org.various.demo.ui.act.SimpleRecyclerActivity;
+import org.various.demo.ui.act.SmoothStreamingActivity;
+import org.various.demo.ui.act.SimpleDemoActivity;
+import org.various.demo.ui.act.VideoApiActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -65,21 +69,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void goApi(View view) {
-        intent=new Intent(this,VideoApiActivity.class);
+        intent=new Intent(this, VideoApiActivity.class);
         startActivity(intent);
     }
     public void goSimple(View view) {
-        intent=new Intent(this,SimpleDemoActivity.class);
+        intent=new Intent(this, SimpleDemoActivity.class);
         startActivity(intent);
 
     }
 
     public void goNormal(View view) {
-        intent=new Intent(this,NormalDemoActivity.class);
+        intent=new Intent(this, NormalDemoActivity.class);
         startActivity(intent);
     }
-    public void SeamlessConnection(View view){
-        intent=new Intent(this,SeamlessConnectionActivity.class);
+    public void SmoothStreaming(View view){
+        intent=new Intent(this, SmoothStreamingActivity.class);
+        startActivity(intent);
+    }
+    public void SimpleRecycler(View view){
+        intent=new Intent(this, SimpleRecyclerActivity.class);
         startActivity(intent);
     }
 }
