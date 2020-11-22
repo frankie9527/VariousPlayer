@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.SparseIntArray;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.database.ExoDatabaseProvider;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -40,10 +42,15 @@ public class PlayerConfig {
     private static Cache downloadCache;
 
 
+    private static SparseIntArray exoStatus=new SparseIntArray();
     public static void init(@NonNull Application app) {
         mContext = app;
         applicationHandler = new Handler(mContext.getMainLooper());
         userAgent = Util.getUserAgent(mContext, "org.Various.player");
+        exoStatus.put(Player.STATE_IDLE,PlayerConstants.IDLE);
+        exoStatus.put(Player.STATE_READY,PlayerConstants.READY);
+        exoStatus.put(Player.STATE_BUFFERING,PlayerConstants.BUFFERING);
+        exoStatus.put(Player.STATE_ENDED,PlayerConstants.END);
     }
 
     public static Application getContext() {
@@ -83,4 +90,10 @@ public class PlayerConfig {
     }
 
 
+    public static int changStatus2Normal(@PlayerConstants.PlayerCore int core,int status){
+        if (core==PlayerConstants.EXO_CORE){
+            return exoStatus.get(status);
+        }
+        return -1;
+    }
 }

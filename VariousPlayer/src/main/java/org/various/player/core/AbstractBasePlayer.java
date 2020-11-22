@@ -1,7 +1,10 @@
 package org.various.player.core;
 
+import android.util.Log;
+
 import com.google.android.exoplayer2.Player;
 
+import org.various.player.PlayerConfig;
 import org.various.player.PlayerConstants;
 import org.various.player.listener.PlayerStatusListener;
 
@@ -19,19 +22,14 @@ public abstract class AbstractBasePlayer implements IPlayer {
         mStatusListener = listener;
     }
 
-    public void notifyStatus(int status) {
+    public void notifyStatus(@PlayerConstants.PlayerCore int core,int status) {
         if (mStatusListener == null)
             return;
-        if (status == Player.STATE_READY) {
-            PlayerManager.setPlayerStatus(PlayerConstants.READY);
-            mStatusListener.statusChange(PlayerConstants.READY);
-        } else if (status == Player.STATE_BUFFERING) {
-            PlayerManager.setPlayerStatus(PlayerConstants.BUFFERING);
-            mStatusListener.statusChange(PlayerConstants.BUFFERING);
-        } else if (status == Player.STATE_ENDED) {
-            PlayerManager.setPlayerStatus(PlayerConstants.END);
-            mStatusListener.statusChange(PlayerConstants.END);
-        }
+        Log.e("AbstractBasePlayer","status="+status);
+       int normalStatus= PlayerConfig.changStatus2Normal(core,status);
+        Log.e("AbstractBasePlayer","normalStatus="+normalStatus);
+        PlayerManager.setPlayerStatus(normalStatus);
+        mStatusListener.statusChange(normalStatus);
     }
 
     public void notifyPlayerError(){

@@ -27,6 +27,7 @@ public interface PlayerConstants {
 
     }
 
+    int IDLE=-1;
     int READY = 0;
     int BUFFERING = 1;
     int END=2;

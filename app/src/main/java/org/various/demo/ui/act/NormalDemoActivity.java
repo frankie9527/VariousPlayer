@@ -4,12 +4,14 @@ package org.various.demo.ui.act;
 import org.various.demo.R;
 import org.various.demo.base.BaseActivity;
 import org.various.demo.data.SimpleData;
+import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
 import org.various.player.ui.normal.NormalVideoView;
 
 public class NormalDemoActivity extends BaseActivity {
     NormalVideoView normal_view;
     String title = "NormalVideoView";
+
     @Override
     protected int setLayout() {
         return R.layout.activity_normal;
@@ -24,7 +26,8 @@ public class NormalDemoActivity extends BaseActivity {
         normal_view.setUserActionListener(new UserActionListener() {
             @Override
             public void onUserAction(int action) {
-
+                if (action == PlayerConstants.ACTION_BACK)
+                    finish();
             }
         });
     }

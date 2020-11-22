@@ -28,7 +28,7 @@ import com.google.android.exoplayer2.util.Util;
 
 import org.various.player.NotificationCenter;
 import org.various.player.PlayerConfig;
-
+import org.various.player.PlayerConstants;
 
 
 public class VariousExoPlayer extends AbstractBasePlayer implements Player.EventListener , NotificationCenter.NotificationCenterDelegate{
@@ -185,7 +185,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         Log.e(TAG, "onPlayerStateChanged=" + playWhenReady + " playbackState=" + playbackState);
-        notifyStatus(playbackState);
+        notifyStatus(PlayerConstants.EXO_CORE,playbackState);
     }
 
     @Override

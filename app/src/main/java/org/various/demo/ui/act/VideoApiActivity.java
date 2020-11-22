@@ -80,4 +80,26 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
             img_copy.setImageBitmap((Bitmap) args[0]);
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (simple_view != null)
+            simple_view.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (simple_view != null)
+            simple_view.resume();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (simple_view != null)
+            simple_view.release();
+    }
 }

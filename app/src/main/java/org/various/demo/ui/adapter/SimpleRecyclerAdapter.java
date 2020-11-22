@@ -33,7 +33,7 @@ public class SimpleRecyclerAdapter extends BaseRecyclerAdapter<Bean, SimpleRecyc
         Bean bean=list.get(position);
         holder.tv_title.setText(bean.getTitle());
         holder.simple_view.setPlayData(bean.getUrl(),bean.getTitle());
-//        holder.simple_view.startSyncPlay();
+
     }
 
     class Holder extends BaseRecyclerHolder {

@@ -4,7 +4,6 @@
     android:id="@+id/layout_top"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="#99000000"
     android:gravity="center_vertical">
 
     <ImageView

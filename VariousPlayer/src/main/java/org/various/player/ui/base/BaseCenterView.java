@@ -36,8 +36,10 @@ public abstract class BaseCenterView extends FrameLayout {
     private int moveType = -1;
     /**
      * 判断action_down 的时候是在屏幕左边还是右边
+     *
      */
-    private boolean fristDownIsLeft = false;
+    private boolean firstDownIsLeft = false;
+
     /**
      * 上一次音量或者屏幕亮度值
      */
@@ -100,11 +102,14 @@ public abstract class BaseCenterView extends FrameLayout {
             case MotionEvent.ACTION_DOWN:
                 lastDownX = downX = event.getX();
                 downY = event.getY();
+                Log.e(TAG,"lastDownX="+lastDownX);
+                Log.e(TAG,"downX="+downX);
+                Log.e(TAG,"downY="+downY);
                 videoViewWidth = view.getWidth();
                 videoViewHeight = view.getHeight();
                 moveType = -1;
-                fristDownIsLeft = downX < (videoViewWidth / 2);
-                if (fristDownIsLeft) {
+                firstDownIsLeft = downX < (videoViewWidth / 2f);
+                if (firstDownIsLeft) {
                     currentBrightness = OrientationUtils.getActivity(getContext()).getWindow().getAttributes().screenBrightness;
                     if (currentBrightness <= 0.00f) {
                         currentBrightness = 0.50f;
@@ -119,13 +124,21 @@ public abstract class BaseCenterView extends FrameLayout {
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (downX < defaultMoveLength && downY < defaultMoveLength) {
+                float absDeltaX = Math.abs(event.getX() - downX);
+                float absDeltaY = Math.abs(event.getY() - downY);
+                if (absDeltaX <defaultMoveLength && absDeltaY < defaultMoveLength) {
                     return;
                 }
                 if (moveType == -1) {
-                    float absDeltaX = Math.abs(event.getX() - downX);
-                    float absDeltaY = Math.abs(event.getY() - downY);
+                    Log.e(TAG,"event.getX="+event.getX());
+                    Log.e(TAG,"downX="+downX);
+                    Log.e(TAG,"absDeltaX="+absDeltaX);
+
+                    Log.e(TAG,"event.getY="+event.getY());
+                    Log.e(TAG,"downY="+downY);
+                    Log.e(TAG,"absDeltaY="+absDeltaY);
                     moveType = (absDeltaX < absDeltaY) ? 0 : 1;
+                    Log.e(TAG,"moveType="+moveType);
                 }
                 //垂直滑动的时候
                 if (moveType == 0) {
@@ -133,7 +146,7 @@ public abstract class BaseCenterView extends FrameLayout {
                     if (lastChangPercent == changePercent) {
                         return;
                     }
-                    if (fristDownIsLeft) {
+                    if (firstDownIsLeft) {
                         showBrightnessChange(changePercent);
                         return;
                     }
@@ -167,6 +180,7 @@ public abstract class BaseCenterView extends FrameLayout {
                 if (userProgressListener!=null&&moveType==1){
                     userProgressListener.onUserProgress(PlayerConstants.USER_PROGRESS_END,lastVideoPlayTime);
                 }
+                moveType=-1;
                 break;
         }
     }
