@@ -9,17 +9,14 @@ import android.util.SparseIntArray;
 import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.database.DatabaseProvider;
-import com.google.android.exoplayer2.database.ExoDatabaseProvider;
+import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.FileDataSource;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
-import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 
@@ -65,26 +62,27 @@ public class PlayerConfig {
         return currentCore;
     }
 
+
     public static DataSource.Factory buildDataSourceFactory() {
-        DefaultDataSourceFactory upstreamFactory =
-                new DefaultDataSourceFactory(mContext,  new DefaultHttpDataSourceFactory(userAgent));
+        DefaultDataSource.Factory  upstreamFactory =
+                new DefaultDataSource.Factory(mContext,  new DefaultHttpDataSource.Factory());
         return buildReadOnlyCacheDataSource(upstreamFactory, getDownloadCache());
     }
-    protected static CacheDataSourceFactory buildReadOnlyCacheDataSource(
+
+    protected static CacheDataSource.Factory buildReadOnlyCacheDataSource(
             DataSource.Factory upstreamFactory, Cache cache) {
-        return new CacheDataSourceFactory(
-                cache,
-                upstreamFactory,
-                new FileDataSource.Factory(),
-                /* cacheWriteDataSinkFactory= */ null,
-                CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR,
-                /* eventListener= */ null);
+        CacheDataSource.Factory factory=new CacheDataSource.Factory();
+        factory.setCache(cache);
+        factory.setUpstreamDataSourceFactory(upstreamFactory);
+        factory.setCacheReadDataSourceFactory(new FileDataSource.Factory());
+        factory.setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
+        return factory;
     }
     protected static synchronized Cache getDownloadCache() {
         if (downloadCache == null) {
             File downloadContentDirectory = new File(mContext.getExternalFilesDir(null),"VariousCache");
             downloadCache =
-                    new SimpleCache(downloadContentDirectory, new LeastRecentlyUsedCacheEvictor(50 * 1024 * 1024), new ExoDatabaseProvider(mContext));
+                    new SimpleCache(downloadContentDirectory, new LeastRecentlyUsedCacheEvictor(50 * 1024 * 1024), new StandaloneDatabaseProvider(mContext));
         }
         return downloadCache;
     }
@@ -97,3 +95,4 @@ public class PlayerConfig {
         return -1;
     }
 }
+

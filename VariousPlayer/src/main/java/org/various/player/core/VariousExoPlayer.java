@@ -7,6 +7,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -31,7 +33,7 @@ import org.various.player.PlayerConfig;
 import org.various.player.PlayerConstants;
 
 
-public class VariousExoPlayer extends AbstractBasePlayer implements Player.EventListener , NotificationCenter.NotificationCenterDelegate{
+public class VariousExoPlayer extends AbstractBasePlayer implements Player.Listener , NotificationCenter.NotificationCenterDelegate{
     private  String TAG = "VariousExoPlayer";
     private  MediaSource mediaSource;
     private  SimpleExoPlayer player;
@@ -154,17 +156,16 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
 
     public MediaSource createMediaSource(@Nullable String url, @Nullable String overrideExtension) {
         int type = Util.inferContentType(Uri.parse(url), overrideExtension);
-        Uri uri = Uri.parse(url);
         if (type == C.TYPE_DASH) {
-            return new DashMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(uri);
+            return new DashMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(url));
         }
         if (type == C.TYPE_SS) {
-            return new SsMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(uri);
+            return new SsMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(url));
         }
         if (type == C.TYPE_HLS) {
-            return new HlsMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(uri);
+            return new HlsMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(url));
         }
-        return new ProgressiveMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(uri);
+        return new ProgressiveMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(url));
     }
 
     @Override
@@ -206,25 +207,19 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Event
     }
 
     @Override
-    public void onPlayerError(ExoPlaybackException error) {
-        Log.e(TAG, "ExoPlaybackException="+error.toString());
+    public void onPlayerError(PlaybackException error) {
+        Player.Listener.super.onPlayerError(error);
         notifyPlayerError();
     }
 
-    @Override
-    public void onPositionDiscontinuity(int reason) {
-        Log.e(TAG, "onPositionDiscontinuity=" + reason);
-    }
+
 
     @Override
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
         Log.e(TAG, "onPlaybackParametersChanged");
     }
 
-    @Override
-    public void onSeekProcessed() {
-        Log.e(TAG, "onSeekProcessed");
-    }
+
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
