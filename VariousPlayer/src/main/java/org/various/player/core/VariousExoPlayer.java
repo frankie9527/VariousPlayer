@@ -5,26 +5,22 @@ import android.view.Surface;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.TracksInfo;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
 
@@ -32,21 +28,21 @@ import org.various.player.NotificationCenter;
 import org.various.player.PlayerConfig;
 import org.various.player.PlayerConstants;
 
-
-public class VariousExoPlayer extends AbstractBasePlayer implements Player.Listener , NotificationCenter.NotificationCenterDelegate{
-    private  String TAG = "VariousExoPlayer";
-    private  MediaSource mediaSource;
-    private  SimpleExoPlayer player;
-    private   DefaultTrackSelector trackSelector;
+public class VariousExoPlayer extends AbstractBasePlayer implements Player.Listener, NotificationCenter.NotificationCenterDelegate {
+    private String TAG = "VariousExoPlayer";
+    private MediaSource mediaSource;
+    private ExoPlayer player;
+    private DefaultTrackSelector trackSelector;
     private DefaultTrackSelector.Parameters trackSelectorParameters;
+    private String url;
 
     public VariousExoPlayer() {
         trackSelector = new DefaultTrackSelector(PlayerConfig.getContext(), new AdaptiveTrackSelection.Factory());
-        trackSelectorParameters= new DefaultTrackSelector.ParametersBuilder(PlayerConfig.getContext()).build();
+        trackSelectorParameters = new DefaultTrackSelector.ParametersBuilder(PlayerConfig.getContext()).build();
         trackSelector.setParameters(trackSelectorParameters);
-        player = new SimpleExoPlayer.Builder(PlayerConfig.getContext()).setTrackSelector(trackSelector).build();
+        player = new ExoPlayer.Builder(PlayerConfig.getContext()).setTrackSelector(trackSelector).build();
         player.addListener(this);
-        NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_video_err_retry);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.user_onclick_video_err_retry);
 
     }
 
@@ -57,6 +53,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     public DefaultTrackSelector.Parameters getTrackSelectorParameters() {
         return trackSelectorParameters;
     }
+
     @Override
     public float getVolume() {
         return player.getVolume();
@@ -79,7 +76,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
         if (player != null) {
             player.removeListener(this);
             player.release();
-            NotificationCenter.getGlobalInstance().removeObserver(this,NotificationCenter.user_onclick_video_err_retry);
+
         }
     }
 
@@ -97,7 +94,13 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
 
     @Override
     public void setVideoUri(@Nullable String url) {
+        this.url = url;
         this.mediaSource = createMediaSource(url, null);
+    }
+
+    @Override
+    public String getVideoUrl() {
+        return url;
     }
 
     @Override
@@ -138,7 +141,8 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     @Override
     public void startSyncPlay() {
         if (player != null) {
-            player.prepare(mediaSource);
+            player.setMediaSource(mediaSource);
+            player.prepare();
             player.setPlayWhenReady(true);
         }
     }
@@ -173,20 +177,33 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
         Log.e(TAG, "onTimelineChanged");
     }
 
+
     @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+    public void onTracksInfoChanged(TracksInfo tracksInfo) {
+        Player.Listener.super.onTracksInfoChanged(tracksInfo);
         Log.e(TAG, "onTracksChanged");
     }
 
+
     @Override
-    public void onLoadingChanged(boolean isLoading) {
-//        Log.e(TAG, "onLoadingChanged=" + isLoading);
+    public void onIsLoadingChanged(boolean isLoading) {
+        Player.Listener.super.onIsLoadingChanged(isLoading);
+        Log.e(TAG, "onIsLoadingChanged isLoading=" + isLoading);
     }
 
     @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        Log.e(TAG, "onPlayerStateChanged=" + playWhenReady + " playbackState=" + playbackState);
-        notifyStatus(PlayerConstants.EXO_CORE,playbackState);
+    public void onPlaybackStateChanged(int playbackState) {
+        Player.Listener.super.onPlaybackStateChanged(playbackState);
+        Log.e(TAG, "onPlaybackStateChanged playbackState=" + playbackState);
+        notifyStatus(PlayerConstants.EXO_CORE, playbackState);
+    }
+
+    @Override
+    public void onPlayWhenReadyChanged(boolean playWhenReady, int reason) {
+        Player.Listener.super.onPlayWhenReadyChanged(playWhenReady, reason);
+        Log.e(TAG, "onPlayWhenReadyChanged=" + playWhenReady + " reason=" + reason);
+        notifyStatus(PlayerConstants.EXO_CORE, reason);
+
     }
 
     @Override
@@ -198,6 +215,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     @Override
     public void onIsPlayingChanged(boolean isPlaying) {
         Log.e(TAG, "onIsPlayingChanged=" + isPlaying);
+        notifyStatus(PlayerConstants.EXO_CORE, Player.STATE_READY);
     }
 
 
@@ -213,19 +231,17 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     }
 
 
-
     @Override
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
         Log.e(TAG, "onPlaybackParametersChanged");
     }
 
 
-
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id==NotificationCenter.user_onclick_video_err_retry){
-            player.retry();
-            Toast.makeText(PlayerConfig.getContext(),"player.retry",Toast.LENGTH_LONG).show();
+        if (id == NotificationCenter.user_onclick_video_err_retry) {
+            player.prepare();
+            Toast.makeText(PlayerConfig.getContext(), "player.retry", Toast.LENGTH_LONG).show();
         }
     }
 }

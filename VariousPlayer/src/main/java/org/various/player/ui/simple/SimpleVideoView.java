@@ -42,7 +42,6 @@ public class SimpleVideoView extends BaseVideoView implements PlayerStatusListen
         player.setVideoUri(url);
         control.setTitle(title);
     }
-
     @Override
     public void startSyncPlay() {
         super.startSyncPlay();

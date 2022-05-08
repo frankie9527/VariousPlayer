@@ -36,7 +36,7 @@ public class SimpleRecyclerAdapter extends BaseRecyclerAdapter<Bean, SimpleRecyc
 
     }
 
-    class Holder extends BaseRecyclerHolder {
+    static class Holder extends BaseRecyclerHolder {
         SimpleVideoView simple_view;
         TextView tv_title;
         public Holder(View itemView) {

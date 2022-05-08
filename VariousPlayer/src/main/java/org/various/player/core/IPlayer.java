@@ -25,6 +25,10 @@ public interface IPlayer {
 
     void setVideoUri(@Nullable String url);
 
+    default String getVideoUrl(){
+        return "";
+    };
+
     void setVolume(@FloatRange(from = 0.0d, to = 1.0d) float volume);
 
 

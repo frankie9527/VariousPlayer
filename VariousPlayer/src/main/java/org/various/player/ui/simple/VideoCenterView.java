@@ -1,16 +1,11 @@
 package org.various.player.ui.simple;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.media.AudioManager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,8 +18,6 @@ import org.various.player.PlayerConstants;
 import org.various.player.R;
 import org.various.player.core.PlayerManager;
 import org.various.player.ui.base.BaseCenterView;
-import org.various.player.utils.OrientationUtils;
-import org.various.player.utils.TimeFormatUtil;
 import org.various.player.utils.UiUtils;
 import org.various.player.widget.BrightnessPopupWindow;
 import org.various.player.widget.ProgressPopupWindow;
@@ -42,11 +35,13 @@ public class VideoCenterView extends BaseCenterView {
     RelativeLayout rl_play_err;
     TextView tv_replay;
     BrightnessPopupWindow mBrightnessPop;
-    VolumePopupWindow   mVolumePop;
+    VolumePopupWindow mVolumePop;
     ProgressPopupWindow mProgressPopup;
+
     public VideoCenterView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
+
     @Override
     protected int setLayoutId() {
         return R.layout.various_simple_view_center;
@@ -64,6 +59,13 @@ public class VideoCenterView extends BaseCenterView {
                     PlayerManager.getPlayer().pause();
                     return;
                 }
+                int currentStatus = PlayerManager.getCurrentStatus();
+                long currentPosition = PlayerManager.getPlayer().getCurrentPosition();
+                String url = PlayerManager.getPlayer().getVideoUrl();
+                if (currentStatus == PlayerConstants.IDLE && currentPosition == 0 && !TextUtils.isEmpty(url)) {
+                    PlayerManager.getPlayer().startSyncPlay();
+                    return;
+                }
                 PlayerManager.getPlayer().resume();
             }
         });
@@ -75,9 +77,9 @@ public class VideoCenterView extends BaseCenterView {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_video_err_retry);
             }
         });
-        mVolumePop=new VolumePopupWindow(context);
-        mBrightnessPop=new BrightnessPopupWindow(context);
-        mProgressPopup=new ProgressPopupWindow(context);
+        mVolumePop = new VolumePopupWindow(context);
+        mBrightnessPop = new BrightnessPopupWindow(context);
+        mProgressPopup = new ProgressPopupWindow(context);
     }
 
     @Override
@@ -141,26 +143,25 @@ public class VideoCenterView extends BaseCenterView {
                 break;
             default:
                 UiUtils.viewSetVisible(img_status);
-                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(),   R.drawable.video_play));
+                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_play));
                 break;
         }
     }
 
 
-
     @Override
     public void showBrightnessChange(int changePercent) {
-        mBrightnessPop.showBrightnessChange(changePercent, (View) getParent(),currentBrightness);
+        mBrightnessPop.showBrightnessChange(changePercent, (View) getParent(), currentBrightness);
     }
 
     @Override
     public void showVolumeChange(int changePercent) {
-        mVolumePop.showVolumeChange(changePercent,(View) getParent(),currentVolume);
+        mVolumePop.showVolumeChange(changePercent, (View) getParent(), currentVolume);
     }
 
     @Override
     public void showProgressChange(long lastVideoPlayTime, int arrowDirection, long videoDurationTime) {
-        mProgressPopup.showProgressChange((View) getParent(),lastVideoPlayTime,arrowDirection,videoDurationTime);
+        mProgressPopup.showProgressChange((View) getParent(), lastVideoPlayTime, arrowDirection, videoDurationTime);
     }
 
     @Override

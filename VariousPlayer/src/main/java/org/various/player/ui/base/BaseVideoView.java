@@ -130,7 +130,7 @@ public abstract class BaseVideoView extends FrameLayout implements IPlayer , Use
             lp.height=ViewGroup.LayoutParams.MATCH_PARENT;
             orientationUtils.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }else {
-            orientationUtils.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            orientationUtils.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
             lp.height=initHeight;
         }
         setLayoutParams(lp);

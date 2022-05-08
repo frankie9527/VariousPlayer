@@ -10,33 +10,33 @@
         android:textAllCaps="false"
         android:onClick="goApi"
         android:text="ApiView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
         android:textAllCaps="false"
         android:onClick="goSimple"
         android:text="SimpleView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
         android:textAllCaps="false"
         android:onClick="goNormal"
         android:text="NormalView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
         android:textAllCaps="false"
         android:onClick="SmoothStreaming"
         android:text="SmoothStreaming"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
     <Button
         android:textAllCaps="false"
         android:onClick="SimpleRecycler"
         android:text="SimpleRecycler"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
 </LinearLayout>
