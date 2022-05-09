@@ -12,11 +12,13 @@ import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.PlaybackParameters;
 
+import org.various.player.PlayerConstants;
 import org.various.player.core.AbstractBasePlayer;
 import org.various.player.core.IPlayer;
 import org.various.player.core.PlayerManager;
 import org.various.player.listener.PlayerStatusListener;
 import org.various.player.listener.UserChangeOrientationListener;
+import org.various.player.ui.base.impl.IVideoControl;
 import org.various.player.utils.OrientationUtils;
 
 /**
@@ -24,10 +26,11 @@ import org.various.player.utils.OrientationUtils;
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseVideoView extends FrameLayout implements IPlayer , UserChangeOrientationListener {
+public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayout implements IPlayer , UserChangeOrientationListener ,PlayerStatusListener{
     protected AbstractBasePlayer player;
     OrientationUtils orientationUtils;
     private  int initHeight;
+    protected  T control;
     public BaseVideoView(@NonNull Context context) {
         super(context);
         init();
@@ -110,6 +113,7 @@ public abstract class BaseVideoView extends FrameLayout implements IPlayer , Use
     public void startSyncPlay() {
         setKeepScreenOn(true);
         player.startSyncPlay();
+        control.stateBuffering();
     }
 
     @Override
@@ -145,4 +149,16 @@ public abstract class BaseVideoView extends FrameLayout implements IPlayer , Use
         return player.getSpeed();
     }
 
+    @Override
+    public void statusChange(int status) {
+        if (status == PlayerConstants.READY) {
+            control.stateReady();
+        } else if (status == PlayerConstants.BUFFERING) {
+            control.stateBuffering();
+        } else if (status == PlayerConstants.END) {
+            control.showComplete();
+        } else if (status == PlayerConstants.ERROR) {
+            control.showError();
+        }
+    }
 }

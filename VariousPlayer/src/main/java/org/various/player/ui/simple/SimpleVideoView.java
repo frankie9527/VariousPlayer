@@ -4,18 +4,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
-import org.various.player.listener.PlayerStatusListener;
-import org.various.player.ui.base.impl.IVideoControl;
-import org.various.player.PlayerConstants;
 import org.various.player.R;
 import org.various.player.listener.UserActionListener;
 import org.various.player.ui.base.BaseVideoView;
-import org.various.player.view.VariousTextureView;
 
-public class SimpleVideoView extends BaseVideoView implements PlayerStatusListener {
-    IVideoControl control;
-
-
+public class SimpleVideoView extends BaseVideoView<VideoControlView> {
     public SimpleVideoView(Context context) {
         super(context);
         initView(context);
@@ -42,27 +35,9 @@ public class SimpleVideoView extends BaseVideoView implements PlayerStatusListen
         player.setVideoUri(url);
         control.setTitle(title);
     }
-    @Override
-    public void startSyncPlay() {
-        super.startSyncPlay();
-        control.stateBuffering();
-    }
 
     public void setUserActionListener(UserActionListener listener) {
         control.setUserActionListener(listener);
-    }
-
-    @Override
-    public void statusChange(int status) {
-        if (status == PlayerConstants.READY) {
-            control.stateReady();
-        } else if (status == PlayerConstants.BUFFERING) {
-            control.stateBuffering();
-        } else if (status == PlayerConstants.END) {
-            control.showComplete();
-        } else if (status == PlayerConstants.ERROR) {
-            control.showError();
-        }
     }
 
 

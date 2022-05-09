@@ -55,6 +55,7 @@ public class VideoCenterView extends BaseCenterView {
         img_status.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (PlayerManager.getPlayer().isPlaying()) {
                     PlayerManager.getPlayer().pause();
                     return;
