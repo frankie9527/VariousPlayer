@@ -14,20 +14,23 @@ import org.various.player.utils.StackTraceUtils;
  */
 public class PlayerManager {
     private static final String TAG = "PlayerManager";
-    private static int currentStatus=-1;
+    private static int currentStatus = -1;
     private static AbstractBasePlayer iPlayer;
 
     public static AbstractBasePlayer getPlayer() {
+        if (iPlayer == null) {
+            iPlayer = new VariousExoPlayer();
+        }
         return iPlayer;
     }
 
     public static AbstractBasePlayer init() {
-        Log.e(TAG, "init" );
+        Log.e(TAG, "init");
         if (PlayerConfig.getPlayerCore() == PlayerConstants.EXO_CORE) {
-            Log.e(TAG, "getPlayer new VariousExoPlayer" );
+            Log.e(TAG, "getPlayer new VariousExoPlayer");
             iPlayer = new VariousExoPlayer();
         } else {
-            Log.e(TAG, "getPlayer new VariousIjkPlayer" );
+            Log.e(TAG, "getPlayer new VariousIjkPlayer");
             iPlayer = new VariousIjkPlayer();
         }
         return iPlayer;

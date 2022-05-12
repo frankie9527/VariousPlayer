@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/video_play"
-        android:visibility="gone" />
+        />
 
     <RelativeLayout
         android:visibility="gone"

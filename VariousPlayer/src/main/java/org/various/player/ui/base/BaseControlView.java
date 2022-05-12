@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -112,6 +113,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     protected void initCenterView(int id) {
         centerView = findViewById(id);
         centerView.setUserProgressListener(this);
+        centerView.setOnCenterClickListener(this);
     }
 
     @Override

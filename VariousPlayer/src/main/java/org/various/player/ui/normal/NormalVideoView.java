@@ -35,12 +35,19 @@ public class NormalVideoView extends BaseVideoView<NormalControlView> implements
     }
 
     public void initView(Context context) {
-        View.inflate(context, R.layout.various_normal_view, this);
-        control = findViewById(R.id.video_control);
         video_container=findViewById(R.id.video_container);
         player.setVideoEventListener(this);
         control.setOrientationListener(this);
+    }
 
+    @Override
+    protected int setLayoutId() {
+        return R.layout.various_normal_view;
+    }
+
+    @Override
+    protected int initControlView() {
+        return R.id.video_control;
     }
 
     public void setPlayData(String url, String title) {

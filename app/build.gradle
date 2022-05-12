@@ -7,8 +7,8 @@ android {
         applicationId "org.various.demo"
         minSdk 21
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 21
+        versionName "0.83"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

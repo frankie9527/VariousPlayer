@@ -31,7 +31,6 @@ import org.various.player.widget.VolumePopupWindow;
 public class VideoCenterView extends BaseCenterView {
     private static final String TAG = "VideoCenterView";
     ProgressBar video_progress;
-    ImageView img_status;
     RelativeLayout rl_play_err;
     TextView tv_replay;
     BrightnessPopupWindow mBrightnessPop;
@@ -56,18 +55,6 @@ public class VideoCenterView extends BaseCenterView {
             @Override
             public void onClick(View view) {
 
-                if (PlayerManager.getPlayer().isPlaying()) {
-                    PlayerManager.getPlayer().pause();
-                    return;
-                }
-                int currentStatus = PlayerManager.getCurrentStatus();
-                long currentPosition = PlayerManager.getPlayer().getCurrentPosition();
-                String url = PlayerManager.getPlayer().getVideoUrl();
-                if (currentStatus == PlayerConstants.IDLE && currentPosition == 0 && !TextUtils.isEmpty(url)) {
-                    PlayerManager.getPlayer().startSyncPlay();
-                    return;
-                }
-                PlayerManager.getPlayer().resume();
             }
         });
         rl_play_err = findViewById(R.id.rl_play_err);
@@ -176,6 +163,11 @@ public class VideoCenterView extends BaseCenterView {
         if (mProgressPopup != null) {
             mProgressPopup.dismissPop();
         }
+    }
+
+    @Override
+    public void setOnCenterClickListener(OnClickListener listener) {
+
     }
 
 }

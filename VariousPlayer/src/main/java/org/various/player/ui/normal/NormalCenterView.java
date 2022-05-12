@@ -1,21 +1,14 @@
 package org.various.player.ui.normal;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.drawable.AnimationDrawable;
-import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
@@ -24,7 +17,6 @@ import org.various.player.PlayerConstants;
 import org.various.player.R;
 import org.various.player.core.PlayerManager;
 import org.various.player.ui.base.BaseCenterView;
-import org.various.player.utils.ToastUtils;
 import org.various.player.utils.UiUtils;
 import org.various.player.widget.BrightnessPopupWindow;
 import org.various.player.widget.PicPopupWindow;
@@ -39,7 +31,6 @@ import org.various.player.widget.VolumePopupWindow;
 public class NormalCenterView extends BaseCenterView implements View.OnClickListener, NotificationCenter.NotificationCenterDelegate {
     private static final String TAG = "NormalCenterView";
     ProgressBar video_progress;
-    ImageView img_status;
     ImageView img_lock_screen;
     ImageView img_take_pic;
     RelativeLayout rl_play_err;
@@ -180,6 +171,11 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
         if (mProgressPopup != null) {
             mProgressPopup.dismissPop();
         }
+    }
+
+    @Override
+    public void setOnCenterClickListener(OnClickListener listener) {
+
     }
 
     @Override

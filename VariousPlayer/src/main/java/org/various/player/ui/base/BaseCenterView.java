@@ -1,4 +1,5 @@
 package org.various.player.ui.base;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -6,8 +7,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import org.various.player.PlayerConstants;
 import org.various.player.core.PlayerManager;
 import org.various.player.listener.UserProgressListener;
@@ -23,6 +27,7 @@ public abstract class BaseCenterView extends FrameLayout {
     private static final String TAG = "BaseCenterView";
     private float downX, downY;
     private int videoViewWidth, videoViewHeight;
+    public ImageView img_status;
     /**
      * getScaledTouchSlop是ViewConfiguration类里的一个方法，返回值是int类型，其含义是一段滑动的距离，一般用在解决滑动冲突上，用法就是获取手指滑动的距离为X，如果X大于这个值就让控件去处理滑动事件，否则就不作滑动处理。
      */
@@ -36,7 +41,6 @@ public abstract class BaseCenterView extends FrameLayout {
     private int moveType = -1;
     /**
      * 判断action_down 的时候是在屏幕左边还是右边
-     *
      */
     private boolean firstDownIsLeft = false;
 
@@ -58,7 +62,8 @@ public abstract class BaseCenterView extends FrameLayout {
      */
     public long lastVideoPlayTime;
 
-    private   UserProgressListener userProgressListener;
+    private UserProgressListener userProgressListener;
+
     public BaseCenterView(@NonNull Context context) {
         super(context);
         initView(context);
@@ -73,9 +78,11 @@ public abstract class BaseCenterView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
+
     public void setUserProgressListener(UserProgressListener userProgressListener) {
         this.userProgressListener = userProgressListener;
     }
+
     protected abstract int setLayoutId();
 
     public void initView(Context context) {
@@ -102,9 +109,9 @@ public abstract class BaseCenterView extends FrameLayout {
             case MotionEvent.ACTION_DOWN:
                 lastDownX = downX = event.getX();
                 downY = event.getY();
-                Log.e(TAG,"lastDownX="+lastDownX);
-                Log.e(TAG,"downX="+downX);
-                Log.e(TAG,"downY="+downY);
+                Log.e(TAG, "lastDownX=" + lastDownX);
+                Log.e(TAG, "downX=" + downX);
+                Log.e(TAG, "downY=" + downY);
                 videoViewWidth = view.getWidth();
                 videoViewHeight = view.getHeight();
                 moveType = -1;
@@ -117,7 +124,7 @@ public abstract class BaseCenterView extends FrameLayout {
                         currentBrightness = 0.01f;
                     }
                 }
-                currentVolume=    PlayerManager.getPlayer().getVolume();
+                currentVolume = PlayerManager.getPlayer().getVolume();
                 actionDownVideoTime = PlayerManager.getPlayer().getCurrentPosition();
                 if (videoDurationTime == -1) {
                     videoDurationTime = PlayerManager.getPlayer().getDuration();
@@ -126,19 +133,19 @@ public abstract class BaseCenterView extends FrameLayout {
             case MotionEvent.ACTION_MOVE:
                 float absDeltaX = Math.abs(event.getX() - downX);
                 float absDeltaY = Math.abs(event.getY() - downY);
-                if (absDeltaX <defaultMoveLength && absDeltaY < defaultMoveLength) {
+                if (absDeltaX < defaultMoveLength && absDeltaY < defaultMoveLength) {
                     return;
                 }
                 if (moveType == -1) {
-                    Log.e(TAG,"event.getX="+event.getX());
-                    Log.e(TAG,"downX="+downX);
-                    Log.e(TAG,"absDeltaX="+absDeltaX);
+                    Log.e(TAG, "event.getX=" + event.getX());
+                    Log.e(TAG, "downX=" + downX);
+                    Log.e(TAG, "absDeltaX=" + absDeltaX);
 
-                    Log.e(TAG,"event.getY="+event.getY());
-                    Log.e(TAG,"downY="+downY);
-                    Log.e(TAG,"absDeltaY="+absDeltaY);
+                    Log.e(TAG, "event.getY=" + event.getY());
+                    Log.e(TAG, "downY=" + downY);
+                    Log.e(TAG, "absDeltaY=" + absDeltaY);
                     moveType = (absDeltaX < absDeltaY) ? 0 : 1;
-                    Log.e(TAG,"moveType="+moveType);
+                    Log.e(TAG, "moveType=" + moveType);
                 }
                 //垂直滑动的时候
                 if (moveType == 0) {
@@ -166,8 +173,8 @@ public abstract class BaseCenterView extends FrameLayout {
                     lastVideoPlayTime = videoDurationTime;
                 showProgressChange(lastVideoPlayTime, arrowDirection, videoDurationTime);
                 // 告知底部seek 跟随手指滑动改变seek 当前进度
-                if (userProgressListener!=null){
-                    userProgressListener.onUserProgress(PlayerConstants.USER_PROGRESS_START,lastVideoPlayTime);
+                if (userProgressListener != null) {
+                    userProgressListener.onUserProgress(PlayerConstants.USER_PROGRESS_START, lastVideoPlayTime);
                 }
                 //快进快退过程中，隐藏播放或者加载的按钮或者动画
                 hideLoadingAndPlayIcon();
@@ -177,14 +184,15 @@ public abstract class BaseCenterView extends FrameLayout {
                 currentBrightness = -1;
                 currentVolume = -1;
                 dismissAllView();
-                if (userProgressListener!=null&&moveType==1){
-                    userProgressListener.onUserProgress(PlayerConstants.USER_PROGRESS_END,lastVideoPlayTime);
+                if (userProgressListener != null && moveType == 1) {
+                    userProgressListener.onUserProgress(PlayerConstants.USER_PROGRESS_END, lastVideoPlayTime);
                 }
-                moveType=-1;
+                moveType = -1;
                 break;
         }
     }
-    public void handleDoubleTap( MotionEvent event){
+
+    public void handleDoubleTap(MotionEvent event) {
         float x = event.getRawX();
         int W = UiUtils.getWindowWidth();
         if (x < W * 0.4) {
@@ -193,12 +201,14 @@ public abstract class BaseCenterView extends FrameLayout {
             onRightDoubleTap();
         }
     }
+
     /**
      * 左边双击了
      */
     public void onLeftDoubleTop() {
 
     }
+
     /**
      * 右边双击了
      */
@@ -218,10 +228,15 @@ public abstract class BaseCenterView extends FrameLayout {
     public abstract void showProgressChange(long lastVideoPlayTime, int arrowDirection, long videoDurationTime);
 
 
-
     protected abstract void dismissAllView();
+
+    public abstract void setOnCenterClickListener(OnClickListener listener);
 
     public void onScreenOrientationChanged(int currentOrientation) {
         Log.e("BaseBottomView", "user ScreenOrientationChanged=" + currentOrientation);
+    }
+
+    public ImageView getCenterPlayView() {
+        return img_status;
     }
 }
