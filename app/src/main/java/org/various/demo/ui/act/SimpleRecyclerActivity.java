@@ -10,6 +10,7 @@ import org.various.demo.R;
 import org.various.demo.base.BaseActivity;
 import org.various.demo.data.SimpleData;
 import org.various.demo.ui.adapter.SimpleRecyclerAdapter;
+import org.various.player.core.PlayerManager;
 
 /**
  * Created by 江雨寒 on 2020/9/27
@@ -28,9 +29,9 @@ public class SimpleRecyclerActivity extends BaseActivity implements ItemClickLis
     @Override
     protected void initView() {
         super.initView();
-        recycler=findViewById(R.id.recycler);
+        recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        adapter=new SimpleRecyclerAdapter();
+        adapter = new SimpleRecyclerAdapter();
         adapter.setItemListener(this);
         recycler.setAdapter(adapter);
         adapter.setData(SimpleData.dataList);
@@ -39,5 +40,11 @@ public class SimpleRecyclerActivity extends BaseActivity implements ItemClickLis
     @Override
     public void onItemClick(View view, int postion) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PlayerManager.releasePlayer();
     }
 }

@@ -45,4 +45,5 @@ public class SimpleRecyclerAdapter extends BaseRecyclerAdapter<Bean, SimpleRecyc
             tv_title=itemView.findViewById(R.id.tv_title);
         }
     }
+
 }

@@ -24,9 +24,8 @@ public class SimpleVideoView extends BaseVideoView<VideoControlView> {
     }
 
     @Override
-    protected void initView(Context context) {
-        super.initView(context);
-//        player.setVideoEventListener(this);
+    protected void initView(Context context, AttributeSet attrs) {
+        super.initView(context, attrs);
         control.setOrientationListener(this);
     }
 
@@ -40,10 +39,6 @@ public class SimpleVideoView extends BaseVideoView<VideoControlView> {
         return R.id.video_control;
     }
 
-//    public void setPlayData(String url, String title) {
-//        player.setVideoUri(url);
-//        control.setTitle(title);
-//    }
 
     public void setUserActionListener(UserActionListener listener) {
         control.setUserActionListener(listener);

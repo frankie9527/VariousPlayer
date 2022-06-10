@@ -20,6 +20,7 @@
 
     <org.various.player.ui.simple.SimpleVideoView
         android:id="@+id/simple_view"
+        app:in_recycle="true"
         android:layout_width="match_parent"
         android:layout_height="240dp"/>
     <RelativeLayout

@@ -19,22 +19,25 @@ public abstract class AbstractBasePlayer implements IPlayer {
 
 
     public void setVideoEventListener(PlayerStatusListener listener) {
+        if (mStatusListener != null) {
+            mStatusListener = null;
+        }
         mStatusListener = listener;
     }
 
-    public void notifyStatus(@PlayerConstants.PlayerCore int core,int status) {
+    public void notifyStatus(@PlayerConstants.PlayerCore int core, int status) {
         if (mStatusListener == null)
             return;
-        Log.e("AbstractBasePlayer","status="+status);
-       int normalStatus= PlayerConfig.changStatus2Normal(core,status);
-        Log.e("AbstractBasePlayer","normalStatus="+normalStatus);
+        Log.e("AbstractBasePlayer", "status=" + status);
+        int normalStatus = PlayerConfig.changStatus2Normal(core, status);
+        Log.e("AbstractBasePlayer", "normalStatus=" + normalStatus);
         PlayerManager.setPlayerStatus(normalStatus);
         mStatusListener.statusChange(normalStatus);
     }
 
-    public void notifyPlayerError(){
+    public void notifyPlayerError() {
         PlayerManager.setPlayerStatus(PlayerConstants.ERROR);
-        if (mStatusListener !=null){
+        if (mStatusListener != null) {
             mStatusListener.statusChange(PlayerConstants.ERROR);
         }
     }

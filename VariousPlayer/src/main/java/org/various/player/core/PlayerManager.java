@@ -44,4 +44,7 @@ public class PlayerManager {
     public static int getCurrentStatus() {
         return currentStatus;
     }
+    public static void releasePlayer(){
+        iPlayer=null;
+    }
 }

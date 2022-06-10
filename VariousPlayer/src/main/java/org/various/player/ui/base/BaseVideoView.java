@@ -1,7 +1,9 @@
 package org.various.player.ui.base;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
 import android.graphics.SurfaceTexture;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -44,28 +46,36 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
     private Context context;
     private String url;
     private String title;
+    private boolean inRecycle = false;
 
     public BaseVideoView(@NonNull Context context) {
         super(context);
-        initView(context);
+        initView(context, null);
     }
 
     public void setPlayData(String url, String title) {
         this.url = url;
         this.title = title;
+        if (!inRecycle) {
+            player.setVideoUri(url);
+        }
+        control.topView.setTitle(this.title);
     }
 
     public BaseVideoView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        initView(context);
+        super(context, attrs, 0);
+        initView(context, attrs);
     }
 
     public BaseVideoView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView(context);
+        initView(context, attrs);
     }
 
-    protected void initView(Context context) {
+    protected void initView(Context context, AttributeSet attrs) {
+        @SuppressLint("CustomViewStyleable") final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PlayerType);
+        inRecycle = a.getBoolean(R.styleable.PlayerType_in_recycle, false);
+        a.recycle();
         this.context = context;
         View.inflate(context, setLayoutId(), this);
         control = findViewById(initControlView());
@@ -74,7 +84,7 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
             @Override
             public void onClick(View view) {
                 if ((PlayerManager.getPlayer().isPlaying() && playStatus != PlayerConstants.BUFFERING)
-                ||(!PlayerManager.getPlayer().isPlaying()&&playStatus == PlayerConstants.IDLE)) {
+                        || (!PlayerManager.getPlayer().isPlaying() && playStatus == PlayerConstants.IDLE)) {
                     initPlayer();
                     return;
                 }
@@ -92,7 +102,18 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
                 PlayerManager.getPlayer().resume();
             }
         });
-
+        if (!inRecycle) {
+            initPlayer();
+            if (orientationUtils == null) {
+                orientationUtils = new OrientationUtils(context);
+            }
+        } else {
+            orientationUtils = new OrientationUtils(context);
+        }
+        if (player == null) {
+            player = PlayerManager.getPlayer();
+        }
+        player.setVideoEventListener(BaseVideoView.this);
     }
 
 
@@ -113,7 +134,6 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         Gravity.CENTER);
         video_container.addView(textureView, layoutParams);
-
     }
 
     TextureListener listener;
@@ -233,15 +253,14 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
     }
 
     protected class TextureListener implements TextureView.SurfaceTextureListener {
-
         @Override
         public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
-            if (player == null) {
-                player = PlayerManager.getPlayer();
-            }
-            player.setVideoUri(url);
+            player.setVideoEventListener(BaseVideoView.this);
             player.setVideoSurface(new Surface(surface));
-            player.startSyncPlay();
+            if (inRecycle) {
+                player.setVideoUri(url);
+                player.startSyncPlay();
+            }
         }
 
         @Override
@@ -251,7 +270,12 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
 
         @Override
         public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
-            return false;
+            player.clearVideoSurface();
+            if (inRecycle) {
+                PlayerManager.releasePlayer();
+                player = null;
+            }
+            return true;
         }
 
         @Override
