@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "org.various.demo"
         minSdk 21
-        targetSdk 32
+        targetSdk 23
         versionCode 21
         versionName "0.83"
 
