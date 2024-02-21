@@ -115,24 +115,24 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (!fromUser) return;
-        long time = PlayerManager.getPlayer().getDuration() * progress / 100;
+        long time = PlayerManager.getInstance().getPlayer().getDuration() * progress / 100;
         String str = TimeFormatUtil.formatMs(time);
         setCurrentTime(str);
 
     }
 
     private void updateProgress() {
-        long currentTime = PlayerManager.getPlayer().getCurrentPosition();
+        long currentTime = PlayerManager.getInstance().getPlayer().getCurrentPosition();
         String currentStr = TimeFormatUtil.formatMs(currentTime);
         setCurrentTime(currentStr);
         if (tv_total != null && "--:--".equals(tv_total.getText().toString())) {
-            long totalTime = PlayerManager.getPlayer().getDuration();
+            long totalTime = PlayerManager.getInstance().getPlayer().getDuration();
             String totalStr = TimeFormatUtil.formatMs(totalTime);
             setTotalTime(totalStr);
         }
-        float duration = PlayerManager.getPlayer().getDuration();
+        float duration = PlayerManager.getInstance().getPlayer().getDuration();
         int currentPosition = (int) ((currentTime / duration) * 100);
-        int bufferPercent = PlayerManager.getPlayer().getBufferedPercent();
+        int bufferPercent = PlayerManager.getInstance().getPlayer().getBufferedPercent();
         setSeekPosition(currentPosition, bufferPercent);
     }
 
@@ -145,7 +145,7 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         int progress = seekBar.getProgress();
-        long time = PlayerManager.getPlayer().getDuration() * progress / 100;
+        long time = PlayerManager.getInstance().getPlayer().getDuration() * progress / 100;
         changSeekBar(PlayerConstants.USER_DRAG_END, time);
     }
 
@@ -172,7 +172,7 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
             return;
         }
         if (type == PlayerConstants.USER_DRAG_END) {
-            PlayerManager.getPlayer().seekTo(time);
+            PlayerManager.getInstance().getPlayer().seekTo(time);
             progressPollRepeater.start();
             if (userProgressListener != null) {
                 userProgressListener.onUserProgress(type, time);
@@ -190,14 +190,14 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
             if (video_seek != null) {
                 String currentStr = TimeFormatUtil.formatMs(time);
                 setCurrentTime(currentStr);
-                float duration = PlayerManager.getPlayer().getDuration();
+                float duration = PlayerManager.getInstance().getPlayer().getDuration();
                 int currentPosition = (int) ((time / duration) * 100);
                 video_seek.setProgress(currentPosition);
             }
             return;
         }
         if (type == PlayerConstants.USER_PROGRESS_END) {
-            PlayerManager.getPlayer().seekTo(time);
+            PlayerManager.getInstance().getPlayer().seekTo(time);
             progressPollRepeater.start();
         }
     }

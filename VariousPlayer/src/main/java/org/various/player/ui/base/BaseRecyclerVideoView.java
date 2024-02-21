@@ -3,23 +3,17 @@ package org.various.player.ui.base;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.exoplayer2.PlaybackParameters;
-
 import org.various.player.PlayerConstants;
 import org.various.player.core.AbstractBasePlayer;
 import org.various.player.core.IPlayer;
-import org.various.player.core.PlayerManager;
 import org.various.player.listener.PlayerStatusListener;
 import org.various.player.listener.UserChangeOrientationListener;
-import org.various.player.ui.base.impl.IVideoControl;
 import org.various.player.utils.OrientationUtils;
 
 /**
@@ -27,36 +21,33 @@ import org.various.player.utils.OrientationUtils;
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayout implements IPlayer, UserChangeOrientationListener, PlayerStatusListener {
+public abstract class BaseRecyclerVideoView<T extends BaseControlView> extends FrameLayout implements IPlayer, UserChangeOrientationListener, PlayerStatusListener {
     protected AbstractBasePlayer player;
     OrientationUtils orientationUtils;
     private int initHeight;
     protected T control;
 
-    public BaseVideoView(@NonNull Context context) {
+
+
+    public BaseRecyclerVideoView(@NonNull Context context) {
         super(context);
-        init();
     }
 
-    public BaseVideoView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseRecyclerVideoView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+
     }
 
-    public BaseVideoView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BaseRecyclerVideoView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+
     }
 
-    private void init() {
-        player = PlayerManager.getInstance().init();
-        orientationUtils = new OrientationUtils(getContext());
+
+    public T getControlView(){
+        return control;
     }
 
-    public void setPlayData(String url, String title) {
-        player.setVideoUri(url);
-        control.setTitle(title);
-    }
 
     @Override
     public float getVolume() {
@@ -119,6 +110,7 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
     @Override
     public void startSyncPlay() {
         setKeepScreenOn(true);
+        orientationUtils = new OrientationUtils(getContext());
         player.startSyncPlay();
         control.stateBuffering();
     }
@@ -126,7 +118,10 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        orientationUtils.release();
+        if (orientationUtils != null) {
+            orientationUtils.release();
+        }
+
     }
 
     @Override

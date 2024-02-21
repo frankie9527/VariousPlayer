@@ -1,12 +1,16 @@
 package org.various.player.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import org.various.player.PlayerConfig;
@@ -132,5 +136,17 @@ public class UiUtils {
 			view.setVisibility(View.VISIBLE);
 		}
 	}
-
+    /**
+     * 将自己从父Parent中移除
+     * @param view
+     */
+    public static void removeViewFromParent(View view) {
+        if(null!=view&&null!=view.getParent() && view.getParent() instanceof ViewGroup){
+            try {
+                ((ViewGroup) view.getParent()).removeView(view);
+            }catch (Throwable e){
+                e.printStackTrace();
+            }
+        }
+    }
 }

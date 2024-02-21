@@ -38,7 +38,7 @@ public class PlayerConfig {
     protected static String userAgent;
     private static Cache downloadCache;
 
-    private static SparseIntArray exoStatus=new SparseIntArray();
+    private static final SparseIntArray exoStatus=new SparseIntArray();
     public static void init(@NonNull Application app) {
         mContext = app;
         applicationHandler = new Handler(mContext.getMainLooper());

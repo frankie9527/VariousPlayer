@@ -1,5 +1,6 @@
 package org.various.player.ui.base;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -103,6 +104,7 @@ public abstract class BaseCenterView extends FrameLayout {
 
     public abstract void showStatus();
 
+    @SuppressLint("Range")
     public void handleTouch(View view, MotionEvent event) {
         int action = event.getAction();
         switch (action) {
@@ -124,10 +126,10 @@ public abstract class BaseCenterView extends FrameLayout {
                         currentBrightness = 0.01f;
                     }
                 }
-                currentVolume = PlayerManager.getPlayer().getVolume();
-                actionDownVideoTime = PlayerManager.getPlayer().getCurrentPosition();
+                currentVolume = PlayerManager.getInstance().getPlayer().getVolume();
+                actionDownVideoTime = PlayerManager.getInstance().getPlayer().getCurrentPosition();
                 if (videoDurationTime == -1) {
-                    videoDurationTime = PlayerManager.getPlayer().getDuration();
+                    videoDurationTime = PlayerManager.getInstance().getPlayer().getDuration();
                 }
                 break;
             case MotionEvent.ACTION_MOVE:

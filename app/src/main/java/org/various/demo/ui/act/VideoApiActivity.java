@@ -10,6 +10,7 @@ import org.various.demo.R;
 import org.various.demo.base.BaseActivity;
 import org.various.demo.data.SimpleData;
 import org.various.player.NotificationCenter;
+import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
 import org.various.player.ui.simple.SimpleVideoView;
 
@@ -37,7 +38,8 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
         simple_view.setUserActionListener(new UserActionListener() {
             @Override
             public void onUserAction(int action) {
-
+                if (action == PlayerConstants.ACTION_BACK)
+                    finish();
             }
         });
         img_copy=findViewById(R.id.img_copy);
@@ -62,7 +64,7 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
         simple_view.setSpeed(currentSpeed);
         speedButton.setText(currentSpeed+"x");
     }
-    public void  getBitMap(View view){
+    public void  screenShot(View view){
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_take_pic);
     }
 
@@ -71,7 +73,7 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
         simple_view.startSyncPlay();
     }
     public void play2(View view){
-        simple_view.setPlayData(SimpleData.url2, title);
+        simple_view.setPlayData(SimpleData.url3, title);
         simple_view.startSyncPlay();
     }
     @Override

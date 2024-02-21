@@ -36,7 +36,7 @@ public class VariousTextureView extends TextureView implements NotificationCente
         init();
     }
     private void init() {
-        player = PlayerManager.getPlayer();
+        player = PlayerManager.getInstance().getPlayer();
         listener=new VariousSurfaceTextureListener();
         setSurfaceTextureListener(listener);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.user_onclick_take_pic);

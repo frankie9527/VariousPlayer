@@ -110,7 +110,7 @@ public class VideoCenterView extends BaseCenterView {
     @Override
     public void showStatus() {
         setVisibility(View.VISIBLE);
-        int type = PlayerManager.getCurrentStatus();
+        int type = PlayerManager.getInstance().getCurrentStatus();
         Log.e(TAG, "type=" + type);
         UiUtils.viewSetGone(video_progress);
         UiUtils.viewSetGone(img_status);
@@ -118,7 +118,7 @@ public class VideoCenterView extends BaseCenterView {
         switch (type) {
             case PlayerConstants.READY:
                 UiUtils.viewSetVisible(img_status);
-                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), PlayerManager.getPlayer().isPlaying() ? R.drawable.video_pause : R.drawable.video_play));
+                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), PlayerManager.getInstance().getPlayer().isPlaying() ? R.drawable.video_pause : R.drawable.video_play));
                 break;
             case PlayerConstants.BUFFERING:
                 showLoading();
@@ -167,7 +167,8 @@ public class VideoCenterView extends BaseCenterView {
 
     @Override
     public void setOnCenterClickListener(OnClickListener listener) {
-
+        if (img_status!=null)
+            img_status.setOnClickListener(listener);
     }
 
 }

@@ -17,11 +17,7 @@ import org.various.player.listener.PlayerStatusListener;
 public abstract class AbstractBasePlayer implements IPlayer {
     PlayerStatusListener mStatusListener = null;
 
-
     public void setVideoEventListener(PlayerStatusListener listener) {
-        if (mStatusListener != null) {
-            mStatusListener = null;
-        }
         mStatusListener = listener;
     }
 
@@ -31,12 +27,12 @@ public abstract class AbstractBasePlayer implements IPlayer {
         Log.e("AbstractBasePlayer", "status=" + status);
         int normalStatus = PlayerConfig.changStatus2Normal(core, status);
         Log.e("AbstractBasePlayer", "normalStatus=" + normalStatus);
-        PlayerManager.setPlayerStatus(normalStatus);
+        PlayerManager.getInstance().setPlayerStatus(normalStatus);
         mStatusListener.statusChange(normalStatus);
     }
 
     public void notifyPlayerError() {
-        PlayerManager.setPlayerStatus(PlayerConstants.ERROR);
+        PlayerManager.getInstance().setPlayerStatus(PlayerConstants.ERROR);
         if (mStatusListener != null) {
             mStatusListener.statusChange(PlayerConstants.ERROR);
         }

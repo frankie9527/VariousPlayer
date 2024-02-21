@@ -1,62 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp_5"
-    app:cardBackgroundColor="#ffffff"
-    app:cardCornerRadius="@dimen/dp_5"
-    app:cardElevation="@dimen/dp_5">
+    android:background="#fff"
+    android:orientation="vertical">
 
-  <LinearLayout
-      android:id="@+id/ll_video_content"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingTop="@dimen/dp_5"
-      android:paddingLeft="@dimen/dp_5"
-      android:paddingRight="@dimen/dp_5"
-      android:orientation="vertical">
-
-    <org.various.player.ui.simple.SimpleVideoView
-        android:id="@+id/simple_view"
-        app:in_recycle="true"
+    <org.various.player.ui.recycler.RecyclerItemVideoView
+        android:id="@+id/item_view"
         android:layout_width="match_parent"
-        android:layout_height="240dp"/>
+        android:layout_height="240dp"
+        app:in_recycle="true" />
+
     <RelativeLayout
         android:id="@+id/rl_bottom"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-      <TextView
-          android:id="@+id/tv_title"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:paddingBottom="@dimen/dp_5"
-          android:paddingLeft="@dimen/dp_5"
-          android:paddingTop="@dimen/dp_5"
-          android:text="橙雨伞公益"
-          android:textColor="#000"
-          android:textSize="@dimen/sp_16" />
-      <TextView
-          android:id="@+id/tv_playCount"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_toLeftOf="@+id/img_share_collection"
-          android:layout_centerVertical="true"
-          android:layout_marginRight="@dimen/dp_10"
-          android:text="1万次播放"
-          android:textColor="#aaa"
-          android:textSize="@dimen/sp_14" />
-      <ImageView
-          android:id="@+id/img_share_collection"
-          android:background="@drawable/ic_share_collection"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:layout_marginRight="@dimen/dp_10"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
-    </RelativeLayout>
-  </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:text="橙雨伞公益"
+            android:textColor="#000"
+            android:textSize="@dimen/sp_16" />
+
+        <TextView
+            android:id="@+id/tv_playCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_toLeftOf="@+id/img_share_collection"
+            android:text="1万次播放"
+            android:textColor="#aaa"
+            android:textSize="@dimen/sp_14" />
+
+        <ImageView
+            android:id="@+id/img_share_collection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="@drawable/ic_share_collection" />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#F8F8F8"/>
+</LinearLayout>

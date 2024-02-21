@@ -32,10 +32,15 @@ import org.various.player.utils.OrientationUtils;
  * func:
  */
 public abstract class BaseControlView<T extends BaseTopView, B extends BaseBottomView, C extends BaseCenterView> extends FrameLayout implements IVideoControl, View.OnClickListener, UserProgressListener {
-    private String TAG = "BaseControlView";
+    private final String TAG = "BaseControlView";
     T topView;
     B bottomView;
     C centerView;
+
+    public C getCentView() {
+        return centerView;
+    }
+
     UserActionListener userActionListener;
     TouchListener touchListener;
     public final int SHOW_TOP_AND_BOTTOM = 0;
@@ -99,18 +104,27 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     }
 
     protected void initTopView(int id) {
+        if (id == 0) {
+            return;
+        }
         topView = findViewById(id);
         topView.setOnTopClickListener(this);
 
     }
 
     protected void initBottomView(int id) {
+        if (id == 0) {
+            return;
+        }
         bottomView = findViewById(id);
         bottomView.setOnBottomClickListener(this);
         bottomView.setDragSeekListener(this);
     }
 
     protected void initCenterView(int id) {
+        if (id == 0) {
+            return;
+        }
         centerView = findViewById(id);
         centerView.setUserProgressListener(this);
         centerView.setOnCenterClickListener(this);
@@ -129,7 +143,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void stateReady() {
-        Log.e(TAG,"stateReady");
+        Log.e(TAG, "stateReady");
         centerView.showStatus();
         mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
         bottomView.startRepeater();
@@ -138,15 +152,23 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     @Override
     public void showTopAndBottom() {
         Log.e(TAG, "showTopAndBottom");
-        topView.setVisibleStatus(PlayerConstants.SHOW);
-        bottomView.setVisibleStatus(PlayerConstants.SHOW);
+        if (topView!=null){
+            topView.setVisibleStatus(PlayerConstants.SHOW);
+        }
+        if (bottomView!=null){
+            bottomView.setVisibleStatus(PlayerConstants.SHOW);
+        }
     }
 
     @Override
     public void hideTopAndBottom() {
         Log.e(TAG, "hideTopAndBottom");
-        topView.setVisibleStatus(PlayerConstants.HIDE);
-        bottomView.setVisibleStatus(PlayerConstants.HIDE);
+        if (topView!=null){
+            topView.setVisibleStatus(PlayerConstants.HIDE);
+        }
+        if (bottomView!=null){
+            bottomView.setVisibleStatus(PlayerConstants.HIDE);
+        }
     }
 
     @Override
@@ -167,7 +189,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void onClick(View view) {
-        if (view == topView.getBackView() && orientationListener != null) {
+        if (topView != null && view == topView.getBackView() && orientationListener != null) {
             if (OrientationUtils.Orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                 orientationListener.changeOrientation();
                 topView.onScreenOrientationChanged(OrientationUtils.Orientation);
@@ -178,7 +200,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
             if (userActionListener != null)
                 userActionListener.onUserAction(PlayerConstants.ACTION_BACK);
         }
-        if (view == bottomView.getImgSwitchScreen()) {
+        if (bottomView != null && view == bottomView.getImgSwitchScreen()) {
             if (orientationListener != null) {
                 orientationListener.changeOrientation();
                 topView.onScreenOrientationChanged(OrientationUtils.Orientation);
@@ -187,6 +209,20 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
                 mUiHandler.removeMessages(HIDE_ALL);
                 mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
             }
+        }
+        if (bottomView != null && view == centerView.getCenterPlayView()) {
+            if (PlayerManager.getInstance().getPlayer().isPlaying()) {
+                PlayerManager.getInstance().getPlayer().pause();
+                return;
+            }
+            int currentStatus = PlayerManager.getInstance().getCurrentStatus();
+            long currentPosition = PlayerManager.getInstance().getPlayer().getCurrentPosition();
+            String url = PlayerManager.getInstance().getPlayer().getVideoUrl();
+            if (currentStatus == PlayerConstants.IDLE && currentPosition == 0 && !TextUtils.isEmpty(url)) {
+                PlayerManager.getInstance().getPlayer().startSyncPlay();
+                return;
+            }
+            PlayerManager.getInstance().getPlayer().resume();
         }
     }
 
@@ -200,8 +236,8 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
             stateBuffering();
             return;
         }
-        if (bottomView!=null){
-            bottomView.changSeekBar(type,time);
+        if (bottomView != null) {
+            bottomView.changSeekBar(type, time);
         }
     }
 
@@ -218,8 +254,8 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             gestureDetector.onTouchEvent(event);
-            if (PlayerManager.getCurrentStatus()==PlayerConstants.READY||PlayerManager.getCurrentStatus()==PlayerConstants.BUFFERING){
-                centerView.handleTouch(view,event);
+            if (PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.READY || PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.BUFFERING) {
+                centerView.handleTouch(view, event);
             }
             return true;
         }
@@ -227,7 +263,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Log.e(TAG, "onSingleTapConfirmed=" + (bottomView.getVisibility() != VISIBLE));
-            if (PlayerManager.getCurrentStatus()==PlayerConstants.END||PlayerManager.getCurrentStatus()==PlayerConstants.ERROR){
+            if (PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.END || PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.ERROR) {
                 showTopAndBottom();
                 centerView.showStatus();
                 return true;
@@ -247,7 +283,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            if ( PlayerManager.getCurrentStatus()==PlayerConstants.READY||PlayerManager.getCurrentStatus()==PlayerConstants.BUFFERING){
+            if (PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.READY || PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.BUFFERING) {
                 centerView.handleDoubleTap(e);
             }
             return super.onDoubleTap(e);

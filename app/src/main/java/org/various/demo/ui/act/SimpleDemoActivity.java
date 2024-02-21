@@ -20,7 +20,7 @@ public class SimpleDemoActivity extends BaseActivity {
     protected void initView() {
         PlayerConfig.setPlayerCore(PlayerConstants.EXO_CORE);
         simple_view = findViewById(R.id.simple_view);
-        simple_view.setPlayData(SimpleData.url5, title);
+        simple_view.setPlayData(SimpleData.url, title);
         simple_view.startSyncPlay();
         simple_view.setUserActionListener(new UserActionListener() {
             @Override

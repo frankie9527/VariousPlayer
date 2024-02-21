@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VariousDemo</string>
+    <string name="play1">播放1</string>
+    <string name="play2">播放2</string>
+    <string name="pause">暂停</string>
+    <string name="resume">继续播放</string>
+    <string name="speed">倍速播放</string>
+    <string name="screenshot">截图</string>
+</resources>

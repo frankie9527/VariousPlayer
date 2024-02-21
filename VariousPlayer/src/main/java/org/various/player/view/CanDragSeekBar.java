@@ -1,5 +1,6 @@
 package org.various.player.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -26,6 +27,7 @@ public class CanDragSeekBar extends androidx.appcompat.widget.AppCompatSeekBar {
     public CanDragSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (canDrag){

@@ -1,9 +1,11 @@
 package org.various.player.core;
 
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.Surface;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
@@ -13,7 +15,7 @@ import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.TracksInfo;
+
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
@@ -29,7 +31,7 @@ import org.various.player.PlayerConfig;
 import org.various.player.PlayerConstants;
 
 public class VariousExoPlayer extends AbstractBasePlayer implements Player.Listener, NotificationCenter.NotificationCenterDelegate {
-    private String TAG = "VariousExoPlayer";
+    private final String TAG = "VariousExoPlayer";
     private MediaSource mediaSource;
     private ExoPlayer player;
     private DefaultTrackSelector trackSelector;
@@ -38,7 +40,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
 
     public VariousExoPlayer() {
         trackSelector = new DefaultTrackSelector(PlayerConfig.getContext(), new AdaptiveTrackSelection.Factory());
-        trackSelectorParameters = new DefaultTrackSelector.ParametersBuilder(PlayerConfig.getContext()).build();
+        trackSelectorParameters = new DefaultTrackSelector.Parameters.Builder(PlayerConfig.getContext()).build();
         trackSelector.setParameters(trackSelectorParameters);
         player = new ExoPlayer.Builder(PlayerConfig.getContext()).setTrackSelector(trackSelector).build();
         player.addListener(this);
@@ -76,7 +78,6 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
         if (player != null) {
             player.removeListener(this);
             player.release();
-
         }
     }
 
@@ -159,29 +160,24 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     }
 
     public MediaSource createMediaSource(@Nullable String url, @Nullable String overrideExtension) {
-        int type = Util.inferContentType(Uri.parse(url), overrideExtension);
-        if (type == C.TYPE_DASH) {
+        int type = TextUtils.isEmpty(overrideExtension)
+                ? Util.inferContentType(Uri.parse(url))
+                : Util.inferContentTypeForExtension(overrideExtension);;
+        if (type == C.CONTENT_TYPE_DASH) {
             return new DashMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(url));
         }
-        if (type == C.TYPE_SS) {
+        if (type == C.CONTENT_TYPE_SS) {
             return new SsMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(url));
         }
-        if (type == C.TYPE_HLS) {
+        if (type == C.CONTENT_TYPE_HLS) {
             return new HlsMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(url));
         }
         return new ProgressiveMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(url));
     }
 
     @Override
-    public void onTimelineChanged(Timeline timeline, int reason) {
+    public void onTimelineChanged(@NonNull Timeline timeline, int reason) {
         Log.e(TAG, "onTimelineChanged");
-    }
-
-
-    @Override
-    public void onTracksInfoChanged(TracksInfo tracksInfo) {
-        Player.Listener.super.onTracksInfoChanged(tracksInfo);
-        Log.e(TAG, "onTracksChanged");
     }
 
 

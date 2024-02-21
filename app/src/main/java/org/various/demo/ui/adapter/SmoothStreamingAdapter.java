@@ -73,9 +73,8 @@ public class SmoothStreamingAdapter extends BaseRecyclerAdapter<String, SmoothSt
     public void onClickOnPosition(int position) {
         DefaultTrackSelector.SelectionOverride o = new DefaultTrackSelector.SelectionOverride(0, position);
         ToastUtils.show("play the" + position + " item");
-        DefaultTrackSelector.ParametersBuilder builder = parameters.buildUpon();
+        DefaultTrackSelector.Parameters.Builder  builder = parameters.buildUpon();
         for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
-            Log.e("jyh", "i=" + i);
             builder.clearSelectionOverrides(i).setRendererDisabled(i, false);
             if (i == 0 && position != 0) {
                 builder.setSelectionOverride(i, mappedTrackInfo.getTrackGroups(i), o);

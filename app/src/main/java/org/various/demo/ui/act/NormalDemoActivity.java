@@ -21,7 +21,7 @@ public class NormalDemoActivity extends BaseActivity {
     @Override
     protected void initView() {
         normal_view = findViewById(R.id.normal_view);
-        normal_view.setPlayData(SimpleData.url2, title);
+        normal_view.setPlayData(SimpleData.url, title);
         normal_view.startSyncPlay();
         normal_view.setUserActionListener(new UserActionListener() {
             @Override

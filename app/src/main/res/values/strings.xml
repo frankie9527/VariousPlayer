@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">VariousDemo</string>
+    <string name="play1">play1</string>
+    <string name="play2">play2</string>
+    <string name="pause">pause</string>
+    <string name="resume">resume</string>
+    <string name="speed">speed</string>
+    <string name="screenshot">screenshot</string>
 </resources>

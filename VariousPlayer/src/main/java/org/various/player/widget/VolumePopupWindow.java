@@ -47,7 +47,7 @@ public class VolumePopupWindow {
         if (nowVolume > 1.0f)
             nowVolume = 1.0f;
         Log.e("VolumePopupWindow", "nowVolume=" + nowVolume);
-        PlayerManager.getPlayer().setVolume(nowVolume);
+        PlayerManager.getInstance().getPlayer().setVolume(nowVolume);
         if (mVolumePopup == null) {
             localView = LayoutInflater.from(context).inflate(R.layout.various_popup_volume, null);
             mVolumeProgressBar = localView.findViewById(R.id.brightness_progressbar);

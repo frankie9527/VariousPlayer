@@ -49,7 +49,7 @@ public class SmoothStreamingActivity extends BaseActivity implements ItemClickLi
     }
 
     public void test(View view){
-        VariousExoPlayer player= (VariousExoPlayer) PlayerManager.getPlayer();
+        VariousExoPlayer player= (VariousExoPlayer) PlayerManager.getInstance().getPlayer();
         adapter.setVideoData(player);
     }
     @Override

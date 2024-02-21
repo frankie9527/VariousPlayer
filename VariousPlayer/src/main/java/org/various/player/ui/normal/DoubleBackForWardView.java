@@ -104,10 +104,10 @@ public class DoubleBackForWardView extends LinearLayout implements View.OnClickL
                 case DISMISS_FORWARD_BACKWARD:
                     UiUtils.viewSetGone(rl_backward);
                     UiUtils.viewSetGone(rl_forward);
-                    long goTime = fingerCount * 10 * 1000 + PlayerManager.getPlayer().getCurrentPosition();
+                    long goTime = fingerCount * 10 * 1000 + PlayerManager.getInstance().getPlayer().getCurrentPosition();
 
-                    if (goTime > 0 && goTime < PlayerManager.getPlayer().getDuration()) {
-                        PlayerManager.getPlayer().seekTo(goTime);
+                    if (goTime > 0 && goTime < PlayerManager.getInstance().getPlayer().getDuration()) {
+                        PlayerManager.getInstance().getPlayer().seekTo(goTime);
                     } else {
                         ToastUtils.show( "预期播放不符合影片时长");
                     }

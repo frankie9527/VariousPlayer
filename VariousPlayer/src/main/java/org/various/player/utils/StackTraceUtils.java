@@ -11,13 +11,11 @@ public class StackTraceUtils {
     public static void logStack(String tag){
         Throwable ex = new Throwable();
         StackTraceElement[] stackElements = ex.getStackTrace();
-        if (stackElements != null) {
-            Log.e(tag, "-------------StackTrace  start---------------------- " );
-            for (StackTraceElement stackElement : stackElements) {
-                String str = "[" + stackElement.getClassName() + stackElement.getLineNumber() + " " + stackElement.getMethodName() + "]";
-                Log.e(tag, "StackTrace stack=" + str);
-            }
-            Log.d(tag, "-------------StackTrace  end---------------------- " );
+        Log.e(tag, "-------------StackTrace  start---------------------- ");
+        for (StackTraceElement stackElement : stackElements) {
+            String str = "[" + stackElement.getClassName() + stackElement.getLineNumber() + " " + stackElement.getMethodName() + "]";
+            Log.e(tag, "StackTrace stack=" + str);
         }
+        Log.d(tag, "-------------StackTrace  end---------------------- " );
     }
 }

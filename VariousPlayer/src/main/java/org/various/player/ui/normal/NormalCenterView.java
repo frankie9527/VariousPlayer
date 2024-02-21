@@ -59,6 +59,8 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
         video_progress = findViewById(R.id.video_progress);
         img_status = findViewById(R.id.img_status);
         img_status.setOnClickListener(this);
+        UiUtils.viewSetVisible(img_status);
+        img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_play));
         rl_play_err = findViewById(R.id.rl_play_err);
         findViewById(R.id.tv_replay).setOnClickListener(this);
         img_take_pic = findViewById(R.id.img_take_pic);
@@ -117,7 +119,7 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
     @Override
     public void showStatus() {
         setVisibility(View.VISIBLE);
-        int type = PlayerManager.getCurrentStatus();
+        int type = PlayerManager.getInstance().getCurrentStatus();
         Log.e(TAG, "type=" + type);
         UiUtils.viewSetGone(video_progress);
         UiUtils.viewSetGone(img_status);
@@ -125,7 +127,7 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
         switch (type) {
             case PlayerConstants.READY:
                 UiUtils.viewSetVisible(img_status);
-                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), PlayerManager.getPlayer().isPlaying() ? R.drawable.video_pause : R.drawable.video_play));
+                img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), PlayerManager.getInstance().getPlayer().isPlaying() ? R.drawable.video_pause : R.drawable.video_play));
                 onScreenOrientationChanged(currentOrientation);
                 break;
             case PlayerConstants.BUFFERING:
@@ -175,17 +177,18 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
 
     @Override
     public void setOnCenterClickListener(OnClickListener listener) {
-
+        if (img_status!=null)
+            img_status.setOnClickListener(listener);
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.img_status) {
-            if (PlayerManager.getPlayer().isPlaying()) {
-                PlayerManager.getPlayer().pause();
+            if (PlayerManager.getInstance().getPlayer().isPlaying()) {
+                PlayerManager.getInstance().getPlayer().pause();
                 return;
             }
-            PlayerManager.getPlayer().resume();
+            PlayerManager.getInstance().getPlayer().resume();
             return;
         }
         if (v.getId() == R.id.tv_replay) {

@@ -16,7 +16,7 @@ import org.various.player.view.VariousTextureView;
  * Email：847145851@qq.com
  * func: 相比SimpleVideoView多了截图，锁屏，多次双击的快进快退
  */
-public class NormalVideoView extends BaseVideoView<NormalControlView> implements  NotificationCenter.NotificationCenterDelegate {
+public class NormalVideoView extends BaseVideoView<NormalControlView> implements NotificationCenter.NotificationCenterDelegate {
     VariousTextureView video_container;
 
     public NormalVideoView(Context context) {
@@ -35,26 +35,11 @@ public class NormalVideoView extends BaseVideoView<NormalControlView> implements
     }
 
     public void initView(Context context) {
-        video_container=findViewById(R.id.video_container);
+        View.inflate(context, R.layout.various_normal_view, this);
+        control = findViewById(R.id.video_control);
         player.setVideoEventListener(this);
         control.setOrientationListener(this);
     }
-
-    @Override
-    protected int setLayoutId() {
-        return R.layout.various_normal_view;
-    }
-
-    @Override
-    protected int initControlView() {
-        return R.id.video_control;
-    }
-
-    public void setPlayData(String url, String title) {
-        player.setVideoUri(url);
-        control.setTitle(title);
-    }
-
 
 
     public void setUserActionListener(UserActionListener listener) {
@@ -64,7 +49,7 @@ public class NormalVideoView extends BaseVideoView<NormalControlView> implements
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-      Bitmap bitmap= video_container.getBitmap();
-      String str="";
+        Bitmap bitmap = video_container.getBitmap();
+        String str = "";
     }
 }

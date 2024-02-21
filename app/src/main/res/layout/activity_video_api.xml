@@ -2,64 +2,78 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.act.VideoApiActivity">
 
     <org.various.player.ui.simple.SimpleVideoView
         android:id="@+id/simple_view"
         android:layout_width="match_parent"
-        android:layout_height="240dp"/>
+        android:layout_height="240dp" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <Button
-            android:id="@+id/pause"
-            android:onClick="pause"
-            android:text="暂停"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
         <Button
-            android:id="@+id/resume"
-            android:layout_toRightOf="@id/pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="resume"
-            android:text="继续播放" />
-        <Button
-            android:id="@+id/speed"
-            android:layout_toRightOf="@id/resume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="speed"
-            android:text="倍速播放" />
-        <Button
-            android:id="@+id/getBitMap"
-            android:layout_toRightOf="@id/speed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="getBitMap"
-            android:text="截图" />
-        <Button
             android:id="@+id/play1"
-            android:layout_below="@id/pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="play1"
-            android:text="播放1" />
+            android:text="@string/play1"
+            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/play2"
-            android:layout_below="@id/pause"
-            android:layout_toRightOf="@id/play1"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/play1"
             android:onClick="play2"
-            android:text="播放2" />
+            android:text="@string/play2"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/resume"
+            android:onClick="speed"
+            android:text="@string/speed"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/getBitMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/speed"
+            android:onClick="screenShot"
+            android:text="@string/screenshot"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/play1"
+            android:onClick="pause"
+            android:text="@string/pause"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/resume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/play2"
+            android:layout_toRightOf="@id/pause"
+            android:onClick="resume"
+            android:text="@string/resume"
+            android:textAllCaps="false" />
     </RelativeLayout>
+
     <ImageView
         android:id="@+id/img_copy"
         android:layout_width="wrap_content"
-        android:layout_height="240dp"/>
+        android:layout_height="240dp" />
 </LinearLayout>

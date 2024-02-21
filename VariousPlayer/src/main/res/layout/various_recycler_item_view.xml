@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#000"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#000">
 
     <org.various.player.view.VariousSurfaceView
         android:id="@+id/video_container"
@@ -10,7 +10,7 @@
         android:layout_height="match_parent" />
 
 
-    <org.various.player.ui.simple.VideoControlView
+    <org.various.player.ui.recycler.RecyclerItemControlView
         android:id="@+id/video_control"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

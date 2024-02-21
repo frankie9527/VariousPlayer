@@ -11,6 +11,8 @@ import org.various.demo.base.BaseActivity;
 import org.various.demo.data.SimpleData;
 import org.various.demo.ui.adapter.SimpleRecyclerAdapter;
 import org.various.player.core.PlayerManager;
+import org.various.player.ui.simple.SimpleVideoView;
+import org.various.player.utils.ToastUtils;
 
 /**
  * Created by 江雨寒 on 2020/9/27
@@ -33,18 +35,21 @@ public class SimpleRecyclerActivity extends BaseActivity implements ItemClickLis
         recycler.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         adapter = new SimpleRecyclerAdapter();
         adapter.setItemListener(this);
+        adapter.setHasStableIds(true);
         recycler.setAdapter(adapter);
         adapter.setData(SimpleData.dataList);
     }
 
     @Override
     public void onItemClick(View view, int postion) {
-
+         if (view.getId()==R.id.rl_bottom){
+             ToastUtils.show("跳转");
+         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        PlayerManager.releasePlayer();
+        PlayerManager.getInstance().releasePlayer();
     }
 }

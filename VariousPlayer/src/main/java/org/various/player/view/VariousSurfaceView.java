@@ -31,7 +31,7 @@ public class VariousSurfaceView extends SurfaceView implements SurfaceHolder.Cal
     }
 
     private void init() {
-        player = PlayerManager.getPlayer();
+        player = PlayerManager.getInstance().getPlayer();
         getHolder().addCallback(this);
     }
 

@@ -9,12 +9,14 @@
         android:layout_height="wrap_content"/>
     <org.various.player.ui.simple.VideoTopView
         android:id="@+id/video_top_view"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <org.various.player.ui.simple.VideoBottomView
         android:id="@+id/video_bottom_view"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />
 
