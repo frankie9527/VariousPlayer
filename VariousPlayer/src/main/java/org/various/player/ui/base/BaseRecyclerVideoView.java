@@ -109,10 +109,7 @@ public abstract class BaseRecyclerVideoView<T extends BaseControlView> extends F
 
     @Override
     public void startSyncPlay() {
-        setKeepScreenOn(true);
-        orientationUtils = new OrientationUtils(getContext());
-        player.startSyncPlay();
-        control.stateBuffering();
+
     }
 
     @Override
@@ -123,7 +120,6 @@ public abstract class BaseRecyclerVideoView<T extends BaseControlView> extends F
         }
 
     }
-
     @Override
     public void changeOrientation() {
         ViewGroup.LayoutParams lp = getLayoutParams();
@@ -131,12 +127,12 @@ public abstract class BaseRecyclerVideoView<T extends BaseControlView> extends F
         if (initHeight == 0) {
             initHeight = lp.height;
         }
-        int currentOrientation = orientationUtils.getOrientation();
+        int currentOrientation = OrientationUtils.getInstance().getOrientation();
         if (currentOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || currentOrientation == -1) {
             lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            orientationUtils.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
-            orientationUtils.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
             lp.height = initHeight;
         }
         setLayoutParams(lp);
@@ -164,4 +160,5 @@ public abstract class BaseRecyclerVideoView<T extends BaseControlView> extends F
             control.showError();
         }
     }
+
 }

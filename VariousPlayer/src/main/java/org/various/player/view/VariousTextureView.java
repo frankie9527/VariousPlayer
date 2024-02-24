@@ -45,7 +45,7 @@ public class VariousTextureView extends TextureView implements NotificationCente
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id== NotificationCenter.user_onclick_take_pic){
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_take_pic_data,getBitmap());
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_take_pic,getBitmap());
         }
     }
 
@@ -65,7 +65,7 @@ public class VariousTextureView extends TextureView implements NotificationCente
         @Override
         public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
             player.clearVideoSurface();
-            NotificationCenter.getGlobalInstance().removeObserver(VariousTextureView.this, NotificationCenter.user_onclick_take_pic_data);
+            NotificationCenter.getGlobalInstance().removeObserver(VariousTextureView.this, NotificationCenter.user_onclick_take_pic);
             return true;
         }
 

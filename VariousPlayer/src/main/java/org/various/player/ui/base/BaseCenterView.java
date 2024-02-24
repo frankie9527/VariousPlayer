@@ -102,6 +102,8 @@ public abstract class BaseCenterView extends FrameLayout {
 
     public abstract void hideAll();
 
+    public  void hideAllExceptPlayIcon(){};
+
     public abstract void showStatus();
 
     @SuppressLint("Range")
@@ -119,7 +121,7 @@ public abstract class BaseCenterView extends FrameLayout {
                 moveType = -1;
                 firstDownIsLeft = downX < (videoViewWidth / 2f);
                 if (firstDownIsLeft) {
-                    currentBrightness = OrientationUtils.getActivity(getContext()).getWindow().getAttributes().screenBrightness;
+                    currentBrightness = OrientationUtils.getInstance().getActivity(getContext()).getWindow().getAttributes().screenBrightness;
                     if (currentBrightness <= 0.00f) {
                         currentBrightness = 0.50f;
                     } else if (currentBrightness < 0.01f) {
@@ -241,4 +243,5 @@ public abstract class BaseCenterView extends FrameLayout {
     public ImageView getCenterPlayView() {
         return img_status;
     }
+    public void reset(){}
 }

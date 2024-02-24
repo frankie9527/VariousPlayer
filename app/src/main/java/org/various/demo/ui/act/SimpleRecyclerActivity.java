@@ -11,7 +11,6 @@ import org.various.demo.base.BaseActivity;
 import org.various.demo.data.SimpleData;
 import org.various.demo.ui.adapter.SimpleRecyclerAdapter;
 import org.various.player.core.PlayerManager;
-import org.various.player.ui.simple.SimpleVideoView;
 import org.various.player.utils.ToastUtils;
 
 /**
@@ -35,7 +34,6 @@ public class SimpleRecyclerActivity extends BaseActivity implements ItemClickLis
         recycler.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         adapter = new SimpleRecyclerAdapter();
         adapter.setItemListener(this);
-        adapter.setHasStableIds(true);
         recycler.setAdapter(adapter);
         adapter.setData(SimpleData.dataList);
     }

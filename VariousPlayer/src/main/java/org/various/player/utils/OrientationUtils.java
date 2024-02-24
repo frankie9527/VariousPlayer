@@ -8,6 +8,9 @@ import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.WindowManager;
 
+import org.various.player.NotificationCenter;
+import org.various.player.core.PlayerManager;
+
 /**
  * Created by 江雨寒 on 2020/8/21
  * Email：847145851@qq.com
@@ -17,12 +20,22 @@ public class OrientationUtils {
     public static int Orientation=ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     private Activity activity;
     private OrientationEventListener mOrientationEventListener;
-    public OrientationUtils(Context context) {
-        this.activity = getActivity(context);
-        init();
-    }
+    private static volatile OrientationUtils globalInstance;
 
-    private void init() {
+    public static OrientationUtils getInstance() {
+        OrientationUtils localInstance = globalInstance;
+        if (localInstance == null) {
+            synchronized (NotificationCenter.class) {
+                localInstance = globalInstance;
+                if (localInstance == null) {
+                    globalInstance = localInstance = new OrientationUtils();
+                }
+            }
+        }
+        return localInstance;
+    }
+    public void init(Context context) {
+        this.activity = getActivity(context);
         mOrientationEventListener=new OrientationEventListener(activity) {
             @Override
             public void onOrientationChanged(int rotation) {
@@ -31,7 +44,7 @@ public class OrientationUtils {
         };
     }
 
-    public static Activity getActivity(Context context) {
+    public  Activity getActivity(Context context) {
         if (context == null) {
             return null;
         }
@@ -60,9 +73,6 @@ public class OrientationUtils {
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             }
         }
-
-
-
     }
     public  int getOrientation(){
         if (activity!=null){

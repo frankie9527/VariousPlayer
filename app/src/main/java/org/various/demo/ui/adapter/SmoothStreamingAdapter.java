@@ -13,7 +13,6 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.util.Assertions;
-import com.google.android.exoplayer2.util.Log;
 
 import org.easy.ui.recycler.base.BaseRecyclerAdapter;
 import org.easy.ui.recycler.base.BaseRecyclerHolder;

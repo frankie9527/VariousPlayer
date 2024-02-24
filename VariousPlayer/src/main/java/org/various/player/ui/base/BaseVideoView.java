@@ -29,7 +29,6 @@ import org.various.player.utils.OrientationUtils;
  */
 public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayout implements IPlayer, UserChangeOrientationListener, PlayerStatusListener {
     protected AbstractBasePlayer player;
-    OrientationUtils orientationUtils;
     private int initHeight;
     protected T control;
 
@@ -50,7 +49,7 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
 
     private void init() {
         player = PlayerManager.getInstance().init();
-        orientationUtils = new OrientationUtils(getContext());
+        OrientationUtils.getInstance().init(getContext());
     }
 
     public void setPlayData(String url, String title) {
@@ -126,7 +125,7 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        orientationUtils.release();
+        OrientationUtils.getInstance().release();
     }
 
     @Override
@@ -136,12 +135,12 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
         if (initHeight == 0) {
             initHeight = lp.height;
         }
-        int currentOrientation = orientationUtils.getOrientation();
+        int currentOrientation = OrientationUtils.getInstance().getOrientation();
         if (currentOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || currentOrientation == -1) {
             lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            orientationUtils.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
-            orientationUtils.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
             lp.height = initHeight;
         }
         setLayoutParams(lp);

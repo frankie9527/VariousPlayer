@@ -32,7 +32,7 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
 
     @Override
     protected void initView() {
-        NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_take_pic_data);
+        NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_take_pic);
         speedButton=findViewById(R.id.speed);
         simple_view =findViewById(R.id.simple_view);
         simple_view.setUserActionListener(new UserActionListener() {
@@ -78,7 +78,7 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
     }
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id==NotificationCenter.user_onclick_take_pic_data){
+        if (id==NotificationCenter.user_onclick_take_pic){
             img_copy.setImageBitmap((Bitmap) args[0]);
         }
     }

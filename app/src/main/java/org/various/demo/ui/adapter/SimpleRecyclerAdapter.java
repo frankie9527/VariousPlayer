@@ -13,7 +13,6 @@ import org.easy.ui.recycler.base.BaseRecyclerHolder;
 import org.various.demo.R;
 import org.various.demo.data.Bean;
 import org.various.player.ui.recycler.RecyclerItemVideoView;
-import org.various.player.ui.simple.SimpleVideoView;
 
 
 /**
@@ -35,19 +34,8 @@ public class SimpleRecyclerAdapter extends BaseRecyclerAdapter<Bean, SimpleRecyc
         Bean bean = list.get(position);
         holder.tv_title.setText(bean.getTitle());
         holder.item_view.setPlayData(bean.getUrl(), bean.getTitle());
-        holder.item_view.getControlView().getCentView().setOnCenterClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.item_view.startSyncPlayOrPause(position);
-            }
-        });
-
     }
 
-    @Override
-    public int getItemCount() {
-        return 1;
-    }
 
     static class Holder extends BaseRecyclerHolder {
         RecyclerItemVideoView item_view;

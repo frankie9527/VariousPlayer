@@ -55,7 +55,7 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
     @Override
     public void initView(Context context) {
         super.initView(context);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.user_onclick_take_pic_data);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.user_onclick_take_pic);
         video_progress = findViewById(R.id.video_progress);
         img_status = findViewById(R.id.img_status);
         img_status.setOnClickListener(this);
@@ -208,7 +208,7 @@ public class NormalCenterView extends BaseCenterView implements View.OnClickList
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.user_onclick_take_pic_data) {
+        if (id == NotificationCenter.user_onclick_take_pic) {
             Bitmap bitmap = (Bitmap) args[0];
             mPicPop.showPic((View) getParent(), bitmap);
         }

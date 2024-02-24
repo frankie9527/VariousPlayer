@@ -1,17 +1,27 @@
 package org.various.player.ui.recycler;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.graphics.SurfaceTexture;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.various.player.NotificationCenter;
 import org.various.player.PlayerConstants;
 import org.various.player.R;
 import org.various.player.core.PlayerManager;
 import org.various.player.ui.base.BaseRecyclerVideoView;
+import org.various.player.utils.OrientationUtils;
 
 
 /**
@@ -19,9 +29,10 @@ import org.various.player.ui.base.BaseRecyclerVideoView;
  * Date: 2024/2/20
  * Description:
  */
-public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemControlView> {
-    private String url;
-    protected int itemPosition;
+public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemControlView> implements NotificationCenter.NotificationCenterDelegate {
+    private FrameLayout video_container;
+    private TextureView textureView;
+
     public RecyclerItemVideoView(@NonNull Context context) {
         super(context);
         initView(context);
@@ -36,40 +47,182 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
         super(context, attrs, defStyleAttr);
         initView(context);
     }
+
     protected void initView(Context context) {
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.recycler_video_view_reset);
         View.inflate(context, R.layout.various_recycler_item_view, this);
         control = findViewById(R.id.video_control);
+        video_container = findViewById(R.id.video_container);
         control.setOrientationListener(this);
-    }
-    public void setPlayData(String url, String title) {
-        this.url = url;
-    }
-    public void startSyncPlayOrPause(int position){
-        this.itemPosition=position;
-        setKeepScreenOn(true);
-        //正在播放则 切换成 暂停或者播放
-        if (PlayerManager.getInstance().getPlayItemPosition()==itemPosition){
-            if (PlayerManager.getInstance().getPlayer().isPlaying()) {
-                PlayerManager.getInstance().getPlayer().pause();
-                return;
+        control.getCentView().getCenterPlayView().setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startItemPlay();
             }
-            int currentStatus = PlayerManager.getInstance().getCurrentStatus();
-            long currentPosition = PlayerManager.getInstance().getPlayer().getCurrentPosition();
-            String url = PlayerManager.getInstance().getPlayer().getVideoUrl();
-            if (currentStatus == PlayerConstants.IDLE && currentPosition == 0 && !TextUtils.isEmpty(url)) {
-                PlayerManager.getInstance().getPlayer().startSyncPlay();
-                return;
+        });
+        control.bottomView.getImgSwitchScreen().setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (OrientationUtils.Orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    quitFullScreen();
+                }else {
+                    startFullScreen();
+                }
+                control.topView.onScreenOrientationChanged(OrientationUtils.Orientation);
+                control.centerView.onScreenOrientationChanged(OrientationUtils.Orientation);
+                control.bottomView.onScreenOrientationChanged(OrientationUtils.Orientation);
             }
-            PlayerManager.getInstance().getPlayer().resume();
-        }else {
-            //先停止其他item 的播放ui，然后播放当前
-            PlayerManager.getInstance().getPlayer().release();
-            PlayerManager.getInstance().setPlayItemPosition(itemPosition);
-            player = PlayerManager.getInstance().init();
-            player.setVideoEventListener(this);
-            player.setVideoUri(url);
-            player.startSyncPlay();
-            control.stateBuffering();
+        });
+        control.topView.getBackView().setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (OrientationUtils.Orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    quitFullScreen();
+                    control.topView.onScreenOrientationChanged(OrientationUtils.Orientation);
+                    control.centerView.onScreenOrientationChanged(OrientationUtils.Orientation);
+                    control.bottomView.onScreenOrientationChanged(OrientationUtils.Orientation);
+                }
+            }
+        });
+    }
+
+    public void startItemPlay() {
+        if ((!control.getUrl().equals(PlayerManager.getInstance().getPlayer().getVideoUrl()))
+                || (!PlayerManager.getInstance().getPlayer().isPlaying())) {
+            initPlayer();
+            return;
         }
+        if (PlayerManager.getInstance().getPlayer().isPlaying()) {
+            PlayerManager.getInstance().getPlayer().pause();
+            return;
+        }
+        int currentStatus = PlayerManager.getInstance().getCurrentStatus();
+        long currentPosition = PlayerManager.getInstance().getPlayer().getCurrentPosition();
+        if (currentStatus == PlayerConstants.IDLE && currentPosition == 0 && !TextUtils.isEmpty(control.getUrl())) {
+            PlayerManager.getInstance().getPlayer().startSyncPlay();
+            return;
+        }
+        PlayerManager.getInstance().getPlayer().resume();
+    }
+
+    private void initPlayer() {
+        OrientationUtils.getInstance().init(getContext());
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.recycler_video_view_reset, control.getUrl());
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (textureView != null) {
+                    video_container.removeView(textureView);
+                }
+                textureView = new TextureView(getContext());
+                listener = new TextureListener();
+                textureView.setSurfaceTextureListener(listener);
+                FrameLayout.LayoutParams layoutParams =
+                        new FrameLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                Gravity.CENTER);
+                video_container.addView(textureView, layoutParams);
+                player = PlayerManager.getInstance().init();
+            }
+        }, 200);
+    }
+
+    TextureListener listener;
+
+    public void setPlayData(String url, String title) {
+        control.setUrl(url);
+        control.setInRecycler(true);
+    }
+
+    protected class TextureListener implements TextureView.SurfaceTextureListener {
+        @Override
+        public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
+            setKeepScreenOn(true);
+            player.setVideoEventListener(RecyclerItemVideoView.this);
+            player.setVideoSurface(new Surface(surface));
+            player.setVideoUri(control.getUrl());
+            if (System.currentTimeMillis() - userChangeOrientationTime < 200) {
+                return;
+            }
+            player.startSyncPlay();
+        }
+
+        @Override
+        public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+
+        }
+
+        @Override
+        public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
+            if (System.currentTimeMillis() - userChangeOrientationTime < 200) {
+                return false;
+            }
+            control.resetVideoView();
+            player.clearVideoSurface();
+            player.release();
+            return true;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
+
+        }
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.recycler_video_view_reset) {
+            String playUrl = (String) args[0];
+            if (!TextUtils.isEmpty(playUrl) && playUrl.equals(control.getUrl())) {
+                return;
+            }
+            control.resetVideoView();
+            PlayerManager.getInstance().releasePlayer();
+            if (textureView != null) {
+                video_container.removeView(textureView);
+            }
+        }
+    }
+
+    protected ViewGroup.LayoutParams blockLayoutParams;
+    protected int blockIndex;
+    protected int blockWidth;
+    protected int blockHeight;
+    protected ViewGroup parent;
+    protected long userChangeOrientationTime;
+
+    public void startFullScreen() {
+        userChangeOrientationTime = System.currentTimeMillis();
+        Activity activity = OrientationUtils.getInstance().getActivity(getContext());
+        if (activity == null) {
+            return;
+        }
+        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        //从当前视图中移除播放器视图
+        parent = (ViewGroup) getParent();
+        blockLayoutParams = getLayoutParams();
+        blockIndex = parent.indexOfChild(this);
+        blockWidth = getWidth();
+        blockHeight = getHeight();
+        parent.removeView(this);
+        ViewGroup.LayoutParams fullLayout = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        decorView.addView(this, fullLayout);
+        control.hideSysBar(getContext());
+        OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+
+    public void quitFullScreen() {
+        userChangeOrientationTime = System.currentTimeMillis();
+        Activity activity = OrientationUtils.getInstance().getActivity(getContext());
+        if (activity == null) {
+            return;
+        }
+        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        decorView.removeView(this);
+        parent.addView(this, blockIndex, blockLayoutParams);
+        OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 }

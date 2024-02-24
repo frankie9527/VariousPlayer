@@ -8,9 +8,7 @@ import android.os.Environment;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
-
 import org.various.demo.App;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;

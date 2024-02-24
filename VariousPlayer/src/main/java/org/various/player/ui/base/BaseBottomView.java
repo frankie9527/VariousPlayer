@@ -26,7 +26,7 @@ import org.various.player.view.CanDragSeekBar;
  */
 public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
     protected ImageView img_switch_screen;
-    protected CanDragSeekBar  video_seek;
+    protected CanDragSeekBar video_seek;
     protected TextView tv_current, tv_total;
     protected UserProgressListener userProgressListener;
     @NonNull
@@ -78,7 +78,7 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
     public abstract void setOnBottomClickListener(OnClickListener listener);
 
     public void startRepeater() {
-        if (video_seek!=null) {
+        if (video_seek != null) {
             video_seek.setCanDrag(true);
         }
         progressPollRepeater.start();
@@ -200,5 +200,15 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
             PlayerManager.getInstance().getPlayer().seekTo(time);
             progressPollRepeater.start();
         }
+    }
+
+    public void reset() {
+        video_seek.setCanDrag(false);
+        progressPollRepeater.stop();
+        video_seek.setProgress(0);
+        video_seek.setSecondaryProgress(0);
+        setCurrentTime("--:--");
+        setTotalTime("--:--");
+        hide();
     }
 }

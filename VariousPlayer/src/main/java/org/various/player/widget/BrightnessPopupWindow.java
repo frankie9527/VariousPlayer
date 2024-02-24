@@ -33,7 +33,7 @@ public class BrightnessPopupWindow {
     public void showBrightnessChange(int changePercent,View view,float currentBrightness){
         Log.e("BrightnessPopupWindow", "showBrightnessChange=" + changePercent);
         float lastBrightness = currentBrightness + changePercent * 0.01f;
-        WindowManager.LayoutParams layoutParams = OrientationUtils.getActivity(context).getWindow().getAttributes();
+        WindowManager.LayoutParams layoutParams = OrientationUtils.getInstance().getActivity(context).getWindow().getAttributes();
         layoutParams.screenBrightness = lastBrightness;
         if (layoutParams.screenBrightness > 1.0f) {
             layoutParams.screenBrightness = 1.0f;
@@ -41,7 +41,7 @@ public class BrightnessPopupWindow {
             layoutParams.screenBrightness = 0f;
         }
         Log.e("BrightnessPopupWindow", "layoutParams.screenBrightness=" + layoutParams.screenBrightness);
-        OrientationUtils.getActivity(context).getWindow().setAttributes(layoutParams);
+        OrientationUtils.getInstance().getActivity(context).getWindow().setAttributes(layoutParams);
         if (mBrightnessPopup == null) {
             localView = LayoutInflater.from(context).inflate(R.layout.various_popup_brightness, null);
             mBrightnessPopupProgressBar =   localView.findViewById(R.id.brightness_progressbar) ;

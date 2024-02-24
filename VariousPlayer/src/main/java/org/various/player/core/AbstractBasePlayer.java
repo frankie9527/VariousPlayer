@@ -2,12 +2,9 @@ package org.various.player.core;
 
 import android.util.Log;
 
-import com.google.android.exoplayer2.Player;
-
 import org.various.player.PlayerConfig;
 import org.various.player.PlayerConstants;
 import org.various.player.listener.PlayerStatusListener;
-
 
 /**
  * Created by 江雨寒 on 2020/8/19

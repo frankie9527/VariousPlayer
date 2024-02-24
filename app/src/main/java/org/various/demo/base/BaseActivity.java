@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.gyf.immersionbar.ImmersionBar;
 
 /**
  * Created by 江雨寒 on 2020/8/27

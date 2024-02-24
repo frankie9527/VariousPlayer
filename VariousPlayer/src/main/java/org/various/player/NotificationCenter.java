@@ -15,7 +15,8 @@ public class NotificationCenter {
     private static int totalEvents = 1;
     public static final int user_onclick_video_err_retry = totalEvents++;
     public static final int user_onclick_take_pic = totalEvents++;
-    public static final int user_onclick_take_pic_data = totalEvents++;
+//    public static final int user_onclick_take_pic_data = totalEvents++;
+    public static final int recycler_video_view_reset = totalEvents++;
 
     private final SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
     private final SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();

@@ -6,13 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.Toast;
 
@@ -62,26 +60,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     public void goApi(View view) {
-        intent=new Intent(this, VideoApiActivity.class);
+        intent = new Intent(this, VideoApiActivity.class);
         startActivity(intent);
     }
+
     public void goSimple(View view) {
-        intent=new Intent(this, SimpleDemoActivity.class);
+        intent = new Intent(this, SimpleDemoActivity.class);
         startActivity(intent);
 
     }
 
     public void goNormal(View view) {
-        intent=new Intent(this, NormalDemoActivity.class);
+        intent = new Intent(this, NormalDemoActivity.class);
         startActivity(intent);
     }
-    public void SmoothStreaming(View view){
-        intent=new Intent(this, SmoothStreamingActivity.class);
+
+    public void SmoothStreaming(View view) {
+        intent = new Intent(this, SmoothStreamingActivity.class);
         startActivity(intent);
     }
-    public void SimpleRecycler(View view){
-        intent=new Intent(this, SimpleRecyclerActivity.class);
+
+    public void SimpleRecycler(View view) {
+        intent = new Intent(this, SimpleRecyclerActivity.class);
         startActivity(intent);
     }
 }

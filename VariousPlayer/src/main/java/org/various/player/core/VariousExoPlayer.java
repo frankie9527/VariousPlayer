@@ -68,6 +68,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
 
     @Override
     public void pause() {
+        Log.e(TAG, "pause");
         if (player != null && player.isPlaying()) {
             player.setPlayWhenReady(false);
         }
@@ -221,23 +222,24 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     }
 
     @Override
-    public void onPlayerError(PlaybackException error) {
+    public void onPlayerError(@NonNull PlaybackException error) {
+        Log.e(TAG, "onPlayerError");
         Player.Listener.super.onPlayerError(error);
         notifyPlayerError();
     }
 
 
     @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+    public void onPlaybackParametersChanged(@NonNull PlaybackParameters playbackParameters) {
         Log.e(TAG, "onPlaybackParametersChanged");
     }
 
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
+        Log.e(TAG, "didReceivedNotification");
         if (id == NotificationCenter.user_onclick_video_err_retry) {
             player.prepare();
-            Toast.makeText(PlayerConfig.getContext(), "player.retry", Toast.LENGTH_LONG).show();
         }
     }
 }

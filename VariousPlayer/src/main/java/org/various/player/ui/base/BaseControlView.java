@@ -1,8 +1,10 @@
 package org.various.player.ui.base;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -12,11 +14,12 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import org.various.player.core.PlayerManager;
 import org.various.player.listener.UserProgressListener;
 import org.various.player.ui.base.impl.IVideoControl;
@@ -33,9 +36,13 @@ import org.various.player.utils.OrientationUtils;
  */
 public abstract class BaseControlView<T extends BaseTopView, B extends BaseBottomView, C extends BaseCenterView> extends FrameLayout implements IVideoControl, View.OnClickListener, UserProgressListener {
     private final String TAG = "BaseControlView";
-    T topView;
-    B bottomView;
-    C centerView;
+    public T topView;
+    public B bottomView;
+    public C centerView;
+    private String url;
+
+    private boolean inRecycler = false;
+
 
     public C getCentView() {
         return centerView;
@@ -45,7 +52,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     TouchListener touchListener;
     public final int SHOW_TOP_AND_BOTTOM = 0;
     public final int HIDE_ALL = 1;
-    Handler mUiHandler = new Handler(Looper.getMainLooper()) {
+    public Handler mUiHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -56,7 +63,12 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
                     break;
                 case HIDE_ALL:
                     hideTopAndBottom();
-                    centerView.hideAll();
+                    //在Recycler 里面且 ui和播放的url一致，并且在播放状态。则正常隐藏centerView
+                    if (isInRecycler() && getUrl().equals(PlayerManager.getInstance().getPlayer().getVideoUrl()) && PlayerManager.getInstance().getPlayer().isPlaying()) {
+                        centerView.hideAll();
+                    } else {
+                        centerView.hideAllExceptPlayIcon();
+                    }
                     break;
             }
         }
@@ -138,7 +150,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     @Override
     public void stateBuffering() {
         centerView.showLoading();
-        showTopAndBottom();
+        hideTopAndBottom();
     }
 
     @Override
@@ -152,10 +164,10 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     @Override
     public void showTopAndBottom() {
         Log.e(TAG, "showTopAndBottom");
-        if (topView!=null){
+        if (topView != null) {
             topView.setVisibleStatus(PlayerConstants.SHOW);
         }
-        if (bottomView!=null){
+        if (bottomView != null) {
             bottomView.setVisibleStatus(PlayerConstants.SHOW);
         }
     }
@@ -163,10 +175,10 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
     @Override
     public void hideTopAndBottom() {
         Log.e(TAG, "hideTopAndBottom");
-        if (topView!=null){
+        if (topView != null) {
             topView.setVisibleStatus(PlayerConstants.HIDE);
         }
-        if (bottomView!=null){
+        if (bottomView != null) {
             bottomView.setVisibleStatus(PlayerConstants.HIDE);
         }
     }
@@ -187,9 +199,25 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         this.userActionListener = listener;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public boolean isInRecycler() {
+        return inRecycler;
+    }
+
+    public void setInRecycler(boolean inRecycler) {
+        this.inRecycler = inRecycler;
+    }
+
     @Override
     public void onClick(View view) {
-        if (topView != null && view == topView.getBackView() && orientationListener != null) {
+        if (topView != null && view == topView./**/getBackView() && orientationListener != null) {
             if (OrientationUtils.Orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                 orientationListener.changeOrientation();
                 topView.onScreenOrientationChanged(OrientationUtils.Orientation);
@@ -261,8 +289,21 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         }
 
         @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
+        public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
             Log.e(TAG, "onSingleTapConfirmed=" + (bottomView.getVisibility() != VISIBLE));
+             //当前播放器url 和当前ui不一致，则只显示播放图标
+            if ((!TextUtils.isEmpty(getUrl()) && !getUrl().equals(PlayerManager.getInstance().getPlayer().getVideoUrl()) && isInRecycler())) {
+                if (topView != null) {
+                    topView.hide();
+                }
+                if (bottomView != null) {
+                    bottomView.hide();
+                }
+                if (centerView != null) {
+                    centerView.reset();
+                }
+                return true;
+            }
             if (PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.END || PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.ERROR) {
                 showTopAndBottom();
                 centerView.showStatus();
@@ -282,7 +323,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         }
 
         @Override
-        public boolean onDoubleTap(MotionEvent e) {
+        public boolean onDoubleTap(@NonNull MotionEvent e) {
             if (PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.READY || PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.BUFFERING) {
                 centerView.handleDoubleTap(e);
             }
@@ -290,4 +331,33 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         }
     }
 
+    @Override
+    public void resetVideoView() {
+        if (topView != null) {
+            topView.hide();
+        }
+        if (centerView != null) {
+            centerView.reset();
+        }
+        if (bottomView != null) {
+            bottomView.reset();
+        }
+    }
+    public void hideSysBar(Context context) {
+        Activity activity = OrientationUtils.getInstance().getActivity(context);
+        if (activity == null) {
+            return;
+        }
+        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        int uiOptions = decorView.getSystemUiVisibility();
+        uiOptions |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            uiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        }
+        decorView.setSystemUiVisibility(uiOptions);
+        OrientationUtils.getInstance().getActivity(getContext()).getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+    }
 }

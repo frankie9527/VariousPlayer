@@ -27,4 +27,6 @@ public interface IVideoControl {
     void setUserActionListener(UserActionListener listener);
 
     void setOrientationListener(UserChangeOrientationListener orientationListener);
+
+    void resetVideoView();
 }

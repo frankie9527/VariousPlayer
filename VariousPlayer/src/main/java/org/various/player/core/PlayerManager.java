@@ -16,10 +16,6 @@ public class PlayerManager {
     private static final String TAG = "PlayerManager";
     private int currentStatus = -1;
     private AbstractBasePlayer iPlayer;
-    /**
-     * 在recycler view 中的播放位置
-     */
-    private int playItemPosition = -1;
 
     public AbstractBasePlayer getPlayer() {
         if (iPlayer == null) {
@@ -64,18 +60,9 @@ public class PlayerManager {
         return currentStatus;
     }
 
-    public int getPlayItemPosition() {
-        return playItemPosition;
-    }
-
-    public void setPlayItemPosition(int playItemPosition) {
-        this.playItemPosition = playItemPosition;
-    }
-
     public void releasePlayer() {
         if (iPlayer != null) {
             iPlayer.release();
-            playItemPosition = -1;
         }
     }
 

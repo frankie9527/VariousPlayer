@@ -108,6 +108,14 @@ public class VideoCenterView extends BaseCenterView {
     }
 
     @Override
+    public void hideAllExceptPlayIcon() {
+        UiUtils.viewSetGone(video_progress);
+        UiUtils.viewSetGone(rl_play_err);
+        img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_play));
+
+    }
+
+    @Override
     public void showStatus() {
         setVisibility(View.VISIBLE);
         int type = PlayerManager.getInstance().getCurrentStatus();
@@ -167,8 +175,12 @@ public class VideoCenterView extends BaseCenterView {
 
     @Override
     public void setOnCenterClickListener(OnClickListener listener) {
-        if (img_status!=null)
+        if (img_status != null)
             img_status.setOnClickListener(listener);
     }
 
+    @Override
+    public void reset() {
+        img_status.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_play));
+    }
 }
