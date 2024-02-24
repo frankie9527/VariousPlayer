@@ -152,7 +152,9 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
     public void onScreenOrientationChanged(int currentOrientation) {
         Log.e("BaseBottomView", "user ScreenOrientationChanged=" + currentOrientation);
     }
-
+    public void onScreenOrientationChanged(int currentOrientation,boolean isInRecycler) {
+        Log.e("BaseBottomView", "user ScreenOrientationChanged=" + currentOrientation);
+    }
     public void setDragSeekListener(UserProgressListener listener) {
         this.userProgressListener = listener;
     }

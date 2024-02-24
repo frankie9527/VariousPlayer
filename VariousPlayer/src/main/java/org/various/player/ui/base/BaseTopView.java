@@ -77,4 +77,7 @@ public abstract class BaseTopView extends FrameLayout {
     public void onScreenOrientationChanged(int currentOrientation) {
         Log.e("BaseBottomView", "user ScreenOrientationChanged=" + currentOrientation);
     }
+    public void onScreenOrientationChanged(int currentOrientation,boolean isInRecycler) {
+        Log.e("BaseBottomView", "user ScreenOrientationChanged=" + currentOrientation);
+    }
 }

@@ -212,7 +212,6 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     @Override
     public void onIsPlayingChanged(boolean isPlaying) {
         Log.e(TAG, "onIsPlayingChanged=" + isPlaying);
-        notifyStatus(PlayerConstants.EXO_CORE, Player.STATE_READY);
     }
 
 

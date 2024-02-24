@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import org.various.player.core.PlayerManager;
 import org.various.player.listener.UserProgressListener;
 import org.various.player.ui.base.impl.IVideoControl;
@@ -217,7 +218,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void onClick(View view) {
-        if (topView != null && view == topView./**/getBackView() && orientationListener != null) {
+        if (topView != null && view == topView.getBackView() && orientationListener != null) {
             if (OrientationUtils.Orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                 orientationListener.changeOrientation();
                 topView.onScreenOrientationChanged(OrientationUtils.Orientation);
@@ -291,19 +292,43 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         @Override
         public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
             Log.e(TAG, "onSingleTapConfirmed=" + (bottomView.getVisibility() != VISIBLE));
-             //当前播放器url 和当前ui不一致，则只显示播放图标
-            if ((!TextUtils.isEmpty(getUrl()) && !getUrl().equals(PlayerManager.getInstance().getPlayer().getVideoUrl()) && isInRecycler())) {
-                if (topView != null) {
+            if (inRecycler) {
+                //当前播放器url 和当前ui不一致，则只显示播放图标
+                if ((!TextUtils.isEmpty(getUrl()) && !getUrl().equals(PlayerManager.getInstance().getPlayer().getVideoUrl()))) {
+                    if (topView != null) {
+                        topView.hide();
+                    }
+                    if (bottomView != null) {
+                        bottomView.hide();
+                    }
+                    if (centerView != null) {
+                        centerView.reset();
+                    }
+                    return true;
+                }
+                //全屏
+                boolean landscape = OrientationUtils.Orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                if (bottomView.getVisibility() != VISIBLE && !landscape) {
                     topView.hide();
-                }
-                if (bottomView != null) {
-                    bottomView.hide();
-                }
-                if (centerView != null) {
-                    centerView.reset();
+                    bottomView.show();
+                    centerView.showStatus();
+                    mUiHandler.removeMessages(HIDE_ALL);
+                    mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
+                } else if (bottomView.getVisibility() == VISIBLE && !landscape) {
+                    mUiHandler.removeMessages(HIDE_ALL);
+                    mUiHandler.sendEmptyMessage(HIDE_ALL);
+                } else if (bottomView.getVisibility() == VISIBLE && landscape) {
+                    mUiHandler.removeMessages(HIDE_ALL);
+                    mUiHandler.sendEmptyMessage(HIDE_ALL);
+                }else if (bottomView.getVisibility() != VISIBLE && landscape){
+                    showTopAndBottom();
+                    centerView.showStatus();
+                    mUiHandler.removeMessages(HIDE_ALL);
+                    mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
                 }
                 return true;
             }
+
             if (PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.END || PlayerManager.getInstance().getCurrentStatus() == PlayerConstants.ERROR) {
                 showTopAndBottom();
                 centerView.showStatus();
@@ -343,6 +368,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
             bottomView.reset();
         }
     }
+
     public void hideSysBar(Context context) {
         Activity activity = OrientationUtils.getInstance().getActivity(context);
         if (activity == null) {

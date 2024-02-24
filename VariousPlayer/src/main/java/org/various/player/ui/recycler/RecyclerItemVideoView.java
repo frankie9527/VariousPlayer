@@ -60,35 +60,12 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
                 startItemPlay();
             }
         });
-        control.bottomView.getImgSwitchScreen().setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (OrientationUtils.Orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                    quitFullScreen();
-                }else {
-                    startFullScreen();
-                }
-                control.topView.onScreenOrientationChanged(OrientationUtils.Orientation);
-                control.centerView.onScreenOrientationChanged(OrientationUtils.Orientation);
-                control.bottomView.onScreenOrientationChanged(OrientationUtils.Orientation);
-            }
-        });
-        control.topView.getBackView().setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (OrientationUtils.Orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                    quitFullScreen();
-                    control.topView.onScreenOrientationChanged(OrientationUtils.Orientation);
-                    control.centerView.onScreenOrientationChanged(OrientationUtils.Orientation);
-                    control.bottomView.onScreenOrientationChanged(OrientationUtils.Orientation);
-                }
-            }
-        });
     }
 
     public void startItemPlay() {
+        //当前ui 和播放器一样且没有在播放
         if ((!control.getUrl().equals(PlayerManager.getInstance().getPlayer().getVideoUrl()))
-                || (!PlayerManager.getInstance().getPlayer().isPlaying())) {
+                && (!PlayerManager.getInstance().getPlayer().isPlaying())) {
             initPlayer();
             return;
         }
@@ -142,7 +119,7 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
             player.setVideoEventListener(RecyclerItemVideoView.this);
             player.setVideoSurface(new Surface(surface));
             player.setVideoUri(control.getUrl());
-            if (System.currentTimeMillis() - userChangeOrientationTime < 200) {
+            if (System.currentTimeMillis() - control.userChangeOrientationTime < 200) {
                 return;
             }
             player.startSyncPlay();
@@ -155,7 +132,7 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
 
         @Override
         public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
-            if (System.currentTimeMillis() - userChangeOrientationTime < 200) {
+            if (System.currentTimeMillis() - control.userChangeOrientationTime < 200) {
                 return false;
             }
             control.resetVideoView();
@@ -185,44 +162,4 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
         }
     }
 
-    protected ViewGroup.LayoutParams blockLayoutParams;
-    protected int blockIndex;
-    protected int blockWidth;
-    protected int blockHeight;
-    protected ViewGroup parent;
-    protected long userChangeOrientationTime;
-
-    public void startFullScreen() {
-        userChangeOrientationTime = System.currentTimeMillis();
-        Activity activity = OrientationUtils.getInstance().getActivity(getContext());
-        if (activity == null) {
-            return;
-        }
-        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
-        //从当前视图中移除播放器视图
-        parent = (ViewGroup) getParent();
-        blockLayoutParams = getLayoutParams();
-        blockIndex = parent.indexOfChild(this);
-        blockWidth = getWidth();
-        blockHeight = getHeight();
-        parent.removeView(this);
-        ViewGroup.LayoutParams fullLayout = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        decorView.addView(this, fullLayout);
-        control.hideSysBar(getContext());
-        OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    }
-
-
-    public void quitFullScreen() {
-        userChangeOrientationTime = System.currentTimeMillis();
-        Activity activity = OrientationUtils.getInstance().getActivity(getContext());
-        if (activity == null) {
-            return;
-        }
-        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
-        decorView.removeView(this);
-        parent.addView(this, blockIndex, blockLayoutParams);
-        OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-    }
 }
