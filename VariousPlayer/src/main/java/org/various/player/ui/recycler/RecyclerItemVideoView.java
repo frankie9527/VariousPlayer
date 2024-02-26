@@ -1,11 +1,11 @@
 package org.various.player.ui.recycler;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.SurfaceTexture;
+import android.nfc.Tag;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Surface;
 import android.view.TextureView;
@@ -19,8 +19,11 @@ import androidx.annotation.Nullable;
 import org.various.player.NotificationCenter;
 import org.various.player.PlayerConstants;
 import org.various.player.R;
+
 import org.various.player.core.PlayerManager;
-import org.various.player.ui.base.BaseRecyclerVideoView;
+import org.various.player.core.VariousPlayerManager;
+import org.various.player.ui.base.recycler.BaseRecyclerVideoView;
+import org.various.player.utils.LogUtils;
 import org.various.player.utils.OrientationUtils;
 
 
@@ -30,8 +33,9 @@ import org.various.player.utils.OrientationUtils;
  * Description:
  */
 public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemControlView> implements NotificationCenter.NotificationCenterDelegate {
+    private static final String TAG = "RecyclerItemVideoView";
     private FrameLayout video_container;
-    private TextureView textureView;
+    private TextureView textureView=null;
 
     public RecyclerItemVideoView(@NonNull Context context) {
         super(context);
@@ -57,29 +61,37 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
         control.getCentView().getCenterPlayView().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                LogUtils.d(TAG, "startItemPlay");
                 startItemPlay();
             }
         });
     }
 
+    int currentProgress = 0;
+
     public void startItemPlay() {
-        //当前ui 和播放器一样且没有在播放
-        if ((!control.getUrl().equals(PlayerManager.getInstance().getPlayer().getVideoUrl()))
-                && (!PlayerManager.getInstance().getPlayer().isPlaying())) {
+        currentProgress = control.bottomView.video_seek.getProgress();
+        LogUtils.d(TAG, "currentProgress=" + currentProgress);
+        if (currentProgress == 0 && textureView != null) {
+            LogUtils.d(TAG, "currentProgress step0");
+            VariousPlayerManager.startSyncPlay();
+        } else if (currentProgress == 100) {
+            LogUtils.d(TAG, "currentProgress step1");
+            VariousPlayerManager.startSyncPlay();
+
+        } else if (currentProgress != 0 && VariousPlayerManager.isPlaying()) {
+            LogUtils.d(TAG, "currentProgress step2");
+            VariousPlayerManager.pause();
+
+        } else if (currentProgress != 0 && !VariousPlayerManager.isPlaying()) {
+            LogUtils.d(TAG, "currentProgress step3");
+            VariousPlayerManager.resume();
+
+        } else if (currentProgress == 0 && textureView == null) {
+            LogUtils.d(TAG, "currentProgress step4");
+            control.initUiOrientationListener();
             initPlayer();
-            return;
         }
-        if (PlayerManager.getInstance().getPlayer().isPlaying()) {
-            PlayerManager.getInstance().getPlayer().pause();
-            return;
-        }
-        int currentStatus = PlayerManager.getInstance().getCurrentStatus();
-        long currentPosition = PlayerManager.getInstance().getPlayer().getCurrentPosition();
-        if (currentStatus == PlayerConstants.IDLE && currentPosition == 0 && !TextUtils.isEmpty(control.getUrl())) {
-            PlayerManager.getInstance().getPlayer().startSyncPlay();
-            return;
-        }
-        PlayerManager.getInstance().getPlayer().resume();
     }
 
     private void initPlayer() {
@@ -88,18 +100,21 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (textureView != null) {
-                    video_container.removeView(textureView);
+//                if (textureView != null) {
+//                    video_container.removeView(textureView);
+//                }
+
+                if (textureView == null) {
+                    textureView = new TextureView(getContext());
+                    listener = new TextureListener();
+                    textureView.setSurfaceTextureListener(listener);
+                    FrameLayout.LayoutParams layoutParams =
+                            new FrameLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    Gravity.CENTER);
+                    video_container.addView(textureView, layoutParams);
                 }
-                textureView = new TextureView(getContext());
-                listener = new TextureListener();
-                textureView.setSurfaceTextureListener(listener);
-                FrameLayout.LayoutParams layoutParams =
-                        new FrameLayout.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                Gravity.CENTER);
-                video_container.addView(textureView, layoutParams);
                 player = PlayerManager.getInstance().init();
             }
         }, 200);
@@ -109,7 +124,6 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
 
     public void setPlayData(String url, String title) {
         control.setUrl(url);
-        control.setInRecycler(true);
     }
 
     protected class TextureListener implements TextureView.SurfaceTextureListener {
@@ -132,12 +146,14 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
 
         @Override
         public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
+            LogUtils.d(TAG, "currentProgress onSurfaceTextureDestroyed");
             if (System.currentTimeMillis() - control.userChangeOrientationTime < 200) {
                 return false;
             }
             control.resetVideoView();
             player.clearVideoSurface();
             player.release();
+            textureView=null;
             return true;
         }
 
@@ -155,7 +171,7 @@ public class RecyclerItemVideoView extends BaseRecyclerVideoView<RecyclerItemCon
                 return;
             }
             control.resetVideoView();
-            PlayerManager.getInstance().releasePlayer();
+            VariousPlayerManager.release();
             if (textureView != null) {
                 video_container.removeView(textureView);
             }

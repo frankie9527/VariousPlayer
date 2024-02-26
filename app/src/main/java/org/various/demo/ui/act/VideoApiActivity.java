@@ -13,6 +13,7 @@ import org.various.player.NotificationCenter;
 import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
 import org.various.player.ui.simple.SimpleVideoView;
+import org.various.player.widget.PicPopupWindow;
 
 public class VideoApiActivity extends BaseActivity implements NotificationCenter.NotificationCenterDelegate {
     SimpleVideoView simple_view;
@@ -23,6 +24,8 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
      * */
     float currentSpeed;
     ImageView img_copy;
+    PicPopupWindow mPicPop;
+
     @Override
     protected int setLayout() {
         return R.layout.activity_video_api;
@@ -32,7 +35,7 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
 
     @Override
     protected void initView() {
-        NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_take_pic);
+        NotificationCenter.getGlobalInstance().addObserver(this,NotificationCenter.user_onclick_take_pic_data);
         speedButton=findViewById(R.id.speed);
         simple_view =findViewById(R.id.simple_view);
         simple_view.setUserActionListener(new UserActionListener() {
@@ -43,7 +46,8 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
             }
         });
         img_copy=findViewById(R.id.img_copy);
-
+        simple_view.setPlayData(SimpleData.url, title);
+        mPicPop = new PicPopupWindow(this);
     }
 
 
@@ -78,8 +82,9 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
     }
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id==NotificationCenter.user_onclick_take_pic){
-            img_copy.setImageBitmap((Bitmap) args[0]);
+        if (id==NotificationCenter.user_onclick_take_pic_data){
+            Bitmap bitmap=(Bitmap) args[0];
+            mPicPop.showPic(img_copy, bitmap);
         }
     }
 

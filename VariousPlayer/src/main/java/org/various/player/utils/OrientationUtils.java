@@ -4,22 +4,28 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.ActivityInfo;
+import android.util.Log;
 import android.view.OrientationEventListener;
-import android.view.View;
 import android.view.WindowManager;
 
 import org.various.player.NotificationCenter;
-import org.various.player.core.PlayerManager;
+import org.various.player.listener.UiOrientationListener;
 
 /**
- * Created by 江雨寒 on 2020/8/21
+ * Created by Frankie on 2020/8/21
  * Email：847145851@qq.com
  * func: ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
  */
 public class OrientationUtils {
-    public static int Orientation=ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+    public int currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     private Activity activity;
     private OrientationEventListener mOrientationEventListener;
+
+    public void setUiOrientationListener(UiOrientationListener uiOrientationListener) {
+        this.uiOrientationListener = uiOrientationListener;
+    }
+
+    private UiOrientationListener uiOrientationListener;
     private static volatile OrientationUtils globalInstance;
 
     public static OrientationUtils getInstance() {
@@ -34,17 +40,17 @@ public class OrientationUtils {
         }
         return localInstance;
     }
+
     public void init(Context context) {
         this.activity = getActivity(context);
-        mOrientationEventListener=new OrientationEventListener(activity) {
+        mOrientationEventListener = new OrientationEventListener(activity) {
             @Override
             public void onOrientationChanged(int rotation) {
-
             }
         };
     }
 
-    public  Activity getActivity(Context context) {
+    public Activity getActivity(Context context) {
         if (context == null) {
             return null;
         }
@@ -57,33 +63,38 @@ public class OrientationUtils {
         return null;
     }
 
-    public  void setRequestedOrientation(int orientation) {
-        if (activity!=null){
-            Orientation=orientation;
+    public void setRequestedOrientation(int orientation) {
+        if (activity != null) {
+            currentOrientation = orientation;
             activity.setRequestedOrientation(
                     orientation);
             WindowManager.LayoutParams attrs = activity.getWindow().getAttributes();
-            if (orientation==ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+            if (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                 attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
                 activity.getWindow().setAttributes(attrs);
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            }else {
+            } else {
                 attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 activity.getWindow().setAttributes(attrs);
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             }
+            if (uiOrientationListener != null) {
+                uiOrientationListener.onOrientationChanged();
+            }
         }
     }
-    public  int getOrientation(){
-        if (activity!=null){
-            return   activity.getRequestedOrientation();
+
+    public int getOrientation() {
+        if (activity != null) {
+            return activity.getRequestedOrientation();
         }
 
-        return   -1;
+        return currentOrientation;
     }
-    public void release(){
-        activity=null;
-        if (mOrientationEventListener!=null){
+
+    public void release() {
+        activity = null;
+        if (mOrientationEventListener != null) {
             mOrientationEventListener.disable();
         }
     }

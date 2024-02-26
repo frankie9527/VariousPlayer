@@ -23,7 +23,7 @@ import org.various.player.utils.ToastUtils;
 import org.various.player.utils.TrackNameProvider;
 
 /**
- * Created by 江雨寒 on 2020/9/21
+ * Created by Frankie on 2020/9/21
  * Email：847145851@qq.com
  * func: 视频无缝衔接播放的adapter
  */

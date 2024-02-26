@@ -7,15 +7,15 @@ import androidx.annotation.UiThread;
 import java.util.ArrayList;
 
 /**
- * Created by 江雨寒 on 2020/8/18
+ * Created by Frankie on 2020/8/18
  * Email：847145851@qq.com
  * func:
  */
 public class NotificationCenter {
     private static int totalEvents = 1;
-    public static final int user_onclick_video_err_retry = totalEvents++;
+//    public static final int user_onclick_video_err_retry = totalEvents++;
     public static final int user_onclick_take_pic = totalEvents++;
-//    public static final int user_onclick_take_pic_data = totalEvents++;
+    public static final int user_onclick_take_pic_data = totalEvents++;
     public static final int recycler_video_view_reset = totalEvents++;
 
     private final SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();

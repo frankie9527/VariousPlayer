@@ -1,4 +1,4 @@
-package org.various.player.ui.base;
+package org.various.player.ui.base.recycler;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,19 +25,19 @@ import org.various.player.utils.UiUtils;
 /**
  * Created by Frankie on 2020/8/19
  * Email：847145851@qq.com
- * func:
+ * func:recycler
  */
-public abstract class BaseCenterView extends FrameLayout {
-    private static final String TAG = "BaseCenterView";
+public abstract class BaseRecyclerCenterView extends FrameLayout {
+    private static final String TAG = "BaseRecyclerCenterView";
     private float downX, downY;
     private int videoViewWidth, videoViewHeight;
     public ImageView img_status;
+    public  RelativeLayout rl_play_err;
+    public  TextView tv_replay;
     /**
      * getScaledTouchSlop是ViewConfiguration类里的一个方法，返回值是int类型，其含义是一段滑动的距离，一般用在解决滑动冲突上，用法就是获取手指滑动的距离为X，如果X大于这个值就让控件去处理滑动事件，否则就不作滑动处理。
      */
     private int defaultMoveLength;
-    public  RelativeLayout rl_play_err;
-    public TextView tv_replay;
 
     /**
      * moveType :-1 初始化状态
@@ -70,17 +70,17 @@ public abstract class BaseCenterView extends FrameLayout {
 
     private UserProgressListener userProgressListener;
 
-    public BaseCenterView(@NonNull Context context) {
+    public BaseRecyclerCenterView(@NonNull Context context) {
         super(context);
         initView(context);
     }
 
-    public BaseCenterView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseRecyclerCenterView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-    public BaseCenterView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BaseRecyclerCenterView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
@@ -144,15 +144,15 @@ public abstract class BaseCenterView extends FrameLayout {
                     return;
                 }
                 if (moveType == -1) {
-                    LogUtils.e(TAG, "event.getX=" + event.getX());
-                    LogUtils.e(TAG, "downX=" + downX);
-                    LogUtils.e(TAG, "absDeltaX=" + absDeltaX);
+                    LogUtils.d(TAG, "event.getX=" + event.getX());
+                    LogUtils.d(TAG, "downX=" + downX);
+                    LogUtils.d(TAG, "absDeltaX=" + absDeltaX);
 
-                    LogUtils.e(TAG, "event.getY=" + event.getY());
-                    LogUtils.e(TAG, "downY=" + downY);
-                    LogUtils.e(TAG, "absDeltaY=" + absDeltaY);
+                    LogUtils.d(TAG, "event.getY=" + event.getY());
+                    LogUtils.d(TAG, "downY=" + downY);
+                    LogUtils.d(TAG, "absDeltaY=" + absDeltaY);
                     moveType = (absDeltaX < absDeltaY) ? 0 : 1;
-                    LogUtils.e(TAG, "moveType=" + moveType);
+                    LogUtils.d(TAG, "moveType=" + moveType);
                 }
                 //垂直滑动的时候
                 if (moveType == 0) {
@@ -187,6 +187,9 @@ public abstract class BaseCenterView extends FrameLayout {
                 hideLoadingAndPlayIcon();
                 break;
             case MotionEvent.ACTION_UP:
+                LogUtils.d("jjjjjj","ACTION_UP");
+                LogUtils.d("jjjjjj","userProgressListener"+(userProgressListener != null));
+                LogUtils.d("jjjjjj","userProgressListener"+(moveType == 1));
                 lastChangPercent = -1;
                 currentBrightness = -1;
                 currentVolume = -1;
@@ -240,7 +243,7 @@ public abstract class BaseCenterView extends FrameLayout {
     public abstract void setOnCenterClickListener(OnClickListener listener);
 
     public void onScreenOrientationChanged() {
-        LogUtils.e("BaseBottomView", "user ScreenOrientationChanged");
+        LogUtils.e(TAG, "user ScreenOrientationChanged");
     }
     public ImageView getCenterPlayView() {
         return img_status;

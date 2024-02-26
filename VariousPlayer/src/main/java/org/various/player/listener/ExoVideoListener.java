@@ -6,7 +6,7 @@ import com.google.android.exoplayer2.analytics.AnalyticsListener;
 
 
 /**
- * Created by 江雨寒 on 2020/8/19
+ * Created by Frankie on 2020/8/19
  * Email：847145851@qq.com
  * func:
  */

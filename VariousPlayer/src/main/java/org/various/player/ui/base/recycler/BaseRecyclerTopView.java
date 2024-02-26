@@ -1,4 +1,4 @@
-package org.various.player.ui.base;
+package org.various.player.ui.base.recycler;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -18,22 +18,22 @@ import org.various.player.utils.LogUtils;
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseTopView extends FrameLayout {
+public abstract class BaseRecyclerTopView extends FrameLayout {
     protected View backView;
     protected TextView titleView;
 
 
-    public BaseTopView(@NonNull Context context) {
+    public BaseRecyclerTopView(@NonNull Context context) {
         super(context);
         initView(context);
     }
 
-    public BaseTopView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseRecyclerTopView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-    public BaseTopView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BaseRecyclerTopView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
@@ -75,6 +75,6 @@ public abstract class BaseTopView extends FrameLayout {
         return backView;
     }
     public void onScreenOrientationChanged() {
-        LogUtils.e("BaseBottomView", "user ScreenOrientationChanged");
+        LogUtils.e("BaseRecyclerTopView", "user ScreenOrientationChanged");
     }
 }

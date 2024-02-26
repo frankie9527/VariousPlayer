@@ -13,8 +13,9 @@ import org.various.player.NotificationCenter;
 import org.various.player.core.IPlayer;
 import org.various.player.core.PlayerManager;
 
+
 /**
- * Created by 江雨寒 on 2020/9/15
+ * Created by Frankie on 2020/9/15
  * Email：847145851@qq.com
  * func:
  */
@@ -45,7 +46,7 @@ public class VariousTextureView extends TextureView implements NotificationCente
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id== NotificationCenter.user_onclick_take_pic){
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_take_pic,getBitmap());
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_take_pic_data,getBitmap());
         }
     }
 

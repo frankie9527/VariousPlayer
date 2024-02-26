@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <org.various.player.ui.simple.VideoCenterView
+    <org.various.player.ui.simple.SimpleCenterView
         android:id="@+id/video_center_view"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <org.various.player.ui.simple.VideoTopView
+    <org.various.player.ui.simple.SimpleTopView
         android:id="@+id/video_top_view"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <org.various.player.ui.simple.VideoBottomView
+    <org.various.player.ui.simple.SimpleBottomView
         android:id="@+id/video_bottom_view"
         android:layout_width="match_parent"
         android:visibility="gone"

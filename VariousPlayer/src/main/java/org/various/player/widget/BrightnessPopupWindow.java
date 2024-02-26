@@ -2,8 +2,6 @@ package org.various.player.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,12 +10,13 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 
 import org.various.player.R;
+import org.various.player.utils.LogUtils;
 import org.various.player.utils.OrientationUtils;
 import org.various.player.utils.UiUtils;
 
 
 /**
- * Created by 江雨寒 on 2020/9/14
+ * Created by Frankie on 2020/9/14
  * Email：847145851@qq.com
  * func:
  */
@@ -31,7 +30,7 @@ public class BrightnessPopupWindow {
         this.context = context;
     }
     public void showBrightnessChange(int changePercent,View view,float currentBrightness){
-        Log.e("BrightnessPopupWindow", "showBrightnessChange=" + changePercent);
+        LogUtils.e("BrightnessPopupWindow", "showBrightnessChange=" + changePercent);
         float lastBrightness = currentBrightness + changePercent * 0.01f;
         WindowManager.LayoutParams layoutParams = OrientationUtils.getInstance().getActivity(context).getWindow().getAttributes();
         layoutParams.screenBrightness = lastBrightness;
@@ -40,7 +39,7 @@ public class BrightnessPopupWindow {
         } else if (layoutParams.screenBrightness < 0.01f) {
             layoutParams.screenBrightness = 0f;
         }
-        Log.e("BrightnessPopupWindow", "layoutParams.screenBrightness=" + layoutParams.screenBrightness);
+        LogUtils.e("BrightnessPopupWindow", "layoutParams.screenBrightness=" + layoutParams.screenBrightness);
         OrientationUtils.getInstance().getActivity(context).getWindow().setAttributes(layoutParams);
         if (mBrightnessPopup == null) {
             localView = LayoutInflater.from(context).inflate(R.layout.various_popup_brightness, null);

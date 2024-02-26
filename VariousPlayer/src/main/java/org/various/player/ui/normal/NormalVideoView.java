@@ -12,7 +12,7 @@ import org.various.player.ui.base.BaseVideoView;
 import org.various.player.view.VariousTextureView;
 
 /**
- * Created by 江雨寒 on 2020/9/15
+ * Created by Frankie on 2020/9/15
  * Email：847145851@qq.com
  * func: 相比SimpleVideoView多了截图，锁屏，多次双击的快进快退
  */

@@ -7,8 +7,9 @@ import android.view.View;
 import org.various.player.R;
 import org.various.player.listener.UserActionListener;
 import org.various.player.ui.base.BaseVideoView;
+import org.various.player.utils.OrientationUtils;
 
-public class SimpleVideoView extends BaseVideoView<VideoControlView> {
+public class SimpleVideoView extends BaseVideoView<SimpleControlView> {
     public SimpleVideoView(Context context) {
         super(context);
         initView(context);

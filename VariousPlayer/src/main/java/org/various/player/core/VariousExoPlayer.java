@@ -3,7 +3,6 @@ package org.various.player.core;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Surface;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,12 +22,12 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
 
 import org.various.player.NotificationCenter;
 import org.various.player.PlayerConfig;
 import org.various.player.PlayerConstants;
+import org.various.player.utils.LogUtils;
 
 public class VariousExoPlayer extends AbstractBasePlayer implements Player.Listener, NotificationCenter.NotificationCenterDelegate {
     private final String TAG = "VariousExoPlayer";
@@ -44,7 +43,6 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
         trackSelector.setParameters(trackSelectorParameters);
         player = new ExoPlayer.Builder(PlayerConfig.getContext()).setTrackSelector(trackSelector).build();
         player.addListener(this);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.user_onclick_video_err_retry);
 
     }
 
@@ -68,7 +66,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
 
     @Override
     public void pause() {
-        Log.e(TAG, "pause");
+        LogUtils.e(TAG, "pause");
         if (player != null && player.isPlaying()) {
             player.setPlayWhenReady(false);
         }
@@ -76,6 +74,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
 
     @Override
     public void release() {
+        url = "";
         if (player != null) {
             player.removeListener(this);
             player.release();
@@ -163,7 +162,8 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     public MediaSource createMediaSource(@Nullable String url, @Nullable String overrideExtension) {
         int type = TextUtils.isEmpty(overrideExtension)
                 ? Util.inferContentType(Uri.parse(url))
-                : Util.inferContentTypeForExtension(overrideExtension);;
+                : Util.inferContentTypeForExtension(overrideExtension);
+        ;
         if (type == C.CONTENT_TYPE_DASH) {
             return new DashMediaSource.Factory(PlayerConfig.buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(url));
         }
@@ -178,51 +178,52 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
 
     @Override
     public void onTimelineChanged(@NonNull Timeline timeline, int reason) {
-        Log.e(TAG, "onTimelineChanged");
+        LogUtils.e(TAG, "onTimelineChanged");
     }
 
 
     @Override
     public void onIsLoadingChanged(boolean isLoading) {
         Player.Listener.super.onIsLoadingChanged(isLoading);
-        Log.e(TAG, "onIsLoadingChanged isLoading=" + isLoading);
+        LogUtils.e(TAG, "onIsLoadingChanged isLoading=" + isLoading);
+        notifyStatus(PlayerConstants.EXO_CORE, isLoading?Player.STATE_BUFFERING:Player.STATE_READY);
     }
 
     @Override
     public void onPlaybackStateChanged(int playbackState) {
         Player.Listener.super.onPlaybackStateChanged(playbackState);
-        Log.e(TAG, "onPlaybackStateChanged playbackState=" + playbackState);
+        LogUtils.e(TAG, "onPlaybackStateChanged playbackState=" + playbackState);
         notifyStatus(PlayerConstants.EXO_CORE, playbackState);
     }
 
     @Override
     public void onPlayWhenReadyChanged(boolean playWhenReady, int reason) {
         Player.Listener.super.onPlayWhenReadyChanged(playWhenReady, reason);
-        Log.e(TAG, "onPlayWhenReadyChanged=" + playWhenReady + " reason=" + reason);
+        LogUtils.e(TAG, "onPlayWhenReadyChanged=" + playWhenReady + " reason=" + reason);
         notifyStatus(PlayerConstants.EXO_CORE, reason);
 
     }
 
     @Override
     public void onPlaybackSuppressionReasonChanged(int playbackSuppressionReason) {
-        Log.e(TAG, "onPlaybackSuppressionReasonChanged=" + playbackSuppressionReason);
+        LogUtils.e(TAG, "onPlaybackSuppressionReasonChanged=" + playbackSuppressionReason);
 
     }
 
     @Override
     public void onIsPlayingChanged(boolean isPlaying) {
-        Log.e(TAG, "onIsPlayingChanged=" + isPlaying);
+        LogUtils.e(TAG, "onIsPlayingChanged=" + isPlaying);
     }
 
 
     @Override
     public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-        Log.e(TAG, "onShuffleModeEnabledChanged=" + shuffleModeEnabled);
+        LogUtils.e(TAG, "onShuffleModeEnabledChanged=" + shuffleModeEnabled);
     }
 
     @Override
     public void onPlayerError(@NonNull PlaybackException error) {
-        Log.e(TAG, "onPlayerError");
+        LogUtils.e(TAG, "onPlayerError =" + error.toString());
         Player.Listener.super.onPlayerError(error);
         notifyPlayerError();
     }
@@ -230,15 +231,18 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
 
     @Override
     public void onPlaybackParametersChanged(@NonNull PlaybackParameters playbackParameters) {
-        Log.e(TAG, "onPlaybackParametersChanged");
+        LogUtils.e(TAG, "onPlaybackParametersChanged");
     }
 
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        Log.e(TAG, "didReceivedNotification");
-        if (id == NotificationCenter.user_onclick_video_err_retry) {
-            player.prepare();
-        }
+        LogUtils.e(TAG, "didReceivedNotification");
+    }
+
+    @Override
+    public void playRetry() {
+        LogUtils.e(TAG, "playRetry");
+        player.prepare();
     }
 }

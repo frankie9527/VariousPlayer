@@ -1,4 +1,4 @@
-package org.various.player.ui.simple;
+package org.various.player.ui.recycler;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -10,21 +10,22 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import org.various.player.R;
-import org.various.player.ui.base.BaseBottomView;
+import org.various.player.ui.base.recycler.BaseRecyclerBottomView;
+import org.various.player.utils.OrientationUtils;
 
 /**
- * Created by 江雨寒 on 2020/8/13
+ * Created by Frankie on 2020/8/13
  * Email：847145851@qq.com
  * func:
  */
-public class VideoBottomView extends BaseBottomView {
-    String TAG="VideoBottomView";
+public class RecyclerBottomView extends BaseRecyclerBottomView {
+    String TAG="VideoRecyclerBottomView";
 
-    public VideoBottomView(@NonNull Context context) {
+    public RecyclerBottomView(@NonNull Context context) {
         super(context);
     }
 
-    public VideoBottomView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public RecyclerBottomView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -60,9 +61,9 @@ public class VideoBottomView extends BaseBottomView {
     }
 
     @Override
-    public void onScreenOrientationChanged(int currentOrientation) {
-        super.onScreenOrientationChanged(currentOrientation);
-        if (currentOrientation== ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+    public void onScreenOrientationChanged() {
+
+        if (OrientationUtils.getInstance().getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
             img_switch_screen.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.video_switch_full));
             return;
         }

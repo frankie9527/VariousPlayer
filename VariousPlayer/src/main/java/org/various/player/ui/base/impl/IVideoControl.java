@@ -4,7 +4,7 @@ import org.various.player.listener.UserActionListener;
 import org.various.player.listener.UserChangeOrientationListener;
 
 /**
- * Created by 江雨寒 on 2020/8/13
+ * Created by Frankie on 2020/8/13
  * Email：847145851@qq.com
  * func:
  */

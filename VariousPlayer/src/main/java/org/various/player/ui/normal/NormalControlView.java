@@ -2,17 +2,16 @@ package org.various.player.ui.normal;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.various.player.R;
 import org.various.player.ui.base.BaseControlView;
-import org.various.player.ui.simple.VideoBottomView;
-import org.various.player.ui.simple.VideoTopView;
+import org.various.player.ui.simple.SimpleBottomView;
+import org.various.player.ui.simple.SimpleTopView;
 
-public class NormalControlView extends BaseControlView<VideoTopView, VideoBottomView, NormalCenterView> {
+public class NormalControlView extends BaseControlView<SimpleTopView, SimpleBottomView, NormalCenterView> {
 
     public NormalControlView(@NonNull Context context) {
         super(context);

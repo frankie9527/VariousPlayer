@@ -10,11 +10,12 @@ import org.various.demo.R;
 import org.various.demo.base.BaseActivity;
 import org.various.demo.data.SimpleData;
 import org.various.demo.ui.adapter.SimpleRecyclerAdapter;
-import org.various.player.core.PlayerManager;
+
+import org.various.player.core.VariousPlayerManager;
 import org.various.player.utils.ToastUtils;
 
 /**
- * Created by 江雨寒 on 2020/9/27
+ * Created by Frankie on 2020/9/27
  * Email：847145851@qq.com
  * func:
  */
@@ -46,8 +47,20 @@ public class SimpleRecyclerActivity extends BaseActivity implements ItemClickLis
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        VariousPlayerManager.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        VariousPlayerManager.pause();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        PlayerManager.getInstance().releasePlayer();
+        VariousPlayerManager.release();
     }
 }

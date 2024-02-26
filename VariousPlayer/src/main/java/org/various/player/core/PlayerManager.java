@@ -1,14 +1,12 @@
 package org.various.player.core;
 
-
-import android.util.Log;
-
 import org.various.player.NotificationCenter;
 import org.various.player.PlayerConstants;
 import org.various.player.PlayerConfig;
+import org.various.player.utils.LogUtils;
 
 /**
- * Created by 江雨寒 on 2020/8/17
+ * Created by Frankie on 2020/8/17
  * Email：847145851@qq.com
  * func:
  */
@@ -40,30 +38,17 @@ public class PlayerManager {
     }
 
     public AbstractBasePlayer init() {
-        Log.e(TAG, "init");
+        LogUtils.e(TAG, "init");
         if (PlayerConfig.getPlayerCore() == PlayerConstants.EXO_CORE) {
-            Log.e(TAG, "getPlayer new VariousExoPlayer");
+            LogUtils.e(TAG, "getPlayer new VariousExoPlayer");
             iPlayer = new VariousExoPlayer();
         } else {
-            Log.e(TAG, "getPlayer new VariousIjkPlayer");
+            LogUtils.e(TAG, "getPlayer new VariousIjkPlayer");
             iPlayer = new VariousIjkPlayer();
         }
         return iPlayer;
     }
 
-    public void setPlayerStatus(int status) {
-        Log.e(TAG, "status=" + status);
-        currentStatus = status;
-    }
 
-    public int getCurrentStatus() {
-        return currentStatus;
-    }
-
-    public void releasePlayer() {
-        if (iPlayer != null) {
-            iPlayer.release();
-        }
-    }
 
 }

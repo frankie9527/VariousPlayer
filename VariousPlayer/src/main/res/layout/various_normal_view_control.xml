@@ -7,13 +7,13 @@
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <org.various.player.ui.simple.VideoTopView
+    <org.various.player.ui.simple.SimpleTopView
         android:id="@+id/video_top_view"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <org.various.player.ui.simple.VideoBottomView
+    <org.various.player.ui.simple.SimpleBottomView
         android:id="@+id/video_bottom_view"
         android:layout_width="match_parent"
         android:visibility="gone"

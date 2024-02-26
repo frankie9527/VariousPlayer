@@ -55,5 +55,6 @@ public interface IPlayer {
 
     default void clearVideoSurface() {
     }
-
+    default void playRetry() {
+    }
 }

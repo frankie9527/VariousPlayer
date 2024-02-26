@@ -1,4 +1,4 @@
-package org.various.player.ui.base;
+package org.various.player.ui.base.recycler;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -25,25 +25,25 @@ import org.various.player.view.CanDragSeekBar;
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
+public abstract class BaseRecyclerBottomView extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
     protected ImageView img_switch_screen;
-    protected CanDragSeekBar video_seek;
+    public CanDragSeekBar video_seek;
     protected TextView tv_current, tv_total;
     protected UserProgressListener userProgressListener;
     @NonNull
     protected Repeater progressPollRepeater = new Repeater();
 
-    public BaseBottomView(@NonNull Context context) {
+    public BaseRecyclerBottomView(@NonNull Context context) {
         super(context);
         initView(context);
     }
 
-    public BaseBottomView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseRecyclerBottomView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-    public BaseBottomView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BaseRecyclerBottomView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
@@ -151,7 +151,7 @@ public abstract class BaseBottomView extends FrameLayout implements SeekBar.OnSe
     }
 
     public void onScreenOrientationChanged() {
-        LogUtils.e("BaseBottomView", "user ScreenOrientationChanged");
+        LogUtils.d("BaseRecyclerBottomView", "user ScreenOrientationChanged");
     }
 
     public void setDragSeekListener(UserProgressListener listener) {

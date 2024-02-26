@@ -4,13 +4,13 @@
     android:background="#000"
     android:layout_height="wrap_content">
 
-    <org.various.player.view.VariousSurfaceView
+    <org.various.player.view.VariousTextureView
         android:id="@+id/video_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
 
-    <org.various.player.ui.simple.VideoControlView
+    <org.various.player.ui.simple.SimpleControlView
         android:id="@+id/video_control"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -3,31 +3,29 @@ package org.various.player.ui.base;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.exoplayer2.PlaybackParameters;
-
 import org.various.player.PlayerConstants;
 import org.various.player.core.AbstractBasePlayer;
 import org.various.player.core.IPlayer;
+
 import org.various.player.core.PlayerManager;
 import org.various.player.listener.PlayerStatusListener;
 import org.various.player.listener.UserChangeOrientationListener;
-import org.various.player.ui.base.impl.IVideoControl;
+import org.various.player.utils.LogUtils;
 import org.various.player.utils.OrientationUtils;
 
 /**
- * Created by 江雨寒 on 2020/8/19
+ * Created by Frankie on 2020/8/19
  * Email：847145851@qq.com
  * func:
  */
 public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayout implements IPlayer, UserChangeOrientationListener, PlayerStatusListener {
+    private final String TAG = "BaseVideoView";
     protected AbstractBasePlayer player;
     private int initHeight;
     protected T control;
@@ -158,7 +156,8 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
 
     @Override
     public void statusChange(int status) {
-        if (status == PlayerConstants.READY) {
+        LogUtils.d(TAG, "statusChange status=" + status);
+        if (status == PlayerConstants.READY || status == PlayerConstants.IDLE) {
             control.stateReady();
         } else if (status == PlayerConstants.BUFFERING) {
             control.stateBuffering();

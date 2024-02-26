@@ -23,7 +23,7 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.File;
 
 /**
- * Created by 江雨寒 on 2020/8/18
+ * Created by Frankie on 2020/8/18
  * Email：847145851@qq.com
  * func: 播放器配置相关
  */
@@ -38,15 +38,16 @@ public class PlayerConfig {
     protected static String userAgent;
     private static Cache downloadCache;
 
-    private static final SparseIntArray exoStatus=new SparseIntArray();
+    private static final SparseIntArray exoStatus = new SparseIntArray();
+
     public static void init(@NonNull Application app) {
         mContext = app;
         applicationHandler = new Handler(mContext.getMainLooper());
         userAgent = Util.getUserAgent(mContext, "org.Various.player");
-        exoStatus.put(Player.STATE_IDLE,PlayerConstants.IDLE);
-        exoStatus.put(Player.STATE_READY,PlayerConstants.READY);
-        exoStatus.put(Player.STATE_BUFFERING,PlayerConstants.BUFFERING);
-        exoStatus.put(Player.STATE_ENDED,PlayerConstants.END);
+        exoStatus.put(Player.STATE_IDLE, PlayerConstants.IDLE);
+        exoStatus.put(Player.STATE_READY, PlayerConstants.READY);
+        exoStatus.put(Player.STATE_BUFFERING, PlayerConstants.BUFFERING);
+        exoStatus.put(Player.STATE_ENDED, PlayerConstants.END);
     }
 
     public static Application getContext() {
@@ -63,23 +64,24 @@ public class PlayerConfig {
 
 
     public static DataSource.Factory buildDataSourceFactory() {
-        DefaultDataSource.Factory  upstreamFactory =
-                new DefaultDataSource.Factory(mContext,  new DefaultHttpDataSource.Factory());
+        DefaultDataSource.Factory upstreamFactory =
+                new DefaultDataSource.Factory(mContext, new DefaultHttpDataSource.Factory());
         return buildReadOnlyCacheDataSource(upstreamFactory, getDownloadCache());
     }
 
     protected static CacheDataSource.Factory buildReadOnlyCacheDataSource(
             DataSource.Factory upstreamFactory, Cache cache) {
-        CacheDataSource.Factory factory=new CacheDataSource.Factory();
+        CacheDataSource.Factory factory = new CacheDataSource.Factory();
         factory.setCache(cache);
         factory.setUpstreamDataSourceFactory(upstreamFactory);
         factory.setCacheReadDataSourceFactory(new FileDataSource.Factory());
         factory.setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
         return factory;
     }
+
     protected static synchronized Cache getDownloadCache() {
         if (downloadCache == null) {
-            File downloadContentDirectory = new File(mContext.getExternalFilesDir(null),"VariousCache");
+            File downloadContentDirectory = new File(mContext.getExternalFilesDir(null), "VariousCache");
             downloadCache =
                     new SimpleCache(downloadContentDirectory, new LeastRecentlyUsedCacheEvictor(50 * 1024 * 1024), new StandaloneDatabaseProvider(mContext));
         }
@@ -87,8 +89,8 @@ public class PlayerConfig {
     }
 
 
-    public static int changStatus2Normal(@PlayerConstants.PlayerCore int core,int status){
-        if (core==PlayerConstants.EXO_CORE){
+    public static int changStatus2Normal(@PlayerConstants.PlayerCore int core, int status) {
+        if (core == PlayerConstants.EXO_CORE) {
             return exoStatus.get(status);
         }
         return -1;

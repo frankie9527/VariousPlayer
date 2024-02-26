@@ -16,12 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.various.player.R;
-import org.various.player.core.PlayerManager;
+
+import org.various.player.core.VariousPlayerManager;
 import org.various.player.utils.ToastUtils;
 import org.various.player.utils.UiUtils;
 
 /**
- * Created by 江雨寒 on 2020/9/17
+ * Created by Frankie on 2020/9/17
  * Email：847145851@qq.com
  * func:
  */
@@ -104,10 +105,10 @@ public class DoubleBackForWardView extends LinearLayout implements View.OnClickL
                 case DISMISS_FORWARD_BACKWARD:
                     UiUtils.viewSetGone(rl_backward);
                     UiUtils.viewSetGone(rl_forward);
-                    long goTime = fingerCount * 10 * 1000 + PlayerManager.getInstance().getPlayer().getCurrentPosition();
+                    long goTime = fingerCount * 10 * 1000 + VariousPlayerManager.getCurrentPosition();
 
-                    if (goTime > 0 && goTime < PlayerManager.getInstance().getPlayer().getDuration()) {
-                        PlayerManager.getInstance().getPlayer().seekTo(goTime);
+                    if (goTime > 0 && goTime < VariousPlayerManager.getDuration()) {
+                        VariousPlayerManager.seekTo(goTime);
                     } else {
                         ToastUtils.show( "预期播放不符合影片时长");
                     }

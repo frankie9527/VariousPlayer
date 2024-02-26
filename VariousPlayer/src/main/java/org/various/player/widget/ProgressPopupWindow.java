@@ -2,8 +2,6 @@ package org.various.player.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,11 +13,12 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import org.various.player.R;
+import org.various.player.utils.LogUtils;
 import org.various.player.utils.TimeFormatUtil;
 
 
 /**
- * Created by 江雨寒 on 2020/9/14
+ * Created by Frankie on 2020/9/14
  * Email：847145851@qq.com
  * func:
  */
@@ -41,9 +40,9 @@ public class ProgressPopupWindow {
         String str = arrowDirection <= 0 ? "左" : "右";
         String playStr = TimeFormatUtil.formatMs(lastVideoPlayTime);
         String allStr = TimeFormatUtil.formatMs(videoDurationTime);
-        Log.e("ProgressPopupWindow", "str="+str);
-        Log.e("ProgressPopupWindow", "playStr="+playStr);
-        Log.e("ProgressPopupWindow", "allStr="+allStr);
+        LogUtils.e("ProgressPopupWindow", "str="+str);
+        LogUtils.e("ProgressPopupWindow", "playStr="+playStr);
+        LogUtils.e("ProgressPopupWindow", "allStr="+allStr);
         if (mProgressPopup == null) {
             localView = LayoutInflater.from(context).inflate(R.layout.various_popup_progress, null);
             img_arrow = localView.findViewById(R.id.img_arrow);
@@ -65,7 +64,7 @@ public class ProgressPopupWindow {
         tv_total.setText("/ " + allStr);
         int num = (int) ((lastVideoPlayTime * 1.0f) / (videoDurationTime * 1.0f) * 100);
         video_progressbar.setProgress(num);
-        Log.e("ProgressPopupWindow", "num=" + num);
+        LogUtils.e("ProgressPopupWindow", "num=" + num);
     }
 
     public void dismissPop() {

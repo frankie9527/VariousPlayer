@@ -10,6 +10,7 @@ import org.various.demo.R;
 import org.various.demo.base.BaseActivity;
 import org.various.demo.data.SimpleData;
 import org.various.demo.ui.adapter.SmoothStreamingAdapter;
+
 import org.various.player.core.PlayerManager;
 import org.various.player.core.VariousExoPlayer;
 import org.various.player.listener.UserActionListener;
@@ -17,7 +18,7 @@ import org.various.player.ui.normal.NormalVideoView;
 
 
 /**
- * Created by 江雨寒 on 2020/9/17
+ * Created by Frankie on 2020/9/17
  * Email：847145851@qq.com
  * func: exo 清晰度切换demo，
  */

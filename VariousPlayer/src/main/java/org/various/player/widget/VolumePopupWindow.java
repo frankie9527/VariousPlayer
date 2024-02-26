@@ -2,8 +2,6 @@ package org.various.player.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -11,12 +9,14 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 
 import org.various.player.R;
-import org.various.player.core.PlayerManager;
+
+import org.various.player.core.VariousPlayerManager;
+import org.various.player.utils.LogUtils;
 import org.various.player.utils.UiUtils;
 
 
 /**
- * Created by 江雨寒 on 2020/9/14
+ * Created by  on 2020/9/14
  * Email：847145851@qq.com
  * func:
  */
@@ -46,8 +46,8 @@ public class VolumePopupWindow {
             nowVolume = 0;
         if (nowVolume > 1.0f)
             nowVolume = 1.0f;
-        Log.e("VolumePopupWindow", "nowVolume=" + nowVolume);
-        PlayerManager.getInstance().getPlayer().setVolume(nowVolume);
+        LogUtils.e("VolumePopupWindow", "nowVolume=" + nowVolume);
+        VariousPlayerManager.setVolume(nowVolume);
         if (mVolumePopup == null) {
             localView = LayoutInflater.from(context).inflate(R.layout.various_popup_volume, null);
             mVolumeProgressBar = localView.findViewById(R.id.brightness_progressbar);

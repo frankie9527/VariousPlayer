@@ -1,4 +1,4 @@
-package org.various.player.ui.base;
+package org.various.player.ui.base.recycler;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,14 +21,14 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.various.player.PlayerConstants;
 
 import org.various.player.core.VariousPlayerManager;
 import org.various.player.listener.UiOrientationListener;
-import org.various.player.listener.UserProgressListener;
-import org.various.player.ui.base.impl.IVideoControl;
-import org.various.player.PlayerConstants;
 import org.various.player.listener.UserActionListener;
 import org.various.player.listener.UserChangeOrientationListener;
+import org.various.player.listener.UserProgressListener;
+import org.various.player.ui.base.impl.IVideoControl;
 import org.various.player.utils.LogUtils;
 import org.various.player.utils.OrientationUtils;
 
@@ -37,8 +38,8 @@ import org.various.player.utils.OrientationUtils;
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseControlView<T extends BaseTopView, B extends BaseBottomView, C extends BaseCenterView> extends FrameLayout implements IVideoControl, View.OnClickListener, UserProgressListener, UiOrientationListener {
-    private final String TAG = "BaseControlView";
+public abstract class BaseRecyclerControlView<T extends BaseRecyclerTopView, B extends BaseRecyclerBottomView, C extends BaseRecyclerCenterView> extends FrameLayout implements IVideoControl, View.OnClickListener, UserProgressListener, UiOrientationListener {
+    private final String TAG = "BaseRecyclerControlView";
     public T topView;
     public B bottomView;
     public C centerView;
@@ -64,6 +65,10 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
                     break;
                 case HIDE_ALL:
                     hideTopAndBottom();
+                    //底部的进度条为0，说明是初始化状态！中间图标不应该隐藏
+                    if (bottomView.video_seek.getProgress() == 0) {
+                        return;
+                    }
                     centerView.hideAll();
                     break;
             }
@@ -77,17 +82,17 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     UserChangeOrientationListener orientationListener;
 
-    public BaseControlView(@NonNull Context context) {
+    public BaseRecyclerControlView(@NonNull Context context) {
         super(context);
         initView(context);
     }
 
-    public BaseControlView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseRecyclerControlView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-    public BaseControlView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BaseRecyclerControlView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
@@ -108,7 +113,6 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         initCenterView(setCenterViewId());
         touchListener = new TouchListener(getContext());
         setOnTouchListener(touchListener);
-        OrientationUtils.getInstance().setUiOrientationListener(this);
 
     }
 
@@ -152,7 +156,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void stateReady() {
-        LogUtils.d(TAG, "stateReady");
+        LogUtils.e(TAG, "stateReady");
         centerView.showStatus();
         mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
         bottomView.startRepeater();
@@ -160,18 +164,24 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void showTopAndBottom() {
-        LogUtils.d(TAG, "showTopAndBottom");
-        if (topView != null) {
+        LogUtils.e(TAG, "showTopAndBottom");
+        //全屏
+        boolean landscape = OrientationUtils.getInstance().getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        if (topView != null && landscape) {
             topView.setVisibleStatus(PlayerConstants.SHOW);
         }
-        if (bottomView != null) {
+        //全屏
+        if (bottomView != null && landscape) {
+            bottomView.setVisibleStatus(PlayerConstants.SHOW);
+            //竖屏 且播放地址一致
+        } else if (bottomView != null && !TextUtils.isEmpty(url) && url.equals(VariousPlayerManager.getVideoUrl())) {
             bottomView.setVisibleStatus(PlayerConstants.SHOW);
         }
     }
 
     @Override
     public void hideTopAndBottom() {
-        LogUtils.d(TAG, "hideTopAndBottom");
+        LogUtils.e(TAG, "hideTopAndBottom");
         if (topView != null) {
             topView.setVisibleStatus(PlayerConstants.HIDE);
         }
@@ -182,7 +192,6 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void showComplete() {
-        LogUtils.d(TAG, "showComplete");
         showTopAndBottom();
         centerView.showEnd();
     }
@@ -208,37 +217,20 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
 
     @Override
     public void onClick(View view) {
-        if (topView != null && view == topView.getBackView() && orientationListener != null) {
+        LogUtils.d(TAG, "onClick");
+        if (topView != null && view == topView.getBackView()) {
             if (OrientationUtils.getInstance().getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                orientationListener.changeOrientation();
-                return;
+                quitFullScreen();
             }
             if (userActionListener != null)
                 userActionListener.onUserAction(PlayerConstants.ACTION_BACK);
         }
         if (bottomView != null && view == bottomView.getImgSwitchScreen()) {
-            if (orientationListener != null) {
-                orientationListener.changeOrientation();
-                mUiHandler.removeMessages(HIDE_ALL);
-                mUiHandler.sendEmptyMessageDelayed(HIDE_ALL, 5000);
+            if (OrientationUtils.getInstance().getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                quitFullScreen();
+            } else {
+                startFullScreen();
             }
-        }
-        if (centerView.getCenterPlayView() != null && view == centerView.getCenterPlayView()) {
-            LogUtils.d(TAG, "onclick CenterPlayView");
-            if (VariousPlayerManager.isPlaying()) {
-                VariousPlayerManager.pause();
-                return;
-            }
-            int currentStatus = VariousPlayerManager.getCurrentStatus();
-            long currentPosition = VariousPlayerManager.getCurrentPosition();
-            String url = VariousPlayerManager.getVideoUrl();
-            if (currentStatus == PlayerConstants.IDLE && currentPosition == 0 && !TextUtils.isEmpty(url)) {
-                VariousPlayerManager.startSyncPlay();
-                return;
-            } else if (currentStatus == PlayerConstants.END) {
-                VariousPlayerManager.startSyncPlay();
-            }
-            VariousPlayerManager.resume();
         }
         if (centerView.getCenterReplayView() != null && view == centerView.getCenterReplayView()) {
             VariousPlayerManager.playRetry();
@@ -273,8 +265,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             gestureDetector.onTouchEvent(event);
-            //当前播放器状态不为error且播放器播播放时间轴不为0
-            if (VariousPlayerManager.getCurrentPosition() > 0 && VariousPlayerManager.getCurrentStatus() != PlayerConstants.ERROR) {
+            if (bottomView.video_seek.getProgress() != 0 && VariousPlayerManager.getCurrentStatus() != PlayerConstants.ERROR) {
                 centerView.handleTouch(view, event);
             }
             return true;
@@ -283,6 +274,20 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         @Override
         public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
             LogUtils.e(TAG, "onSingleTapConfirmed=" + (bottomView.getVisibility() != VISIBLE));
+            //当前播放器url 和当前ui不一致，则只显示播放图标
+            long playProgress = bottomView.video_seek.getProgress();
+            if (playProgress == 0) {
+                if (topView != null) {
+                    topView.hide();
+                }
+                if (bottomView != null) {
+                    bottomView.hide();
+                }
+                if (centerView != null) {
+                    centerView.reset();
+                }
+                return true;
+            }
             if (VariousPlayerManager.getCurrentStatus() == PlayerConstants.END) {
                 showTopAndBottom();
                 centerView.showStatus();
@@ -292,9 +297,7 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
                 return true;
             }
             if (bottomView.getVisibility() != VISIBLE) {
-                //全屏
-                boolean landscape = OrientationUtils.getInstance().getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                if (VariousPlayerManager.isPlaying()||landscape) {
+                if (VariousPlayerManager.isPlaying()) {
                     showTopAndBottom();
                 }
                 centerView.showStatus();
@@ -330,6 +333,49 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         }
     }
 
+    protected ViewGroup.LayoutParams blockLayoutParams;
+    protected int blockIndex;
+    protected int blockWidth;
+    protected int blockHeight;
+    protected ViewGroup parent;
+    protected ViewGroup videoView;
+    public long userChangeOrientationTime;
+
+    public void startFullScreen() {
+        userChangeOrientationTime = System.currentTimeMillis();
+        Activity activity = OrientationUtils.getInstance().getActivity(getContext());
+        if (activity == null) {
+            return;
+        }
+        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        //从当前视图中移除播放器视图
+        videoView = (ViewGroup) getParent();
+        parent = (ViewGroup) videoView.getParent();
+        blockLayoutParams = getLayoutParams();
+        blockIndex = parent.indexOfChild(this);
+        blockWidth = getWidth();
+        blockHeight = getHeight();
+        parent.removeView(videoView);
+        ViewGroup.LayoutParams fullLayout = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        decorView.addView(videoView, fullLayout);
+        hideSysBar(getContext());
+        OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+
+    public void quitFullScreen() {
+        userChangeOrientationTime = System.currentTimeMillis();
+        Activity activity = OrientationUtils.getInstance().getActivity(getContext());
+        if (activity == null) {
+            return;
+        }
+        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        decorView.removeView(videoView);
+        parent.addView(videoView, blockIndex, blockLayoutParams);
+        OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    }
+
     public void hideSysBar(Context context) {
         Activity activity = OrientationUtils.getInstance().getActivity(context);
         if (activity == null) {
@@ -360,5 +406,9 @@ public abstract class BaseControlView<T extends BaseTopView, B extends BaseBotto
         if (bottomView != null) {
             bottomView.onScreenOrientationChanged();
         }
+    }
+
+    public void initUiOrientationListener() {
+        OrientationUtils.getInstance().setUiOrientationListener(this);
     }
 }

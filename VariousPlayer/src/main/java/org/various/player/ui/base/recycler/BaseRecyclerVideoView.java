@@ -1,9 +1,7 @@
-package org.various.player.ui.base;
+package org.various.player.ui.base.recycler;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -14,19 +12,15 @@ import org.various.player.core.AbstractBasePlayer;
 import org.various.player.core.IPlayer;
 import org.various.player.listener.PlayerStatusListener;
 import org.various.player.listener.UserChangeOrientationListener;
-import org.various.player.utils.OrientationUtils;
 
 /**
- * Created by 江雨寒 on 2020/8/19
+ * Created by Frankie on 2020/8/19
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseRecyclerVideoView<T extends BaseControlView> extends FrameLayout implements IPlayer, UserChangeOrientationListener, PlayerStatusListener {
+public abstract class BaseRecyclerVideoView<T extends BaseRecyclerControlView> extends FrameLayout implements IPlayer, UserChangeOrientationListener, PlayerStatusListener {
     protected AbstractBasePlayer player;
-    OrientationUtils orientationUtils;
-    private int initHeight;
     protected T control;
-
 
 
     public BaseRecyclerVideoView(@NonNull Context context) {
@@ -44,7 +38,7 @@ public abstract class BaseRecyclerVideoView<T extends BaseControlView> extends F
     }
 
 
-    public T getControlView(){
+    public T getControlView() {
         return control;
     }
 
@@ -113,29 +107,8 @@ public abstract class BaseRecyclerVideoView<T extends BaseControlView> extends F
     }
 
     @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (orientationUtils != null) {
-            orientationUtils.release();
-        }
-
-    }
-    @Override
     public void changeOrientation() {
-        ViewGroup.LayoutParams lp = getLayoutParams();
-        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        if (initHeight == 0) {
-            initHeight = lp.height;
-        }
-        int currentOrientation = OrientationUtils.getInstance().getOrientation();
-        if (currentOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || currentOrientation == -1) {
-            lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            OrientationUtils.getInstance().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-            lp.height = initHeight;
-        }
-        setLayoutParams(lp);
+
     }
 
     @Override
@@ -150,7 +123,7 @@ public abstract class BaseRecyclerVideoView<T extends BaseControlView> extends F
 
     @Override
     public void statusChange(int status) {
-        if (status == PlayerConstants.READY) {
+        if (status == PlayerConstants.READY || status == PlayerConstants.IDLE) {
             control.stateReady();
         } else if (status == PlayerConstants.BUFFERING) {
             control.stateBuffering();
