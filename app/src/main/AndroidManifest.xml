@@ -5,11 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!--适配华为（huawei）刘海屏-->
     <meta-data
         android:name="android.notch_support"
-        android:value="true"/>
+        android:value="true" />
     <!--适配小米（xiaomi）刘海屏-->
     <meta-data
         android:name="notch.config"
@@ -25,29 +25,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".MainActivity">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".ui.act.VideoApiActivity"/>
+            android:name=".ui.act.VideoApiActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".ui.act.SimpleDemoActivity"/>
+            android:name=".ui.act.SimpleDemoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".ui.act.NormalDemoActivity"/>
+            android:name=".ui.act.NormalDemoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".ui.act.SmoothStreamingActivity"/>
+            android:name=".ui.act.SmoothStreamingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <activity
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".ui.act.SimpleRecyclerActivity"/>
+            android:name=".ui.act.SimpleRecyclerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
     </application>
 
 </manifest>
