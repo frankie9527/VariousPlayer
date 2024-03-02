@@ -12,6 +12,7 @@ import org.various.player.PlayerConfig;
 public class SimpleDemoActivity extends BaseActivity {
     SimpleVideoView simple_view;
     String title = "SimpleVideoView";
+    String url="https://d1.xia12345.com/video/202310/6524242a37926f1bd8c3740c/hd.mp4";
     @Override
     protected int setLayout() {
         return R.layout.activity_simple;
@@ -20,7 +21,7 @@ public class SimpleDemoActivity extends BaseActivity {
     protected void initView() {
         PlayerConfig.setPlayerCore(PlayerConstants.EXO_CORE);
         simple_view = findViewById(R.id.simple_view);
-        simple_view.setPlayData(SimpleData.url, title);
+        simple_view.setPlayData(url, title);
         simple_view.startSyncPlay();
         simple_view.setUserActionListener(new UserActionListener() {
             @Override

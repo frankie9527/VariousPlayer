@@ -12,7 +12,7 @@ public class LogUtils {
     public static boolean isDebug = true;
 
 
-    private static final String TAG = "jyh";
+    private static final String TAG = "LogUtils";
 
 
     /**

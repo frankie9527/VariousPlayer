@@ -1,5 +1,6 @@
 package org.various.demo.base;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -11,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * Email：847145851@qq.com
  * func:
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,4 +43,5 @@ public abstract class BaseActivity extends AppCompatActivity {
 //                .keyboardEnable(false)
 //                .init();
     }
+
 }
