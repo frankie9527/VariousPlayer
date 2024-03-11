@@ -134,4 +134,8 @@ public abstract class BaseRecyclerVideoView<T extends BaseRecyclerControlView> e
         }
     }
 
+    @Override
+    public void onRenderedFirstFrame(int width,int height) {
+
+    }
 }

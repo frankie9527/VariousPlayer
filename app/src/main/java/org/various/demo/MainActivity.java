@@ -18,6 +18,7 @@ import org.various.demo.ui.act.NormalDemoActivity;
 import org.various.demo.ui.act.SimpleRecyclerActivity;
 import org.various.demo.ui.act.SmoothStreamingActivity;
 import org.various.demo.ui.act.SimpleDemoActivity;
+import org.various.demo.ui.act.TiktokActivity;
 import org.various.demo.ui.act.VideoApiActivity;
 
 
@@ -86,4 +87,9 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, SimpleRecyclerActivity.class);
         startActivity(intent);
     }
+    public void TikTokRecycler(View view) {
+        intent = new Intent(this, TiktokActivity.class);
+        startActivity(intent);
+    }
+
 }

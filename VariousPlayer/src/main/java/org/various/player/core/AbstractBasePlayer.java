@@ -38,4 +38,9 @@ public abstract class AbstractBasePlayer implements IPlayer {
     }
 
 
+    public void onPlayerRenderedFirstFrame(int width,int height){
+        if (mStatusListener != null) {
+            mStatusListener.onRenderedFirstFrame(width,height);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package org.various.player.core;
 
+import android.media.session.MediaController;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Surface;
@@ -23,6 +24,7 @@ import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.video.VideoSize;
 
 import org.various.player.NotificationCenter;
 import org.various.player.PlayerConfig;
@@ -244,5 +246,19 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     public void playRetry() {
         LogUtils.e(TAG, "playRetry");
         player.prepare();
+    }
+
+    @Override
+    public void onRenderedFirstFrame() {
+        Player.Listener.super.onRenderedFirstFrame();
+        VideoSize size=  player.getVideoSize();
+        onPlayerRenderedFirstFrame(size.width,size.height);
+
+    }
+
+    @Override
+    public void onVideoSizeChanged(VideoSize videoSize) {
+        Player.Listener.super.onVideoSizeChanged(videoSize);
+
     }
 }

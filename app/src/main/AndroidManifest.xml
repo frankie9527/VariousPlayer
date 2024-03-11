@@ -49,6 +49,8 @@
         <activity
             android:name=".ui.act.SimpleRecyclerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity android:name=".ui.act.TiktokActivity"/>
     </application>
 
 </manifest>

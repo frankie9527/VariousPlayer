@@ -167,4 +167,9 @@ public abstract class BaseVideoView<T extends BaseControlView> extends FrameLayo
             control.showError();
         }
     }
+
+    @Override
+    public void onRenderedFirstFrame(int width,int height) {
+
+    }
 }

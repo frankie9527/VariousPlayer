@@ -1,8 +1,11 @@
 package org.various.player.core;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import org.various.player.utils.LogUtils;
+import org.various.player.view.VariousTextureView;
 
 /**
  * author: Frankie
@@ -12,6 +15,15 @@ import org.various.player.utils.LogUtils;
 public class VariousPlayerManager {
     private static final String TAG = "VariousPlayerManager";
     private static int currentStatus = -1;
+
+    public static VariousTextureView getTextureView(Context context) {
+        if (textureView == null) {
+            textureView = new VariousTextureView(context);
+        }
+        return textureView;
+    }
+
+    private static VariousTextureView textureView;
 
     public static float getVolume() {
         return PlayerManager.getInstance().getPlayer().getVolume();

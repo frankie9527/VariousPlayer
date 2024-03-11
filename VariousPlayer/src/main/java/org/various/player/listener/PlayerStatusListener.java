@@ -11,6 +11,6 @@ public interface PlayerStatusListener {
 
     void statusChange(@PlayerConstants.PlayerStatus int status);
 
-
+    void onRenderedFirstFrame(int width,int height);
 
 }

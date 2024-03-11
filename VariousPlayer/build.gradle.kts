@@ -53,7 +53,7 @@ afterEvaluate {
             create<MavenPublication>("maven") {
                 groupId = "com.github.frankie9527"
                 artifactId = "VariousPlayer"
-                version = "0.4"
+                version = "0.6"
                 from(components["release"])
             }
         }

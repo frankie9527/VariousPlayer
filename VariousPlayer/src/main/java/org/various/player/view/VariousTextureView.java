@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import org.various.player.NotificationCenter;
 import org.various.player.core.IPlayer;
 import org.various.player.core.PlayerManager;
+import org.various.player.utils.LogUtils;
 
 
 /**
@@ -55,6 +56,7 @@ public class VariousTextureView extends TextureView implements NotificationCente
 
         @Override
         public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
+            LogUtils.d("VariousTextureView","onSurfaceTextureAvailable");
             player.setVideoSurface(new Surface(surface));
         }
 
@@ -65,6 +67,7 @@ public class VariousTextureView extends TextureView implements NotificationCente
 
         @Override
         public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
+            LogUtils.d("VariousTextureView","onSurfaceTextureDestroyed");
             player.clearVideoSurface();
             NotificationCenter.getGlobalInstance().removeObserver(VariousTextureView.this, NotificationCenter.user_onclick_take_pic);
             return true;

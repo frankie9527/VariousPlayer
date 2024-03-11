@@ -77,7 +77,7 @@ public class VideoApiActivity extends BaseActivity implements NotificationCenter
         simple_view.startSyncPlay();
     }
     public void play2(View view){
-        simple_view.setPlayData(SimpleData.url3, title);
+        simple_view.setPlayData(SimpleData.url2, title);
         simple_view.startSyncPlay();
     }
     @Override
