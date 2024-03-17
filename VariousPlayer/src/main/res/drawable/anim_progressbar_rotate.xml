@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
     android:drawable="@drawable/video_loading"
     android:fromDegrees="0"
     android:pivotX="50%"
     android:pivotY="50%"
-    android:toDegrees="359" >
+    android:toDegrees="359" />
 
-</layer-list>

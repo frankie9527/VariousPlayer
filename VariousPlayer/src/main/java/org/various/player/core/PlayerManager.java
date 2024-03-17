@@ -12,11 +12,10 @@ import org.various.player.utils.LogUtils;
  */
 public class PlayerManager {
     private static final String TAG = "PlayerManager";
-    private int currentStatus = -1;
     private AbstractBasePlayer iPlayer;
 
     public AbstractBasePlayer getPlayer() {
-        if (iPlayer == null) {
+        if (iPlayer == null||iPlayer.isReleased()) {
             init();
         }
         return iPlayer;

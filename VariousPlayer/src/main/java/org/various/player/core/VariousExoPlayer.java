@@ -38,6 +38,7 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
     private DefaultTrackSelector trackSelector;
     private DefaultTrackSelector.Parameters trackSelectorParameters;
     private String url;
+    private boolean playerReleased=false;
 
     public VariousExoPlayer() {
         trackSelector = new DefaultTrackSelector(PlayerConfig.getContext(), new AdaptiveTrackSelection.Factory());
@@ -80,7 +81,13 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
         if (player != null) {
             player.removeListener(this);
             player.release();
+            playerReleased=true;
         }
+    }
+
+    @Override
+    public boolean isReleased() {
+        return playerReleased;
     }
 
     @Override
@@ -253,12 +260,6 @@ public class VariousExoPlayer extends AbstractBasePlayer implements Player.Liste
         Player.Listener.super.onRenderedFirstFrame();
         VideoSize size=  player.getVideoSize();
         onPlayerRenderedFirstFrame(size.width,size.height);
-
-    }
-
-    @Override
-    public void onVideoSizeChanged(VideoSize videoSize) {
-        Player.Listener.super.onVideoSizeChanged(videoSize);
 
     }
 }

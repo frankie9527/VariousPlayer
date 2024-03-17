@@ -8,7 +8,6 @@ import androidx.annotation.IntRange;
 import androidx.annotation.Nullable;
 
 
-
 public interface IPlayer {
     @FloatRange(from = 0.0d, to = 1.0d)
     float getVolume();
@@ -25,9 +24,11 @@ public interface IPlayer {
 
     void setVideoUri(@Nullable String url);
 
-    default String getVideoUrl(){
+    default String getVideoUrl() {
         return "";
-    };
+    }
+
+    ;
 
     void setVolume(@FloatRange(from = 0.0d, to = 1.0d) float volume);
 
@@ -51,6 +52,10 @@ public interface IPlayer {
 
     default void setVideoSurface(@Nullable Surface surface) {
 
+    }
+
+    default boolean isReleased() {
+        return false;
     }
 
     default void clearVideoSurface() {

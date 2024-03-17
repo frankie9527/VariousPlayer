@@ -21,8 +21,15 @@ import org.various.player.utils.LogUtils;
  * func:
  */
 public class VariousTextureView extends TextureView implements NotificationCenter.NotificationCenterDelegate {
+    public void setPlayer(IPlayer newPlayer) {
+        if (newPlayer != null && this.player != newPlayer) {
+            player = newPlayer;
+        }
+    }
+
     protected IPlayer player;
     protected SurfaceTextureListener listener;
+
     public VariousTextureView(@NonNull Context context) {
         super(context);
         init();
@@ -37,26 +44,27 @@ public class VariousTextureView extends TextureView implements NotificationCente
         super(context, attrs, defStyleAttr);
         init();
     }
+
     private void init() {
         player = PlayerManager.getInstance().getPlayer();
-        listener=new VariousSurfaceTextureListener();
+        listener = new VariousSurfaceTextureListener();
         setSurfaceTextureListener(listener);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.user_onclick_take_pic);
     }
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id== NotificationCenter.user_onclick_take_pic){
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_take_pic_data,getBitmap());
+        if (id == NotificationCenter.user_onclick_take_pic) {
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.user_onclick_take_pic_data, getBitmap());
         }
     }
 
 
-    protected class VariousSurfaceTextureListener implements SurfaceTextureListener{
+    protected class VariousSurfaceTextureListener implements SurfaceTextureListener {
 
         @Override
         public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
-            LogUtils.d("VariousTextureView","onSurfaceTextureAvailable");
+            LogUtils.d("VariousTextureView", "onSurfaceTextureAvailable");
             player.setVideoSurface(new Surface(surface));
         }
 
@@ -67,7 +75,7 @@ public class VariousTextureView extends TextureView implements NotificationCente
 
         @Override
         public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
-            LogUtils.d("VariousTextureView","onSurfaceTextureDestroyed");
+            LogUtils.d("VariousTextureView", "onSurfaceTextureDestroyed");
             player.clearVideoSurface();
             NotificationCenter.getGlobalInstance().removeObserver(VariousTextureView.this, NotificationCenter.user_onclick_take_pic);
             return true;
@@ -78,7 +86,6 @@ public class VariousTextureView extends TextureView implements NotificationCente
 
         }
     }
-
 
 
 }

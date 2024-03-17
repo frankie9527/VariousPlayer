@@ -27,6 +27,7 @@ import org.various.player.utils.LogUtils;
 import org.various.player.utils.OrientationUtils;
 import org.various.player.utils.UiUtils;
 import org.various.player.view.CanDragSeekBar;
+import org.various.player.view.VariousTextureView;
 
 /**
  * Created by Frankie on 2020/8/19
@@ -36,7 +37,7 @@ import org.various.player.view.CanDragSeekBar;
 public abstract class BaseTiktokVideoView extends FrameLayout implements IPlayer, UserChangeOrientationListener, PlayerStatusListener {
     private final String TAG = "BaseTiktokVideoView";
     public FrameLayout video_container;
-    public TextureView textureView = null;
+    public VariousTextureView textureView = null;
     public ImageView img_status, img_back_ground;
     public CanDragSeekBar video_seek;
     public TouchListener touchListener;
@@ -70,10 +71,12 @@ public abstract class BaseTiktokVideoView extends FrameLayout implements IPlayer
     }
 
     public void setDataAndPlay(String url) {
+        img_back_ground.setVisibility(VISIBLE);
         setPlayer(PlayerManager.getInstance().getPlayer());
         player.setVideoEventListener(this);
         player.setVideoUri(url);
         initTextureView();
+        textureView.setPlayer(player);
     }
 
     @Override
@@ -194,26 +197,16 @@ public abstract class BaseTiktokVideoView extends FrameLayout implements IPlayer
 
 
     public void initTextureView() {
-        if (textureView != null) {
-            textureView = null;
+        if (textureView == null) {
+            textureView = VariousPlayerManager.getTextureView(getContext());
         }
-        LayoutParams layoutParams =
-                new LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        Gravity.CENTER);
-        textureView = VariousPlayerManager.getTextureView(getContext());
         ViewGroup parent = (ViewGroup) textureView.getParent();
         if (parent != null) {
             parent.removeView(textureView);
         }
-        video_container.addView(textureView, layoutParams);
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                player.startSyncPlay();
-            }
-        }, 50);
+        video_container.addView(textureView, 0);
+
+        player.startSyncPlay();
 
     }
 
